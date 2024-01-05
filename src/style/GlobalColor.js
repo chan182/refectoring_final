@@ -1,7 +1,15 @@
-import React from 'react';
+import { createGlobalStyle } from 'styled-components';
 
-const GlobalColor = () => {
-    return <div></div>;
-};
+const GlobalColor = createGlobalStyle`
+    :root {
+        --main-button-color: #756ab6;
+        --light-purple: #ac87c5;
+        --light-pink: #e0aed0;
+        --light-beige: #ffe5e5;
+        --bold-gray: #a9a9a9;
+        --light-gray: #f1eeef;
+    }
+
+`;
 
 export default GlobalColor;
