@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import MainSlider from './MainSlider';
 
 const Home = () => {
     return (
         <>
-            <StSlider>slider</StSlider>
+            <MainSlider />
+
             <StBox>
                 <StComponents>
                     <StComponent>
@@ -31,14 +33,6 @@ const Home = () => {
 
 export default Home;
 
-const StSlider = styled.div`
-    width: 100%;
-    height: 350px;
-    display: flex;
-    align-items: center;
-    background-color: var(--light-gray);
-`;
-
 const StBox = styled.div`
     width: 100%;
     height: 350px;
@@ -61,6 +55,11 @@ const StComponent = styled.div`
     border-radius: 20px;
     padding: 30px;
     background-color: var(--light-gray);
+
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: 2px 2px 2px 2px grey;
+    }
 `;
 
 const StTitle = styled.p`

@@ -13,7 +13,7 @@ const Header = () => {
                     <StLogo>
                         <img src={logo} onClick={() => navigate('/')} />
                     </StLogo>
-                    <StP>MBTI 검사</StP>
+                    <StP onClick={() => navigate('/mbti/test')}>MBTI 검사</StP>
                     <StP>MBTI 모임</StP>
                     <StP>MBTI 궁합</StP>
                     <StP>커뮤니티</StP>
