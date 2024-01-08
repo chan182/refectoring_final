@@ -6,14 +6,18 @@ const Signup = () => {
         <StSignUpPage>
             <StSignUpWrap>
                 <StLogoImg src={logo} alt="logo" />
+                <StText>사용할 이메일 입력</StText>
                 <StSignUpId type="text" />
-                <StSignUpPw type="text" />
-                <StSignUpPwCheck type="text" />
+                <StText>사용할 비밀번호 입력</StText>
+                <StSignUpPw type="password" />
+                <StText>사용할 비밀번호 확인</StText>
+                <StSignUpPwCheck type="password" />
+                <StText>사용할 닉네임 입력</StText>
                 <StSignUpNickName type="text" />
-                <StLoginSignUpWarp>
-                    <StLoginButton>로그인</StLoginButton>
+                <StBackSignUpWarp>
+                    <StBackButton>돌아가기</StBackButton>
                     <StSignUpButton>회원가입</StSignUpButton>
-                </StLoginSignUpWarp>
+                </StBackSignUpWarp>
                 <StExternalLoginWrap>
                     <StExternalLogin></StExternalLogin>
                     <StExternalLogin></StExternalLogin>
@@ -39,13 +43,17 @@ const StSignUpWrap = styled.div`
 const StLogoImg = styled.img`
     width: 408px;
     height: 68px;
+    margin-bottom: 60px;
+`;
+const StText = styled.div`
+    margin: 10px 0px 10px 10px;
 `;
 const StSignUpId = styled.input`
     width: 402px;
     height: 47px;
     border-radius: 5px;
     border: 1px solid black;
-    margin: 60px auto 0px;
+    margin: 0px auto;
 `;
 const StSignUpPw = styled.input`
     width: 402px;
@@ -68,16 +76,10 @@ const StSignUpNickName = styled.input`
     border-radius: 5px;
     border: 0px;
 `;
-const StPwSearch = styled.div`
-    text-decoration: underline;
-    margin-bottom: 20px;
-    color: gray;
-    cursor: pointer;
-`;
-const StLoginSignUpWarp = styled.div`
+const StBackSignUpWarp = styled.div`
     display: flex;
 `;
-const StLoginButton = styled.button`
+const StBackButton = styled.button`
     width: 196px;
     height: 48px;
     border-radius: 5px;
@@ -98,10 +100,6 @@ const StSignUpButton = styled.button`
         background-color: var(--main-button-color);
         color: white;
     }
-`;
-const StStartText = styled.div`
-    text-align: center;
-    margin-top: 50px;
 `;
 const StExternalLoginWrap = styled.div`
     width: 96px;
