@@ -8,9 +8,22 @@ const MainSlider = () => {
     return (
         <StSlide>
             <Slider {...settings}>
-                <List>슬라이드 1</List>
-                <List>슬라이드 2</List>
-                <List>슬라이드 3</List>
+                <List>
+                    <StH1>슬라이드 1</StH1>
+                    <StH2>슬라이드 1 내용입니다.</StH2>
+                </List>
+                <List>
+                    <StH1>슬라이드 2</StH1>
+                    <StH2>슬라이드 2 내용입니다.</StH2>
+                </List>
+                <List>
+                    <StH1>슬라이드 3</StH1>
+                    <StH2>슬라이드 3 내용입니다.</StH2>
+                </List>
+                <List>
+                    <StH1>슬라이드 4</StH1>
+                    <StH2>슬라이드 4 내용입니다.</StH2>
+                </List>
             </Slider>
         </StSlide>
     );
@@ -22,11 +35,11 @@ const settings = {
     dots: true,
     arrows: true,
     infinite: true,
-    speed: 1000,
-    centerMode: true,
+    speed: 3000,
+    // centerMode: true,
     slidesToShow: 1,
     slidesToScroll: 1,
-    /*variableWidth: true,*/
+    // variableWidth: true,
     autoplay: true,
     autoplaySpeed: 5000,
     pauseOnHover: true
@@ -36,28 +49,21 @@ const StSlide = styled.div`
     width: 100%;
     height: 350px;
 
-    .slick-prev:hover:before,
-    .slick-prev:focus:before,
-    .slick-next:hover:before,
-    .slick-next:focus:before {
-        opacity: 0.5;
-    }
-
     .slick-prev:before,
     .slick-next:before {
-        height: 80px;
         font-size: 50px;
-        color: black;
-        opacity: 0.6;
+        /* color: black; */
+        opacity: 0.5;
+        cursor: pointer;
     }
 
     .slick-prev {
-        left: 50px;
+        left: 160px;
         z-index: 10;
     }
 
     .slick-next {
-        right: 80px;
+        right: 200px;
     }
 
     .slick-dots {
@@ -66,14 +72,17 @@ const StSlide = styled.div`
 `;
 
 const List = styled.div`
-    /*
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    */
     width: 100%;
     height: 350px;
-    background-color: lightgray;
-    border: 1px solid black;
+    padding: 100px 0px 0px 250px;
+    background-color: var(--light-gray);
+`;
+
+const StH1 = styled.h1`
+    font-size: 50px;
+    padding-bottom: 20px;
+`;
+
+const StH2 = styled.h2`
+    font-size: 25px;
 `;

@@ -6,7 +6,6 @@ const Home = () => {
     return (
         <>
             <MainSlider />
-
             <StBox>
                 <StComponents>
                     <StComponent>

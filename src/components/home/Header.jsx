@@ -37,7 +37,7 @@ const StBox = styled.div`
 `;
 
 const StDiv = styled.div`
-    width: 80%;
+    width: 75%;
     height: 80px;
     position: fixed;
     display: flex;
@@ -58,6 +58,11 @@ const StLogo = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.15);
+    }
 
     & img {
         width: 100%;
@@ -71,6 +76,11 @@ const StP = styled.p`
     padding-left: 30px;
     display: flex;
     align-items: center;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.15);
+    }
 `;
 
 const StLightDiv = styled.div`
@@ -81,13 +91,18 @@ const StLightDiv = styled.div`
 const StLoginBtn = styled.button`
     width: 80px;
     height: 30px;
-    background-color: var(--light-purple);
+    background-color: var(--main-button-color);
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 15px;
     font-weight: 500;
     margin-right: 10px;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.05);
+    }
 `;
 
 const StSignupBtn = styled.button`
@@ -99,4 +114,9 @@ const StSignupBtn = styled.button`
     border-radius: 5px;
     font-size: 15px;
     font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.05);
+    }
 `;
