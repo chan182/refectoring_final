@@ -1,12 +1,98 @@
-import React from 'react';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import logo from '../../assets/home/logo.png';
 import google from '../../assets/login/Google.png';
-import logo from '../../assets/login/LOGO.png';
 import kakao from '../../assets/login/kakao.png';
+import { auth } from '../../firebase/firebase.config';
+import { useRecoilState } from 'recoil';
+import { loginIdAtom } from '../../recoil/loginAtom';
 
 const Login = () => {
-    return <div>로그인 페이지</div>;
+    const [uuid, setUuid] = useRecoilState(loginIdAtom);
+
+    //사용자 정보확인
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            console.log('user', user);
+        });
+    }, []);
+    const nav = useNavigate();
+
+    const [userId, setUserId] = useState('');
+    const [userPw, setUserPw] = useState('');
+
+    const onChange = (event) => {
+        const {
+            target: { name, value }
+        } = event;
+        if (name === 'userId') {
+            setUserId(value);
+        }
+        if (name === 'userPw') {
+            setUserPw(value);
+        }
+    };
+
+    const loginButton = async (event) => {
+        event.preventDefault();
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
+            const user = userCredential.user;
+            nav('/profile');
+            console.log(user);
+            setUuid(user.uid);
+            console.log('로그인 성공 !!!!', userCredential.user);
+        } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log('err', errorCode, errorMessage);
+        }
+    };
+    return (
+        <StPage>
+            <StLoginWrap>
+                <StLogo src={logo} alt="logo" />
+                <StUserId
+                    placeholder="이메일을 입력해주세요"
+                    type="email"
+                    value={userId}
+                    name="userId"
+                    onChange={onChange}
+                    required
+                ></StUserId>
+                <StUserPw
+                    placeholder="비밀번호를 입력해주세요"
+                    type="password"
+                    value={userPw}
+                    name="userPw"
+                    onChange={onChange}
+                    required
+                ></StUserPw>
+                <StPwSearch>비밀번호 찾기 </StPwSearch>
+                <StLoginSignUpWarp>
+                    <StLoginButton onClick={loginButton}>로그인</StLoginButton>
+                    <StSignUpButton
+                        onClick={() => {
+                            nav('/signup');
+                        }}
+                    >
+                        회원가입
+                    </StSignUpButton>
+                </StLoginSignUpWarp>
+                <StStartText>SNS로 간편하게 시작하기</StStartText>
+                <StExternalLoginWrap>
+                    <StKakaoLogin type="button">
+                        <StKakaoImg src={kakao} alt="" />
+                    </StKakaoLogin>
+                    <StGoogleLogin>
+                        <StGoogleImg src={google} alt="" />
+                    </StGoogleLogin>
+                </StExternalLoginWrap>
+            </StLoginWrap>
+        </StPage>
+    );
 };
 
 export default Login;

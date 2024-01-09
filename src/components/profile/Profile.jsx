@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { db, storage } from '../../firebase/firebase.config';
 import Avatar from '../common/avatar';
 import profileImage from './image.png';
+import { loginIdAtom } from '../../recoil/loginAtom';
+import { useRecoilValue } from 'recoil';
 
 const Profile = () => {
     const [users, setUsers] = useState({});
@@ -20,6 +22,7 @@ const Profile = () => {
     const [userIntro, setUserIntro] = useState('');
     const [isImageEditing, setIsImageEditing] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const userUuId = useRecoilValue(loginIdAtom);
 
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
 
@@ -50,11 +53,8 @@ const Profile = () => {
 
     // 해당 uid값만 가져온다
     useEffect(() => {
-        const fetchData = onSnapshot(
-            query(collection(db, 'users'), where('uid', '==', 'H660fLLUtYQdFX6k0h30k3XH2222')),
-            handleSnapshot
-        );
-
+        console.log(userUuId);
+        const fetchData = onSnapshot(query(collection(db, 'users'), where('uid', '==', userUuId)), handleSnapshot);
         return fetchData; // cleanup 함수
     }, []);
 
@@ -66,8 +66,8 @@ const Profile = () => {
 
     // 프로필 수정 버튼 입력 후 입력한 값이 수정(추가)이 된다.
     const updateUserinfo = async () => {
-        const userRef = doc(db, 'users', 'ccMqQTcWUzMrpB4LlFqR');
-        const storageRef = ref(storage, 'user_images/' + 'ccMqQTcWUzMrpB4LlFqR');
+        const userRef = doc(db, 'users', users.id);
+        const storageRef = ref(storage, 'user_images/' + users.id);
 
         try {
             const imageFile = selectedFile;
