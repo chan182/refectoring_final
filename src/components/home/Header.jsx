@@ -28,6 +28,7 @@ const Header = () => {
                     <StP>커뮤니티</StP>
                 </StLeftDiv>
                 <StRightDiv>
+                    {/* 로그인 성공 시, */}
                     <StProfileBox>
                         <StProfileImg>
                             <img src={example} />
@@ -38,6 +39,7 @@ const Header = () => {
                         {isOpen && <MainProfile />}
                     </StProfileBox>
 
+                    {/* 로그인 안되어 있는 경우, */}
                     {/* <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
                     <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn> */}
                 </StRightDiv>
@@ -49,9 +51,10 @@ const Header = () => {
 export default Header;
 
 const StBox = styled.div`
+    position: relative;
+    z-index: 1;
     width: 100%;
     height: 80px;
-    z-index: 5;
     display: flex;
     justify-content: center;
 `;
@@ -149,7 +152,6 @@ const StProfileBox = styled.div`
     justify-content: space-between;
     width: 100px;
     height: 80px;
-    z-index: 10;
 `;
 
 const StProfileImg = styled.div`

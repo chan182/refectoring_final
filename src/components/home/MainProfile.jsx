@@ -40,7 +40,6 @@ const StProfileBox = styled.div`
     height: 280px;
     position: absolute;
     transform: translateY(100%);
-    z-index: 10;
     right: 0;
     bottom: 0;
     background-color: white;
