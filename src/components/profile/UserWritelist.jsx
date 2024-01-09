@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Userlist = () => {
+const UserWritelist = () => {
     return (
         <StmainWrapper>
             <StTitle>활동내역</StTitle>
@@ -245,7 +245,7 @@ const Userlist = () => {
     );
 };
 
-export default Userlist;
+export default UserWritelist;
 
 const StmainWrapper = styled.div`
     width: 1200px;
@@ -265,15 +265,17 @@ const Stbolder = styled.div`
 
 const StFilterLIst = styled.div`
     background-color: var(--light-gray);
+    padding: 15px;
     display: flex;
     flex-direction: row;
     margin-bottom: 20px;
+    gap: 15px;
+
     div {
         display: flex;
         padding: 12px 14px;
         justify-content: center;
         align-items: center;
-        gap: 7px;
         border-radius: 74px;
         background: #756ab6;
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -289,7 +291,6 @@ const StFilterLIst = styled.div`
 
 const StTitle = styled.div`
     color: #121212;
-
     font-family: Pretendard;
     font-size: 26px;
     font-style: normal;

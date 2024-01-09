@@ -2,25 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import logo from '../../assets/login/LOGO.png';
 const Signup = () => {
-    return (
-        <StSignUpPage>
-            <StSignUpWrap>
-                <StLogoImg src={logo} alt="logo" />
-                <StSignUpId type="text" />
-                <StSignUpPw type="text" />
-                <StSignUpPwCheck type="text" />
-                <StSignUpNickName type="text" />
-                <StLoginSignUpWarp>
-                    <StLoginButton>로그인</StLoginButton>
-                    <StSignUpButton>회원가입</StSignUpButton>
-                </StLoginSignUpWarp>
-                <StExternalLoginWrap>
-                    <StExternalLogin></StExternalLogin>
-                    <StExternalLogin></StExternalLogin>
-                </StExternalLoginWrap>
-            </StSignUpWrap>
-        </StSignUpPage>
-    );
+    return <div>회원가입 페이지</div>;
 };
 
 export default Signup;

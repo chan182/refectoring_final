@@ -6,30 +6,7 @@ import logo from '../../assets/login/LOGO.png';
 import kakao from '../../assets/login/kakao.png';
 
 const Login = () => {
-    const nav = useNavigate();
-    return (
-        <StPage>
-            <StLoginWrap>
-                <StLogo src={logo} alt="logo" />
-                <StUserId placeholder="이메일을 입력해주세요"></StUserId>
-                <StUserPw placeholder="비밀번호를 입력해주세요" type="password"></StUserPw>
-                <StPwSearch>비밀번호 찾기 </StPwSearch>
-                <StLoginSignUpWarp>
-                    <StLoginButton>로그인</StLoginButton>
-                    <StSignUpButton>회원가입</StSignUpButton>
-                </StLoginSignUpWarp>
-                <StStartText>SNS로 간편하게 시작하기</StStartText>
-                <StExternalLoginWrap>
-                    <StKakaoLogin type="button">
-                        <StKakaoImg src={kakao} alt="" />
-                    </StKakaoLogin>
-                    <StGoogleLogin>
-                        <StGoogleImg src={google} alt="" />
-                    </StGoogleLogin>
-                </StExternalLoginWrap>
-            </StLoginWrap>
-        </StPage>
-    );
+    return <div>로그인 페이지</div>;
 };
 
 export default Login;

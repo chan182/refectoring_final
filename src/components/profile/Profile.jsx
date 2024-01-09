@@ -19,6 +19,7 @@ const Profile = () => {
     const [userLocation, setUserLocation] = useState('');
     const [userIntro, setUserIntro] = useState('');
     const [isImageEditing, setIsImageEditing] = useState(false);
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
 
@@ -89,8 +90,18 @@ const Profile = () => {
                     introduce: userIntro,
                     imageUrl: imageUrl
                 });
-                console.log('Update successful');
+            } else {
+                await updateDoc(userRef, {
+                    nickname: userNickname,
+                    name: userName,
+                    birth: userBirth,
+                    mbti: userMbti,
+                    blood: userBlood,
+                    location: userLocation,
+                    introduce: userIntro
+                });
             }
+            console.log('update successful');
         } catch (error) {
             console.error('업로드 실패', error);
         }
@@ -102,34 +113,26 @@ const Profile = () => {
                 <StUserwrapper>
                     <div>
                         <StProfileImage>
-                            {isImageEditing ? (
-                                <>
-                                    <label htmlFor="inputFile">
-                                        <ProfilePointerAvatar
-                                            src={previewURL || users.imageUrl}
-                                            for="inputFile"
-                                            size="large"
-                                        />
-
-                                        <Stinput
-                                            type="file"
-                                            id="inputFile"
-                                            accept="image/*"
-                                            onChange={fileSelectHandler}
-                                        />
-                                    </label>
-                                </>
+                            {isEditing ? (
+                                <label htmlFor="inputFile">
+                                    <ProfilePointerAvatar
+                                        src={previewURL || users.imageUrl}
+                                        for="inputFile"
+                                        size="large"
+                                    />
+                                    <Stinput type="file" id="inputFile" accept="image/*" onChange={fileSelectHandler} />
+                                </label>
                             ) : (
                                 <Avatar src={users.imageUrl || profileImage} size="large" />
                             )}
                         </StProfileImage>
-                        <StProfileImageButton
+                        {/* <StProfileImageButton
                             onClick={() => {
                                 setIsImageEditing(!isImageEditing);
                             }}
                         >
                             프로필 사진 업로드
-                        </StProfileImageButton>
+                        </StProfileImageButton> */}
                     </div>
                     <div>
                         <StUserInfo>
@@ -142,11 +145,9 @@ const Profile = () => {
                                                 <input
                                                     placeholder="홍길동"
                                                     value={userName}
-                                                    name={userName}
                                                     onChange={(e) => {
                                                         setUserName(e.target.value);
                                                     }}
-                                                    autoFocus
                                                 />
                                             </StminiContent3>
                                         </Stlist>
@@ -214,7 +215,7 @@ const Profile = () => {
                                     </StlistWrapper>
                                     <StlistWrapper>
                                         <Stlist>
-                                            <StminiTitle>한줄소개</StminiTitle>
+                                            <StminiTitle>한 줄 소개</StminiTitle>
                                             <StminiContent2>
                                                 <input
                                                     value={userIntro}
@@ -269,19 +270,28 @@ const Profile = () => {
                                 </>
                             )}
                         </StUserInfo>
-                        <Stbutton2 onClick={() => toggleInput()}>
+                        <button onClick={() => toggleInput()}>
                             {isEditing ? (
-                                <Stbutton2
-                                    onClick={() => {
-                                        updateUserinfo();
-                                    }}
-                                >
-                                    등록하기
-                                </Stbutton2>
+                                <ButtonWrapper>
+                                    <Stbutton2
+                                        onClick={() => {
+                                            updateUserinfo();
+                                        }}
+                                    >
+                                        프로필 수정 완료
+                                    </Stbutton2>
+                                    <Stbutton2
+                                        onClick={() => {
+                                            setIsEditing(true);
+                                        }}
+                                    >
+                                        프로필 수정 취소
+                                    </Stbutton2>
+                                </ButtonWrapper>
                             ) : (
                                 <Stbutton2>프로필수정</Stbutton2>
                             )}
-                        </Stbutton2>
+                        </button>
                     </div>
                 </StUserwrapper>
             </StWrapper>
@@ -300,7 +310,6 @@ const StWrapper = styled.div`
     border: 3px solid var(--light-pink);
     width: 1200px;
     height: 540px;
-    flex-shrink: 0;
 `;
 
 const StprofileTitle = styled.div`
@@ -318,10 +327,8 @@ const StProfileImage = styled.div`
     padding: 10px;
 `;
 const StUserInfo = styled.div`
-    background-color: var(--light-gray);
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
 
     input {
         width: 70px;
@@ -346,7 +353,6 @@ const StProfileImageButton = styled.button`
     justify-content: center;
     align-items: center;
     gap: 4px;
-    flex-shrink: 0;
     border-radius: 6px;
     border: 1px solid #756ab6;
     color: #6a6a6a;
@@ -362,23 +368,19 @@ const StProfileImageButton = styled.button`
 
 const Stbutton2 = styled.button`
     display: flex;
-    width: 196px;
-    height: 48px;
     padding: 10px;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
+    gap: 5px;
     border-radius: 6px;
-    background: #756ab6;
-    color: #fff;
+    background-color: var(--light-purple);
+    color: white;
     font-family: Pretendard;
     font-size: 20px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
     letter-spacing: 0.4px;
-    margin: 10px;
 `;
 
 const ProfilePointerAvatar = styled(Avatar)`
@@ -399,12 +401,11 @@ const StlistWrapper = styled.div`
 const Stlist = styled.div`
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
 `;
 
 const StminiTitle = styled.div`
-    color: #888;
-
+    border: 3px solid var(--light-pink);
+    width: 296px;
     font-family: Pretendard;
     font-size: 13px;
     font-style: normal;
@@ -412,9 +413,11 @@ const StminiTitle = styled.div`
     line-height: normal;
     letter-spacing: 0.28px;
     padding-bottom: 5px;
+    padding-left: 10px;
 `;
 
 const StminiContent = styled.div`
+    border: 3px solid black;
     display: flex;
     width: 296px;
     padding: 13px 14px;
@@ -457,4 +460,9 @@ const StminiContent3 = styled.div`
         border: none;
         padding: 10px;
     }
+`;
+
+const ButtonWrapper = styled.div`
+    gap: 50px;
+    display: flex;
 `;
