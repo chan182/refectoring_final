@@ -9,6 +9,7 @@ import MbtiTestPage from './../pages/MbtiTestPage';
 import GlobalColor from './../style/GlobalColor';
 import GlobalStyle from './../style/GlobalStyle';
 
+
 const Router = () => {
     return (
         <>
