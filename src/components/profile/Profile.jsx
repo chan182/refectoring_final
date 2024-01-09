@@ -11,12 +11,14 @@ const Profile = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [previewURL, setPreviewURL] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [username, setUsername] = useState('');
-    const [usernickname, setUsernickname] = useState('');
+    const [userName, setUserName] = useState('');
+    const [userNickname, setUsernickname] = useState('');
     const [userBirth, setUserBirth] = useState('');
     const [userMbti, setUserMbti] = useState('');
     const [userBlood, setUserBlood] = useState('');
     const [userLocation, setUserLocation] = useState('');
+    const [userIntro, setUserIntro] = useState('');
+    const [isImageEditing, setIsImageEditing] = useState(false);
 
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
 
@@ -78,12 +80,13 @@ const Profile = () => {
 
                 // 사용자 정보 업데이트
                 await updateDoc(userRef, {
-                    nickname: usernickname,
-                    name: username,
+                    nickname: userNickname,
+                    name: userName,
                     birth: userBirth,
                     mbti: userMbti,
                     blood: userBlood,
                     location: userLocation,
+                    introduce: userIntro,
                     imageUrl: imageUrl
                 });
                 console.log('Update successful');
@@ -95,101 +98,191 @@ const Profile = () => {
     return (
         <>
             <StWrapper>
-                <Stbutton onClick={() => toggleInput()}>
-                    {isEditing ? (
-                        <button
+                <StprofileTitle>마이페이지</StprofileTitle>
+                <StUserwrapper>
+                    <div>
+                        <StProfileImage>
+                            {isImageEditing ? (
+                                <>
+                                    <label htmlFor="inputFile">
+                                        <ProfilePointerAvatar
+                                            src={previewURL || users.imageUrl}
+                                            for="inputFile"
+                                            size="large"
+                                        />
+
+                                        <Stinput
+                                            type="file"
+                                            id="inputFile"
+                                            accept="image/*"
+                                            onChange={fileSelectHandler}
+                                        />
+                                    </label>
+                                </>
+                            ) : (
+                                <Avatar src={users.imageUrl || profileImage} size="large" />
+                            )}
+                        </StProfileImage>
+                        <StProfileImageButton
                             onClick={() => {
-                                updateUserinfo();
+                                setIsImageEditing(!isImageEditing);
                             }}
                         >
-                            등록하기
-                        </button>
-                    ) : (
-                        <button>프로필수정</button>
-                    )}
-                </Stbutton>
-                <StUserwrapper>
-                    <StProfileImage>
-                        {isEditing ? (
-                            <label>
-                                <ProfilePointerAvatar src={previewURL || users.imageUrl} for="inputFile" size="large" />
-                                <Stinput type="file" id="inputFile" accept="image/*" onChange={fileSelectHandler} />
-                            </label>
-                        ) : (
-                            <Avatar src={users.imageUrl || profileImage} size="large" />
-                        )}
-                    </StProfileImage>
-                    <StUserInfo>
-                        {isEditing ? (
-                            <>
-                                <div>
-                                    이름 :
-                                    <input
-                                        value={username}
-                                        onChange={(e) => {
-                                            setUsername(e.target.value);
-                                        }}
-                                        autoFocus
-                                    />
-                                </div>
-                                <div>
-                                    닉네임 :
-                                    <input
-                                        defaultValue={users.nickname}
-                                        value={usernickname}
-                                        onChange={(e) => {
-                                            setUsernickname(e.target.value);
-                                        }}
-                                    />
-                                </div>
-                                <div>
-                                    생년월일 :
-                                    <input
-                                        value={userBirth}
-                                        onChange={(e) => {
-                                            setUserBirth(e.target.value);
-                                        }}
-                                    />
-                                </div>
-                                <div>
-                                    MBTI :
-                                    <input
-                                        value={userMbti}
-                                        onChange={(e) => {
-                                            setUserMbti(e.target.value);
-                                        }}
-                                    />
-                                </div>
-                                <div>
-                                    혈액형 :
-                                    <input
-                                        value={userBlood}
-                                        onChange={(e) => {
-                                            setUserBlood(e.target.value);
-                                        }}
-                                    />
-                                </div>
-                                <div>
-                                    거주지 :
-                                    <input
-                                        value={userLocation}
-                                        onChange={(e) => {
-                                            setUserLocation(e.target.value);
-                                        }}
-                                    />
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div>이름 : {users.name}</div>
-                                <div>닉네임 : {users.nickname}</div>
-                                <div>생년월일 : {users.birth}</div>
-                                <div>MBTI : {users.mbti}</div>
-                                <div>혈액형 : {users.blood}</div>
-                                <div>거주지 : {users.location}</div>
-                            </>
-                        )}
-                    </StUserInfo>
+                            프로필 사진 업로드
+                        </StProfileImageButton>
+                    </div>
+                    <div>
+                        <StUserInfo>
+                            {isEditing ? (
+                                <>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>이름</StminiTitle>
+                                            <StminiContent3>
+                                                <input
+                                                    placeholder="홍길동"
+                                                    value={userName}
+                                                    name={userName}
+                                                    onChange={(e) => {
+                                                        setUserName(e.target.value);
+                                                    }}
+                                                    autoFocus
+                                                />
+                                            </StminiContent3>
+                                        </Stlist>
+                                        <Stlist>
+                                            <StminiTitle>닉네임</StminiTitle>
+                                            <StminiContent3>
+                                                <input
+                                                    placeholder="5자 이내로 작성해주세요"
+                                                    value={userNickname}
+                                                    onChange={(e) => {
+                                                        setUsernickname(e.target.value);
+                                                    }}
+                                                />
+                                            </StminiContent3>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>생년월일</StminiTitle>
+                                            <StminiContent3>
+                                                <input
+                                                    value={userBirth}
+                                                    onChange={(e) => {
+                                                        setUserBirth(e.target.value);
+                                                    }}
+                                                />
+                                            </StminiContent3>
+                                        </Stlist>
+                                        <Stlist>
+                                            <StminiTitle>거주지</StminiTitle>
+                                            <StminiContent3>
+                                                <input
+                                                    placeholder="OOO시 OOO구"
+                                                    value={userLocation}
+                                                    onChange={(e) => {
+                                                        setUserLocation(e.target.value);
+                                                    }}
+                                                />
+                                            </StminiContent3>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>MBTI</StminiTitle>
+                                            <StminiContent3>
+                                                <input
+                                                    value={userMbti}
+                                                    onChange={(e) => {
+                                                        setUserMbti(e.target.value);
+                                                    }}
+                                                />
+                                            </StminiContent3>
+                                        </Stlist>
+                                        <Stlist>
+                                            <StminiTitle>혈액형</StminiTitle>
+                                            <StminiContent3>
+                                                <input
+                                                    value={userBlood}
+                                                    onChange={(e) => {
+                                                        setUserBlood(e.target.value);
+                                                    }}
+                                                />
+                                            </StminiContent3>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>한줄소개</StminiTitle>
+                                            <StminiContent2>
+                                                <input
+                                                    value={userIntro}
+                                                    onChange={(e) => {
+                                                        setUserIntro(e.target.value);
+                                                    }}
+                                                    autoFocus
+                                                />
+                                            </StminiContent2>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                </>
+                            ) : (
+                                <>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>이름</StminiTitle>
+                                            <StminiContent>{users.name}</StminiContent>
+                                        </Stlist>
+
+                                        <Stlist>
+                                            <StminiTitle>닉네임</StminiTitle>
+                                            <StminiContent>{users.nickname}</StminiContent>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>생년월일</StminiTitle>
+                                            <StminiContent>{users.birth}</StminiContent>
+                                        </Stlist>
+                                        <Stlist>
+                                            <StminiTitle>거주지</StminiTitle>
+                                            <StminiContent>{users.location}</StminiContent>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>MBTI</StminiTitle>
+                                            <StminiContent>{users.mbti}</StminiContent>
+                                        </Stlist>
+                                        <Stlist>
+                                            <StminiTitle>혈액형</StminiTitle>
+                                            <StminiContent>{users.blood}</StminiContent>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>한줄소개</StminiTitle>
+                                            <StminiContent2>{users.introduce}</StminiContent2>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                </>
+                            )}
+                        </StUserInfo>
+                        <Stbutton2 onClick={() => toggleInput()}>
+                            {isEditing ? (
+                                <Stbutton2
+                                    onClick={() => {
+                                        updateUserinfo();
+                                    }}
+                                >
+                                    등록하기
+                                </Stbutton2>
+                            ) : (
+                                <Stbutton2>프로필수정</Stbutton2>
+                            )}
+                        </Stbutton2>
+                    </div>
                 </StUserwrapper>
             </StWrapper>
         </>
@@ -202,26 +295,34 @@ const StWrapper = styled.div`
     background-color: white;
     border-radius: 10px;
     display: flex;
-    flex-direction: column;
-    width: 700px; // 이거는 다시 한 번 확인해볼 것
+    flex-direction: column; // 이거는 다시 한 번 확인해볼 것
     margin: 10px auto; // 이거는 다시 한 번 확인해볼 것
     border: 3px solid var(--light-pink);
+    width: 1200px;
+    height: 540px;
+    flex-shrink: 0;
+`;
+
+const StprofileTitle = styled.div`
+    color: #121212;
+    font-family: Pretendard;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 120%;
 `;
 
 const StProfileImage = styled.div`
     /* background-color: var(--light-beige); */
     border-radius: 10px;
     padding: 10px;
-    border: 5px solid var(--light-beige);
 `;
 const StUserInfo = styled.div`
     background-color: var(--light-gray);
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    div {
-        margin: 10px;
-    }
+
     input {
         width: 70px;
         margin: -10px 10px -10px 10px;
@@ -231,15 +332,53 @@ const StUserInfo = styled.div`
 
 const StUserwrapper = styled.div`
     display: flex;
-    justify-content: space-around;
     margin-bottom: 20px;
+    margin-top: 20px;
+    height: 583px;
+    border-radius: 26px;
+    background: #fff;
 `;
 
-const Stbutton = styled.div`
-    margin: 10px 5px 10px 0px;
-    width: 100px;
-    margin-left: 75%;
-    margin-bottom: 20px;
+const StProfileImageButton = styled.button`
+    display: inline-flex;
+    height: 48px;
+    padding: 10px 14px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    border: 1px solid #756ab6;
+    color: #6a6a6a;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.4px;
+    margin-left: 80px;
+    cursor: pointer;
+`;
+
+const Stbutton2 = styled.button`
+    display: flex;
+    width: 196px;
+    height: 48px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    background: #756ab6;
+    color: #fff;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.4px;
+    margin: 10px;
 `;
 
 const ProfilePointerAvatar = styled(Avatar)`
@@ -248,4 +387,74 @@ const ProfilePointerAvatar = styled(Avatar)`
 
 const Stinput = styled.input`
     display: none;
+`;
+
+const StlistWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 296px;
+    height: 66px;
+`;
+
+const Stlist = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+`;
+
+const StminiTitle = styled.div`
+    color: #888;
+
+    font-family: Pretendard;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.28px;
+    padding-bottom: 5px;
+`;
+
+const StminiContent = styled.div`
+    display: flex;
+    width: 296px;
+    padding: 13px 14px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    background: #f8f8f8;
+    margin-right: 50px;
+    height: 70px;
+`;
+
+const StminiContent2 = styled.div`
+    display: flex;
+    width: 639px;
+    padding: 13px 14px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    background: #f8f8f8;
+    height: 66px;
+    input {
+        width: 630px;
+        border: none;
+        padding: 10px;
+    }
+`;
+
+const StminiContent3 = styled.div`
+    display: flex;
+    width: 296px;
+    padding: 13px 14px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    background: #f8f8f8;
+    margin-right: 50px;
+    height: 70px;
+    input {
+        width: 280px;
+        border: none;
+        padding: 10px;
+    }
 `;
