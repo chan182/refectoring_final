@@ -48,22 +48,25 @@ const settings = {
 const StSlide = styled.div`
     width: 100%;
     height: 350px;
+    position: relative;
+    z-index: -1;
 
     .slick-prev:before,
     .slick-next:before {
         font-size: 50px;
         /* color: black; */
         opacity: 0.5;
-        cursor: pointer;
     }
 
     .slick-prev {
         left: 160px;
-        z-index: 10;
+        z-index: 1;
+        cursor: pointer;
     }
 
     .slick-next {
         right: 200px;
+        cursor: pointer;
     }
 
     .slick-dots {

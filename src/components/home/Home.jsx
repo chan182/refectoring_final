@@ -57,7 +57,7 @@ const StComponent = styled.div`
 
     &:hover {
         transform: scale(1.05);
-        box-shadow: 2px 2px 2px 2px grey;
+        box-shadow: 2px 2px 2px 2px var(--bold-gray);
     }
 `;
 

@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import dorpArrow from '../../assets/home/dropArrow.png';
 import logo from '../../assets/home/logo.png';
+import example from '../../assets/home/suin.jpg';
+import MainProfile from './MainProfile';
 
 const Header = () => {
     const navigate = useNavigate();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+        console.log('isOpen : ', isOpen);
+    };
 
     return (
         <StBox>
@@ -18,10 +27,20 @@ const Header = () => {
                     <StP>MBTI 궁합</StP>
                     <StP>커뮤니티</StP>
                 </StLeftDiv>
-                <StLightDiv>
-                    <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
-                    <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
-                </StLightDiv>
+                <StRightDiv>
+                    <StProfileBox>
+                        <StProfileImg>
+                            <img src={example} />
+                        </StProfileImg>
+                        <StDropBtn onClick={toggleDropdown}>
+                            <img src={dorpArrow} />
+                        </StDropBtn>
+                        {isOpen && <MainProfile />}
+                    </StProfileBox>
+
+                    {/* <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
+                    <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn> */}
+                </StRightDiv>
             </StDiv>
         </StBox>
     );
@@ -32,6 +51,7 @@ export default Header;
 const StBox = styled.div`
     width: 100%;
     height: 80px;
+    z-index: 5;
     display: flex;
     justify-content: center;
 `;
@@ -83,7 +103,9 @@ const StP = styled.p`
     }
 `;
 
-const StLightDiv = styled.div`
+const StRightDiv = styled.div`
+    width: 200px;
+    height: 80px;
     display: flex;
     justify-content: flex-end;
 `;
@@ -118,5 +140,49 @@ const StSignupBtn = styled.button`
 
     &:hover {
         transform: scale(1.05);
+    }
+`;
+
+const StProfileBox = styled.div`
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: 100px;
+    height: 80px;
+    z-index: 10;
+`;
+
+const StProfileImg = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & img {
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        border-radius: 50%;
+    }
+`;
+
+const StDropBtn = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.15);
+    }
+
+    & img {
+        width: 20px;
+        height: 20px;
+        opacity: 0.6;
     }
 `;
