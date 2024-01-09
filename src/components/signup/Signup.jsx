@@ -1,7 +1,10 @@
+import { createUserWithEmailAndPassword } from '@firebase/auth';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import logo from '../../assets/login/LOGO.png';
+import logo from '../../assets/home/logo.png';
+import { auth } from '../../firebase';
+
 const Signup = () => {
     const nav = useNavigate();
     const [userId, setUserId] = useState('');
@@ -26,8 +29,18 @@ const Signup = () => {
             setNickName(value);
         }
     };
-    const signUpButton = (event) => {
+    //회원가입 버튼
+    const signUpButton = async (event) => {
         event.preventDefault();
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, userId, userPw);
+            console.log('user', userCredential.user);
+        } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log('err', errorCode, errorMessage);
+        }
     };
     return (
         <StSignUpPage>
