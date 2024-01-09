@@ -1,23 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../../assets/login/LOGO.png';
 const Signup = () => {
+    const nav = useNavigate();
+    const [userId, setUserId] = useState('');
+    const [userPw, setUserPw] = useState('');
+    const [pwCheck, setPwCheck] = useState('');
+    const [nickName, setNickName] = useState('');
+
+    const onChange = (event) => {
+        const {
+            target: { name, value }
+        } = event;
+        if (name === 'userId') {
+            setUserId(value);
+        }
+        if (name === 'userPw') {
+            setUserPw(value);
+        }
+        if (name === 'pwCheck') {
+            setPwCheck(value);
+        }
+        if (name === 'nickName') {
+            setNickName(value);
+        }
+    };
+    const signUpButton = (event) => {
+        event.preventDefault();
+    };
     return (
         <StSignUpPage>
             <StSignUpWrap>
                 <StLogoImg src={logo} alt="logo" />
-                <StText>사용할 이메일 입력</StText>
-                <StSignUpId type="text" />
-                <StText>사용할 비밀번호 입력</StText>
-                <StSignUpPw type="password" />
-                <StText>사용할 비밀번호 확인</StText>
-                <StSignUpPwCheck type="password" />
-                <StText>사용할 닉네임 입력</StText>
-                <StSignUpNickName type="text" />
-                <StBackSignUpWarp>
-                    <StBackButton>돌아가기</StBackButton>
-                    <StSignUpButton>회원가입</StSignUpButton>
-                </StBackSignUpWarp>
+                <form>
+                    <StText>사용할 이메일 입력</StText>
+                    <StSignUpId type="email" value={userId} name="userId" onChange={onChange} required />
+                    <StText>사용할 비밀번호 입력</StText>
+                    <StSignUpPw type="password" value={userPw} name="userPw" onChange={onChange} required />
+                    <StText>사용할 비밀번호 확인</StText>
+                    <StSignUpPwCheck type="password" value={pwCheck} name="pwCheck" onChange={onChange} required />
+                    <StText>사용할 닉네임 입력</StText>
+                    <StSignUpNickName type="text" value={nickName} name="nickName" onChange={onChange} required />
+                    <StBackSignUpWarp>
+                        <StBackButton
+                            onClick={() => {
+                                nav('/login');
+                            }}
+                        >
+                            돌아가기
+                        </StBackButton>
+                        <StSignUpButton onClick={signUpButton}>회원가입</StSignUpButton>
+                    </StBackSignUpWarp>
+                </form>
                 <StExternalLoginWrap>
                     <StExternalLogin></StExternalLogin>
                     <StExternalLogin></StExternalLogin>
@@ -52,7 +87,7 @@ const StSignUpId = styled.input`
     width: 402px;
     height: 47px;
     border-radius: 5px;
-    border: 1px solid black;
+    border: 0px;
     margin: 0px auto;
 `;
 const StSignUpPw = styled.input`

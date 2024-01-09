@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import google from '../../assets/login/Google.png';
@@ -7,7 +7,6 @@ import kakao from '../../assets/login/kakao.png';
 
 const Login = () => {
     const nav = useNavigate();
-    const [userId, setUserId] = useState('');
     return (
         <StPage>
             <StLoginWrap>
