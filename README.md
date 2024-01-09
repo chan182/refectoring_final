@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+## 내배캠 React 3기 서비스런칭 B6조 최종 프로젝트
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 📢 프로젝트 개요
 
-## Available Scripts
+** 2024.01.04 ~ 2024.02.08 **
 
-In the project directory, you can run:
+- 프로젝트명: ** MBTI Community **
+- 주제: 각기 다른 MBTI를 가진 사람들이 자유롭게 소통하고, 모임을 통해 인연을 쌓아갈 수 있는 커뮤니티 웹사이트 
+- 내용: MBTI를 검사할 수 있는 서비스, MBTI 궁합을 알아볼 수 있는 서비스, 모임을 만들고 친목을 도모할 수 있는 서비스, 자유롭게 게시글을 작성하고 댓글을 남기며 소통할 수 있는 커뮤니티 서비스를 지원하는 웹사이트
 
-### `yarn start`
+### 👥 팀 소개
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- 팀명: 육사시미
+- 팀원: 최수인, 김희찬, 진영호, 박길훈, 차상현(디자이너)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 👀 구현 기능
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+### 📝 역할 분담
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 🚩 개발 내용
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### 💻 개발 환경
+- IDE: Visual Studio Code
+- OS: windows, Mac
+- Package Manager: Yarn Classic (v1.22.19)
+- React boilerplate: create-react-app
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### 📌 사용 기술
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- React
+- Redux Toolkit (전역 상태 관리 도구)
+- React Query (비동기 관련 로직과 상태를 관리)
+- Firebase (사용자 인증과 데이터베이스 등의 서버 기능 제공)
+- React-router-dom (클라이언트 사이드 라우팅. URL에 맞는 컴포넌트 렌더링)
+- Styled-components (동적 스타일링)
