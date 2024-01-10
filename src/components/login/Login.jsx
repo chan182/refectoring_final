@@ -100,18 +100,29 @@ export default Login;
 const StPage = styled.div`
     display: flex;
     justify-content: center;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--light-gray);
 `;
+
 const StLoginWrap = styled.div`
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    width: 400px;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
     height: 600px;
+    background-color: white;
+    padding: 50px 0px 0px 0px;
+    border-radius: 10px;
 `;
+
 const StLogo = styled.img`
     width: 408px;
     height: 68px;
 `;
+
 const StUserId = styled.input`
     width: 402px;
     height: 47px;
@@ -122,6 +133,7 @@ const StUserId = styled.input`
     font-size: large;
     color: black;
 `;
+
 const StUserPw = styled.input`
     width: 402px;
     height: 47px;
@@ -131,15 +143,18 @@ const StUserPw = styled.input`
     border: 0px;
     font-size: large;
 `;
+
 const StPwSearch = styled.div`
     text-decoration: underline;
     margin: 20px 0px;
     color: var(--bold-gray);
     cursor: pointer;
 `;
+
 const StLoginSignUpWarp = styled.div`
     display: flex;
 `;
+
 const StLoginButton = styled.button`
     width: 196px;
     height: 48px;
@@ -149,6 +164,7 @@ const StLoginButton = styled.button`
     font-size: 20px;
     cursor: pointer;
 `;
+
 const StSignUpButton = styled.button`
     width: 196px;
     height: 48px;
@@ -157,15 +173,18 @@ const StSignUpButton = styled.button`
     margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
+
     &:hover {
         background-color: var(--main-button-color);
         color: white;
     }
 `;
+
 const StStartText = styled.div`
     text-align: center;
     margin-top: 60px;
 `;
+
 const StExternalLoginWrap = styled.div`
     width: 106px;
     height: 42px;
@@ -181,10 +200,12 @@ const StKakaoLogin = styled.button`
     border: 0px;
     cursor: pointer;
 `;
+
 const StKakaoImg = styled.img`
     width: 42px;
     height: 42px;
 `;
+
 const StGoogleLogin = styled.button`
     width: 42px;
     height: 42px;
@@ -192,6 +213,7 @@ const StGoogleLogin = styled.button`
     border: 0px;
     cursor: pointer;
 `;
+
 const StGoogleImg = styled.img`
     width: 30px;
     height: 30px;

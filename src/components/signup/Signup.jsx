@@ -86,13 +86,20 @@ export default Signup;
 const StSignUpPage = styled.div`
     display: flex;
     justify-content: center;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--light-gray);
 `;
 const StSignUpWrap = styled.div`
     margin-top: 50px;
     display: flex;
+    align-items: center;
     flex-direction: column;
-    width: 410px;
+    width: 30%;
     height: 600px;
+    background-color: white;
+    padding: 50px 0px 0px 0px;
+    border-radius: 10px;
 `;
 const StLogoImg = styled.img`
     width: 408px;

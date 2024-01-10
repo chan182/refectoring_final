@@ -79,6 +79,7 @@ const StBox = styled.div`
     height: 80px;
     display: flex;
     justify-content: center;
+    background-color: white;
 `;
 
 const StDiv = styled.div`
