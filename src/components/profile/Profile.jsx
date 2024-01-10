@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import UserWritelist from './UserWritelist';
 import UserInfo from './UserInfo';
-
 const Profile = () => {
     return (
         <StBox>
@@ -13,7 +12,6 @@ const Profile = () => {
     );
 };
 export default Profile;
-
 const StBox = styled.div`
     width: 100%;
     /* height: 200vh; */
@@ -24,7 +22,6 @@ const StBox = styled.div`
     flex-direction: column;
     background-color: var(--light-gray);
 `;
-
 const StHr = styled.hr`
     border: 1px solid var(--bold-gray);
     border-width: 1px 0 0 0;

@@ -9,8 +9,12 @@ import MbtiTest from '../mbti_test/MbtiTest';
 import MainProfile from './MainProfile';
 import { auth } from '../../firebase/firebase.config';
 import { onAuthStateChanged } from 'firebase/auth';
+import { useRecoilValue } from 'recoil';
+import { UserImageAtom } from '../../recoil/Atom';
 
 const Header = () => {
+    const userProfileImage = useRecoilValue(UserImageAtom);
+
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
@@ -47,7 +51,7 @@ const Header = () => {
                             {/* 로그인 성공 시, */}
                             <StProfileBox>
                                 <StProfileImg>
-                                    <img src={example} />
+                                    <img src={userProfileImage} />
                                 </StProfileImg>
                                 <StDropBtn onClick={toggleDropdown}>
                                     <img src={dorpArrow} />
