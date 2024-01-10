@@ -5,7 +5,7 @@ import * as T from './mbtiTestStyle';
 import { questions } from './questions';
 import { typeDescriptions } from './typeDescriptions';
 
-const MbtiResult = ({ counts, setCurrentQuestion }) => {
+const MbtiResult = ({ setCounts, counts, setCurrentQuestion, setIsModalOpen }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -28,24 +28,24 @@ const MbtiResult = ({ counts, setCurrentQuestion }) => {
     const dominantTypeDescription = typeDescriptions[dominantType];
 
     const handleReloadClick = () => {
-        window.location.reload();
+        setIsModalOpen(false);
     };
 
     const handleReturnHomeClick = () => {
+        setCounts({ I: 0, E: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 });
         setCurrentQuestion(0);
-        navigate('/');
     };
 
     return (
         <T.StTestResultContainer>
             <T.StQuestionContainer>
-                <T.StResultMent>고생하셨습니다!</T.StResultMent>
+                {/* <T.StResultMent>고생하셨습니다!</T.StResultMent> */}
                 <T.StResultText>{dominantType}</T.StResultText>
                 <T.StTypeDescription>{dominantTypeDescription}</T.StTypeDescription>
             </T.StQuestionContainer>
             <T.StButtonContainer>
                 <T.StCompleteButton onClick={handleReloadClick} disabled={false}>
-                    궁합 보러가기
+                    홈으로 돌아가기
                 </T.StCompleteButton>
                 <T.StCompleteButton onClick={handleReturnHomeClick} disabled={false}>
                     검사 다시하기
@@ -152,7 +152,7 @@ const MbtiTest = ({ setIsModalOpen }) => {
                         성격 테스트를 통해 자신의 성향과 행동에 대한 정확한 분석 결과를 확인해 보세요.
                     </T.StTestStartText>
                     <T.StButtonContainer>
-                        <T.StTestStartButton onClick={goHomeButton}>홈 으로 돌아가기</T.StTestStartButton>
+                        <T.StTestStartButton onClick={goHomeButton}>홈으로 돌아가기</T.StTestStartButton>
                         <T.StTestStartButton onClick={() => setTestStart(!testStart)}>
                             검사 시작하기
                         </T.StTestStartButton>
@@ -200,7 +200,12 @@ const MbtiTest = ({ setIsModalOpen }) => {
                         </StProgressContainer> */}
                         </div>
                     ) : (
-                        <MbtiResult counts={counts} setCurrentQuestion={setCurrentQuestion} />
+                        <MbtiResult
+                            counts={counts}
+                            setCounts={setCounts}
+                            setIsModalOpen={setIsModalOpen}
+                            setCurrentQuestion={setCurrentQuestion}
+                        />
                     )}
                 </T.StTestContainer>
             )}
