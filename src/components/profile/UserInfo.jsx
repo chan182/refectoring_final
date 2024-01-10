@@ -313,8 +313,10 @@ const UserInfo = () => {
     );
 };
 export default UserInfo;
+
 const StWrapper = styled.div`
     background-color: white;
+    border: 1px solid var(--content-border-color);
     border-radius: 10px;
     display: flex;
     margin: 10px auto;
@@ -335,12 +337,13 @@ const StProfileImage = styled.div`
     margin-left: 50px;
     margin-right: 50px;
     width: 40%;
+
     & button {
         width: 180px;
         height: 40px;
         font-size: 18px;
         color: var(--bold-gray);
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--button-border-color);
         border-radius: 5px;
         margin-top: 25px;
     }
@@ -350,6 +353,7 @@ const StUserInfo = styled.div`
     flex-direction: column;
     width: 100%;
     height: 90%;
+
     input {
         width: 70px;
         margin: -10px 10px -10px 10px;
@@ -433,10 +437,18 @@ const StminiContent = styled.div`
     padding: 10px;
     display: flex;
     align-items: center;
+
     input {
         width: 100%;
         border: none;
         padding: 10px;
+
+        &:focus {
+            border: 1px solid #abaad8;
+            border-radius: 5px;
+            width: 100%;
+            outline: none;
+        }
     }
 `;
 const StminiContent2 = styled.div`
@@ -448,10 +460,18 @@ const StminiContent2 = styled.div`
     padding: 10px;
     display: flex;
     align-items: center;
+
     input {
         width: 100%;
         border: none;
         padding: 10px;
+
+        &:focus {
+            border: 1px solid #abaad8;
+            border-radius: 5px;
+            width: 100%;
+            outline: none;
+        }
     }
 `;
 const StInputBox = styled.div`

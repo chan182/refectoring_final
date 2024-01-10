@@ -64,7 +64,7 @@ const StComponent = styled.div`
     border-radius: 10px;
     padding: 30px;
 
-    border: 2px solid var(--border-color);
+    border: 2px solid var(--button-border-color);
     position: relative;
 
     & img {
@@ -77,7 +77,7 @@ const StComponent = styled.div`
 
     &:hover {
         transform: scale(1.05);
-        box-shadow: 0px 1px 1px 1px var(--border-color);
+        /* box-shadow: 0px 1px 1px 1px var(--content-border-color); */
     }
 `;
 
