@@ -88,7 +88,7 @@ const StProfileImg = styled.div`
         height: 100px;
         overflow: hidden;
         border-radius: 50%;
-        border: 1px solid var(--light-gray);
+        border: 1px solid var(--content-border-color);
     }
 `;
 
@@ -168,7 +168,7 @@ const StLogoutBtn = styled.button`
     height: 30px;
     background-color: white;
     color: var(--bold-gray);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--button-border-color);
     border-radius: 5px;
     font-size: 15px;
     font-weight: 500;
