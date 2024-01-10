@@ -22,6 +22,7 @@ const StBox = styled.div`
     flex-direction: column;
     background-color: var(--background-color);
 `;
+
 const StHr = styled.hr`
     border: 1px solid var(--hr-border-color);
     border-width: 1px 0 0 0;

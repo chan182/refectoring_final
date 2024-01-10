@@ -301,6 +301,7 @@ const UserInfo = () => {
                             ) : (
                                 <StEditBtn>프로필 수정</StEditBtn>
                             )}
+                            --border
                         </StBtnDiv>
                     </StInputBox>
                 </StUserwrapper>
@@ -319,12 +320,14 @@ const StWrapper = styled.div`
     width: 60%;
     height: 400px;
 `;
+
 const StProfileTitle = styled.div`
     font-size: 24px;
     color: var(--bold-gray);
     width: 60%;
     padding: 0px 0px 0px 10px;
 `;
+
 const StProfileImage = styled.div`
     display: flex;
     justify-content: center;
@@ -344,6 +347,7 @@ const StProfileImage = styled.div`
         margin-top: 25px;
     }
 `;
+
 const StUserInfo = styled.div`
     display: flex;
     flex-direction: column;
@@ -356,6 +360,7 @@ const StUserInfo = styled.div`
         background-color: transparent;
     }
 `;
+
 const StUserwrapper = styled.div`
     width: 100%;
     height: 100%;
@@ -365,6 +370,7 @@ const StUserwrapper = styled.div`
     border-radius: 10px;
     background: white;
 `;
+
 const StProfileImageButton = styled.button`
     display: inline-flex;
     height: 48px;
@@ -379,11 +385,13 @@ const StProfileImageButton = styled.button`
     margin-left: 80px;
     cursor: pointer;
 `;
+
 const StBtnDiv = styled.div`
     position: absolute;
     bottom: 10;
     left: 0;
 `;
+
 const StEditBtn = styled.button`
     width: 180px;
     height: 40px;
@@ -392,6 +400,7 @@ const StEditBtn = styled.button`
     background-color: var(--main-button-color);
     color: white;
 `;
+
 const StCancelBtn = styled.button`
     width: 180px;
     height: 40px;
@@ -400,23 +409,28 @@ const StCancelBtn = styled.button`
     background-color: var(--light-gray);
     color: var(--bold-gray);
 `;
+
 const ProfilePointerAvatar = styled(Avatar)`
     cursor: pointer;
 `;
+
 const Stinput = styled.input`
     display: none;
 `;
+
 const StlistWrapper = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 66px;
 `;
+
 const Stlist = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
 `;
+
 const StminiTitle = styled.div`
     width: 50%;
     font-size: 14px;
@@ -424,6 +438,7 @@ const StminiTitle = styled.div`
     padding-bottom: 5px;
     padding-left: 10px;
 `;
+
 const StminiContent = styled.div`
     width: 90%;
     border-radius: 5px;
@@ -447,6 +462,7 @@ const StminiContent = styled.div`
         }
     }
 `;
+
 const StminiContent2 = styled.div`
     width: 95%;
     border-radius: 5px;
@@ -470,6 +486,7 @@ const StminiContent2 = styled.div`
         }
     }
 `;
+
 const StInputBox = styled.div`
     position: relative;
     width: 100%;
@@ -477,10 +494,12 @@ const StInputBox = styled.div`
     padding: 0;
     margin: 0;
 `;
+
 const ButtonWrapper = styled.div`
     gap: 10px;
     display: flex;
 `;
+
 const StHr = styled.hr`
     color: var(--light-gray);
     margin: 80px;

@@ -160,7 +160,7 @@ const StSignUpId = styled.input`
     font-size: large;
     color: black;
     &:focus {
-        border: 2px solid var(--border-color);
+        border: 2px solid var(--button-border-color);
         outline: none;
     }
 `;
@@ -175,7 +175,7 @@ const StSignUpPw = styled.input`
     font-size: large;
     color: black;
     &:focus {
-        border: 2px solid var(--border-color);
+        border: 2px solid var(--button-border-color);
         outline: none;
     }
 `;
@@ -190,7 +190,7 @@ const StSignUpPwCheck = styled.input`
     font-size: large;
     color: black;
     &:focus {
-        border: 2px solid var(--border-color);
+        border: 2px solid var(--button-border-color);
         outline: none;
     }
 `;
@@ -205,7 +205,7 @@ const StSignUpNickName = styled.input`
     font-size: large;
     color: black;
     &:focus {
-        border: 2px solid var(--border-color);
+        border: 2px solid var(--button-border-color);
         outline: none;
     }
 `;
