@@ -1,5 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import mbti_community from '../../assets/home/mbti_community.png';
+import mbti_matching from '../../assets/home/mbti_matching.png';
+import mbti_meeting from '../../assets/home/mbti_meeting.png';
+import mbti_test from '../../assets/home/mbti_test.png';
 import MainSlider from './MainSlider';
 
 const Home = () => {
@@ -11,18 +15,22 @@ const Home = () => {
                     <StComponent>
                         <StTitle>MBTI 검사</StTitle>
                         <StContent>본인의 MBTI가 무엇인지 알아보세요 !</StContent>
+                        <img src={mbti_test} />
                     </StComponent>
                     <StComponent>
                         <StTitle>MBTI 모임</StTitle>
                         <StContent>여러 사람들과 소통하는 모임을 만들어 보세요 !</StContent>
+                        <img src={mbti_meeting} />
                     </StComponent>
                     <StComponent>
                         <StTitle>MBTI 궁합</StTitle>
                         <StContent>우리의 MBTI 궁합이 궁금해요 !</StContent>
+                        <img src={mbti_matching} />
                     </StComponent>
                     <StComponent>
                         <StTitle>커뮤니티</StTitle>
                         <StContent>다양한 사람들과 자유롭게 소통하세요 !</StContent>
+                        <img src={mbti_community} />
                     </StComponent>
                 </StComponents>
             </StBox>
@@ -43,21 +51,30 @@ const StComponents = styled.div`
     width: 80%;
     height: 100%;
     padding-top: 40px;
-    background-color: white;
     display: flex;
     justify-content: space-around;
 `;
 
 const StComponent = styled.div`
-    width: 300px;
-    height: 300px;
-    border-radius: 20px;
+    width: 22%;
+    height: 100%;
+    border-radius: 10px;
     padding: 30px;
-    background-color: var(--light-gray);
+
+    border: 2px solid var(--border-color);
+    position: relative;
+
+    & img {
+        width: 70%;
+        position: absolute;
+        padding-right: 5%;
+        bottom: 0;
+        right: 0;
+    }
 
     &:hover {
         transform: scale(1.05);
-        box-shadow: 2px 2px 2px 2px var(--bold-gray);
+        box-shadow: 0px 1px 1px 1px var(--border-color);
     }
 `;
 
