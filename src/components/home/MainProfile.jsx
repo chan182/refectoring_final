@@ -74,6 +74,7 @@ const StProfileBox = styled.div`
     bottom: 0;
     background-color: white;
     border-radius: 5px;
+    border: 1px solid var(--button-border-color);
 `;
 
 const StProfileImg = styled.div`
@@ -88,7 +89,7 @@ const StProfileImg = styled.div`
         height: 100px;
         overflow: hidden;
         border-radius: 50%;
-        border: 1px solid var(--light-gray);
+        border: 1px solid var(--content-border-color);
     }
 `;
 
@@ -166,15 +167,17 @@ const StMypageBtn = styled.button`
 const StLogoutBtn = styled.button`
     width: 90%;
     height: 30px;
-    background-color: white;
+    background-color: var(--light-gray);
     color: var(--bold-gray);
-    border: 1px solid var(--border-color);
+    border: none;
     border-radius: 5px;
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
 
     &:hover {
-        transform: scale(1.015);
+        /* transform: scale(1.015); */
+        background-color: var(--main-button-color);
+        color: white;
     }
 `;

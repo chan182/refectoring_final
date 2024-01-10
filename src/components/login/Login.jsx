@@ -122,7 +122,7 @@ const StPage = styled.div`
     justify-content: center;
     width: 100%;
     height: 100vh;
-    background-color: var(--light-gray);
+    background-color: var(--background-color);
 `;
 
 const StLoginWrap = styled.div`
@@ -133,6 +133,7 @@ const StLoginWrap = styled.div`
     height: 600px;
     background-color: white;
     border-radius: 10px;
+    border: 1px solid var(--content-border-color);
 `;
 
 const StLogo = styled.img`
@@ -207,6 +208,7 @@ const StSignUpButton = styled.button`
     cursor: pointer;
     background-color: var(--light-gray);
     color: var(--bold-gray);
+
     &:hover {
         background-color: var(--main-button-color);
         color: white;

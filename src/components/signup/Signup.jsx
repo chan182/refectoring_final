@@ -127,7 +127,9 @@ const StSignUpPage = styled.div`
     background-color: var(--light-gray);
     width: 100%;
     height: 100vh;
+    background-color: var(--background-color);
 `;
+
 const StSignUpWrap = styled.div`
     margin-top: 50px;
     display: flex;
@@ -136,14 +138,18 @@ const StSignUpWrap = styled.div`
     height: 600px;
     background-color: white;
     border-radius: 10px;
+    border: 1px solid var(--content-border-color);
 `;
+
 const StLogoImg = styled.img`
     width: 408px;
     margin: 20px auto;
 `;
+
 const StText = styled.div`
     margin: 20px 0px 5px 25px;
 `;
+
 const StSignUpId = styled.input`
     width: 402px;
     height: 47px;
@@ -158,6 +164,7 @@ const StSignUpId = styled.input`
         outline: none;
     }
 `;
+
 const StSignUpPw = styled.input`
     width: 402px;
     height: 47px;
@@ -172,6 +179,7 @@ const StSignUpPw = styled.input`
         outline: none;
     }
 `;
+
 const StSignUpPwCheck = styled.input`
     width: 402px;
     height: 47px;
@@ -186,6 +194,7 @@ const StSignUpPwCheck = styled.input`
         outline: none;
     }
 `;
+
 const StSignUpNickName = styled.input`
     width: 402px;
     height: 47px;
@@ -200,10 +209,12 @@ const StSignUpNickName = styled.input`
         outline: none;
     }
 `;
+
 const StBackSignUpWarp = styled.div`
     display: flex;
     margin-top: 50px;
 `;
+
 const StBackButton = styled.button`
     width: 196px;
     height: 48px;
@@ -219,6 +230,7 @@ const StBackButton = styled.button`
         color: white;
     }
 `;
+
 const StSignUpButton = styled.button`
     width: 196px;
     height: 48px;
