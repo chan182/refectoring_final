@@ -26,17 +26,6 @@ const UserInfo = () => {
     const [isImageEditing, setIsImageEditing] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const userUuId = useRecoilValue(loginIdAtom);
-    useEffect(() => {
-        if (user) {
-            setUserName(user.name);
-            setUsernickname(user.nickname);
-            setUserBirth(user.birth);
-            setUserMbti(user.mbti);
-            setUserBlood(user.blood);
-            setUserLocation(user.location);
-            setUserIntro(user.introduce);
-        }
-    }, [user]);
 
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
     const fileSelectHandler = (event) => {
@@ -70,6 +59,19 @@ const UserInfo = () => {
     const toggleInput = () => {
         setIsEditing((prevState) => !prevState);
     };
+
+    useEffect(() => {
+        if (user) {
+            setUserName(user.name);
+            setUsernickname(user.nickname);
+            setUserBirth(user.birth);
+            setUserMbti(user.mbti);
+            setUserBlood(user.blood);
+            setUserLocation(user.location);
+            setUserIntro(user.introduce);
+        }
+    }, [user]);
+
     // 프로필 수정 버튼 입력 후 입력한 값이 수정(추가)이 된다.
     const updateUserinfo = async () => {
         const userRef = doc(db, 'users', user.id);

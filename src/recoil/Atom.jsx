@@ -26,9 +26,8 @@ export const UserImageAtom = atom({
 });
 
 // 유저의 name 값 저장하기
-const { persistAtom: persistUserNameAtom } = recoilPersist({
-    key: 'userNameInfo',
-    storage: localStorage
+const { persistUserNameAtom } = recoilPersist({
+    key: 'userNameInfo'
 });
 
 export const UserNameAtom = atom({
