@@ -2,7 +2,7 @@ import { createUserWithEmailAndPassword } from '@firebase/auth';
 import { addDoc, collection } from '@firebase/firestore';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import logo from '../../assets/home/logo.png';
 import { auth, db } from '../../firebase/firebase.config';
 
@@ -41,7 +41,8 @@ const Signup = () => {
                 uid: user.uid,
                 email: user.email
             });
-
+            console.log('user =>', user);
+            console.log('db', db);
             alert('회원가입 성공 !!!', userCredential.user);
         } catch (error) {
             const errorCode = error.code;
@@ -99,7 +100,9 @@ const Signup = () => {
                         >
                             돌아가기
                         </StBackButton>
-                        <StSignUpButton onClick={signUpButton}>회원가입</StSignUpButton>
+                        <StSignUpButton disabled={!userId || !userPw || !pwCheck || !nickName} onClick={signUpButton}>
+                            회원가입
+                        </StSignUpButton>
                     </StBackSignUpWarp>
                 </form>
             </StSignUpWrap>
@@ -213,8 +216,19 @@ const StSignUpButton = styled.button`
     cursor: pointer;
     background-color: var(--light-gray);
     color: var(--bold-gray);
-    &:hover {
+    /* &:hover {
         background-color: var(--main-button-color);
         color: white;
-    }
+    } */
+    ${(props) => {
+        if (props.disabled) {
+            return css`
+                background-color: var(--light-gray);
+            `;
+        }
+        return css`
+            background-color: var(--main-button-color);
+            color: white;
+        `;
+    }}
 `;

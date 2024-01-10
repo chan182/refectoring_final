@@ -1,4 +1,4 @@
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -35,6 +35,21 @@ const Login = () => {
             setUserPw(value);
         }
     };
+    // 비밀번호 변경 버튼
+    const pwChangeButton = (event) => {
+        event.preventDefault();
+        if (userId === '') {
+            alert('이메일을 입력해주세요');
+        } else {
+            try {
+                sendPasswordResetEmail(auth, userId);
+            } catch (error) {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log('err', errorCode, errorMessage);
+            }
+        }
+    };
     //로그인 버튼
     const loginButton = async (event) => {
         event.preventDefault();
@@ -55,23 +70,25 @@ const Login = () => {
         <StPage>
             <StLoginWrap>
                 <StLogo src={logo} alt="logo" />
-                <StUserId
-                    placeholder="이메일을 입력해주세요"
-                    type="email"
-                    value={userId}
-                    name="userId"
-                    onChange={onChange}
-                    required
-                ></StUserId>
-                <StUserPw
-                    placeholder="비밀번호를 입력해주세요"
-                    type="password"
-                    value={userPw}
-                    name="userPw"
-                    onChange={onChange}
-                    required
-                ></StUserPw>
-                <StPwSearch>비밀번호 찾기 </StPwSearch>
+                <form>
+                    <StUserId
+                        placeholder="이메일을 입력해주세요"
+                        type="email"
+                        value={userId}
+                        name="userId"
+                        onChange={onChange}
+                        required
+                    ></StUserId>
+                    <StUserPw
+                        placeholder="비밀번호를 입력해주세요"
+                        type="password"
+                        value={userPw}
+                        name="userPw"
+                        onChange={onChange}
+                        required
+                    ></StUserPw>
+                </form>
+                <StPwChange onClick={pwChangeButton}>비밀번호 변경 </StPwChange>
                 <StLoginSignUpWarp>
                     <StLoginButton disabled={!userId || !userPw} onClick={loginButton}>
                         로그인
@@ -104,7 +121,7 @@ const StPage = styled.div`
     display: flex;
     justify-content: center;
 `;
-const StLoginWrap = styled.form`
+const StLoginWrap = styled.div`
     margin-top: 50px;
     display: flex;
     flex-direction: column;
@@ -136,11 +153,13 @@ const StUserPw = styled.input`
     font-size: large;
     background-color: var(--light-gray);
 `;
-const StPwSearch = styled.div`
+const StPwChange = styled.button`
     text-decoration: underline;
-    margin: 20px 0px;
+    margin: 10px 0px 40px;
     color: var(--bold-gray);
     cursor: pointer;
+    width: 90px;
+    height: 20px;
 `;
 const StLoginSignUpWarp = styled.div`
     display: flex;
@@ -156,7 +175,7 @@ const StLoginButton = styled.button`
     ${(props) => {
         if (props.disabled) {
             return css`
-                background-color: #f5f5f5;
+                background-color: var(--light-gray);
             `;
         }
         return css`
