@@ -138,7 +138,7 @@ const StLogoutBtn = styled.button`
     height: 30px;
     background-color: white;
     color: var(--bold-gray);
-    border: 1px solid var(--bold-gray);
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     font-size: 15px;
     font-weight: 500;
