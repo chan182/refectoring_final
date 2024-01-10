@@ -51,7 +51,7 @@ const GlobalStyle = createGlobalStyle`
     border-spacing: 0;
   }
   * {
-  font-family: 'NPSfontBold', sans-serif;
+  font-family: 'Pretendard-Regular';
     box-sizing: border-box;
   }
   :root {
@@ -60,7 +60,7 @@ const GlobalStyle = createGlobalStyle`
     --twinkle-color: #565656;
     }
   html {
-    font-family: 'NPSfontBold';
+    font-family: 'Pretendard-Regular';
     scroll-behavior: smooth;
     height: 100vh;
   }
@@ -69,6 +69,11 @@ const GlobalStyle = createGlobalStyle`
   }
   a {
     text-decoration:none;
+  }
+  button {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
   }
 `;
 
