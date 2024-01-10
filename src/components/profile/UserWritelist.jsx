@@ -255,6 +255,7 @@ const StmainWrapper = styled.div`
     margin: 10px auto;
     border-radius: 10px;
     background: white;
+    border: 1px solid var(--content-border-color);
 `;
 
 const Stbolder = styled.div`

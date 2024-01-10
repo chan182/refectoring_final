@@ -20,11 +20,11 @@ const StBox = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: var(--light-gray);
+    background-color: var(--background-color);
 `;
 const StHr = styled.hr`
-    border: 1px solid var(--bold-gray);
+    border: 1px solid var(--hr-border-color);
     border-width: 1px 0 0 0;
-    margin: 80px;
+    margin: 84px;
     width: 50%;
 `;

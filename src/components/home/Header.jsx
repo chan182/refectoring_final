@@ -35,41 +35,43 @@ const Header = () => {
 
     return (
         <StBox>
-            <StDiv>
-                <StLeftDiv>
-                    <StLogo>
-                        <img src={logo} onClick={() => navigate('/')} />
-                    </StLogo>
-                    <StP onClick={() => setIsModalOpen(true)}>MBTI 검사</StP>
-                    <StP onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StP>
-                    <StP onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StP>
-                    <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
-                </StLeftDiv>
-                <StRightDiv>
-                    {currentUser ? (
-                        <>
-                            {/* 로그인 성공 시, */}
-                            <StProfileBox>
-                                <StProfileImg>
-                                    <img src={userProfileImage} />
-                                </StProfileImg>
-                                <StDropBtn onClick={toggleDropdown}>
-                                    <img src={dorpArrow} />
-                                </StDropBtn>
-                                {isOpen && (
-                                    <MainProfile setCurrentUser={setCurrentUser} toggleDropdown={toggleDropdown} />
-                                )}
-                            </StProfileBox>
-                        </>
-                    ) : (
-                        <>
-                            {/* 로그인 안되어 있는 경우, */}
-                            <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
-                            <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
-                        </>
-                    )}
-                </StRightDiv>
-            </StDiv>
+            <StPositionBox>
+                <StDiv>
+                    <StLeftDiv>
+                        <StLogo>
+                            <img src={logo} onClick={() => navigate('/')} />
+                        </StLogo>
+                        <StP onClick={() => setIsModalOpen(true)}>MBTI 검사</StP>
+                        <StP onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StP>
+                        <StP onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StP>
+                        <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
+                    </StLeftDiv>
+                    <StRightDiv>
+                        {currentUser ? (
+                            <>
+                                {/* 로그인 성공 시, */}
+                                <StProfileBox>
+                                    <StProfileImg>
+                                        <img src={userProfileImage} />
+                                    </StProfileImg>
+                                    <StDropBtn onClick={toggleDropdown}>
+                                        <img src={dorpArrow} />
+                                    </StDropBtn>
+                                    {isOpen && (
+                                        <MainProfile setCurrentUser={setCurrentUser} toggleDropdown={toggleDropdown} />
+                                    )}
+                                </StProfileBox>
+                            </>
+                        ) : (
+                            <>
+                                {/* 로그인 안되어 있는 경우, */}
+                                <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
+                                <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
+                            </>
+                        )}
+                    </StRightDiv>
+                </StDiv>
+            </StPositionBox>
             {/* MBTI 검사 모달 */}
             <Modal
                 isOpen={isModalOpen}
@@ -91,6 +93,12 @@ const StBox = styled.div`
     z-index: 1;
     width: 100%;
     height: 80px;
+`;
+
+const StPositionBox = styled.div`
+    width: 100%;
+    height: 80px;
+    position: fixed;
     display: flex;
     justify-content: center;
     background-color: white;
@@ -99,7 +107,6 @@ const StBox = styled.div`
 const StDiv = styled.div`
     width: 75%;
     height: 80px;
-    position: fixed;
     display: flex;
     justify-content: space-between;
     align-items: center;

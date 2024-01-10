@@ -36,6 +36,8 @@ const StBox = styled.div`
     justify-content: center;
     align-items: center;
     bottom: 0;
+    border: 1px solid var(--footer-border-color);
+    border-width: 1px 0 0 0;
     background-color: var(--light-gray);
 `;
 
