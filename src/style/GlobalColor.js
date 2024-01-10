@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'styled-components';
 const GlobalColor = createGlobalStyle`
     :root {
         --main-button-color: #756ab6;
-        --main-border-color: #ABAAD8;
+        --border-color: #ABAAD8;
         --light-purple: #ac87c5;
         --light-pink: #e0aed0;
         --light-beige: #ffe5e5;

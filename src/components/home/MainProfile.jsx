@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import example from '../../assets/home/suin.jpg';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../../firebase/firebase.config';
+import { signOut } from 'firebase/auth';
 
-const MainProfile = () => {
+const MainProfile = ({ setCurrentUser, toggleDropdown }) => {
     const navigate = useNavigate();
     return (
         <StProfileBox>
@@ -31,11 +33,21 @@ const MainProfile = () => {
                 <StMypageBtn
                     onClick={() => {
                         navigate('/profile');
+                        toggleDropdown();
                     }}
                 >
                     마이페이지
                 </StMypageBtn>
-                <StLogoutBtn>로그아웃</StLogoutBtn>
+                <StLogoutBtn
+                    onClick={async () => {
+                        alert('로그아웃 할까?');
+                        await signOut(auth);
+                        setCurrentUser(null);
+                        toggleDropdown();
+                    }}
+                >
+                    로그아웃
+                </StLogoutBtn>
             </StBtns>
         </StProfileBox>
     );
@@ -146,7 +158,7 @@ const StLogoutBtn = styled.button`
     height: 30px;
     background-color: white;
     color: var(--bold-gray);
-    border: 1px solid var(--bold-gray);
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     font-size: 15px;
     font-weight: 500;

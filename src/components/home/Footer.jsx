@@ -29,7 +29,7 @@ export default Footer;
 
 const StBox = styled.div`
     width: 100%;
-    height: 150px;
+    height: 140px;
     position: fixed;
     display: flex;
     flex-direction: column;

@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import dorpArrow from '../../assets/home/dropArrow.png';
 import logo from '../../assets/home/logo.png';
 import example from '../../assets/home/suin.jpg';
 import MainProfile from './MainProfile';
+import { auth } from '../../firebase/firebase.config';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Header = () => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
         console.log('isOpen : ', isOpen);
     };
+
+    // useEffect를 활용하여 로그인 유무 판단
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            setCurrentUser(user?.email);
+        });
+    }, []);
 
     return (
         <StBox>
@@ -23,25 +33,33 @@ const Header = () => {
                         <img src={logo} onClick={() => navigate('/')} />
                     </StLogo>
                     <StP onClick={() => navigate('/mbti/test')}>MBTI 검사</StP>
-                    <StP>MBTI 모임</StP>
-                    <StP>MBTI 궁합</StP>
-                    <StP>커뮤니티</StP>
+                    <StP onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StP>
+                    <StP onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StP>
+                    <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
                 </StLeftDiv>
                 <StRightDiv>
-                    {/* 로그인 성공 시, */}
-                    <StProfileBox>
-                        <StProfileImg>
-                            <img src={example} />
-                        </StProfileImg>
-                        <StDropBtn onClick={toggleDropdown}>
-                            <img src={dorpArrow} />
-                        </StDropBtn>
-                        {isOpen && <MainProfile />}
-                    </StProfileBox>
-
-                    {/* 로그인 안되어 있는 경우, */}
-                    {/* <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
-                    <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn> */}
+                    {currentUser ? (
+                        <>
+                            {/* 로그인 성공 시, */}
+                            <StProfileBox>
+                                <StProfileImg>
+                                    <img src={example} />
+                                </StProfileImg>
+                                <StDropBtn onClick={toggleDropdown}>
+                                    <img src={dorpArrow} />
+                                </StDropBtn>
+                                {isOpen && (
+                                    <MainProfile setCurrentUser={setCurrentUser} toggleDropdown={toggleDropdown} />
+                                )}
+                            </StProfileBox>
+                        </>
+                    ) : (
+                        <>
+                            {/* 로그인 안되어 있는 경우, */}
+                            <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
+                            <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
+                        </>
+                    )}
                 </StRightDiv>
             </StDiv>
         </StBox>
@@ -95,7 +113,6 @@ const StLogo = styled.div`
 
 const StP = styled.p`
     font-size: 15px;
-    font-weight: 500;
     padding-left: 30px;
     display: flex;
     align-items: center;
@@ -111,6 +128,7 @@ const StRightDiv = styled.div`
     height: 80px;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 `;
 
 const StLoginBtn = styled.button`
@@ -135,7 +153,7 @@ const StSignupBtn = styled.button`
     height: 30px;
     background-color: white;
     color: var(--bold-gray);
-    border: 1px solid var(--bold-gray);
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     font-size: 15px;
     font-weight: 500;
