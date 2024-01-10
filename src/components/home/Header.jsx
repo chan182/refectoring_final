@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import dorpArrow from '../../assets/home/dropArrow.png';
 import logo from '../../assets/home/logo.png';
 import example from '../../assets/home/suin.jpg';
 import MainProfile from './MainProfile';
+import { auth } from '../../firebase/firebase.config';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Header = () => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
         console.log('isOpen : ', isOpen);
     };
+
+    // useEffect를 활용하여 로그인 유무 판단
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            setCurrentUser(user?.email);
+        });
+    }, []);
 
     return (
         <StBox>
@@ -28,20 +38,26 @@ const Header = () => {
                     <StP>커뮤니티</StP>
                 </StLeftDiv>
                 <StRightDiv>
-                    {/* 로그인 성공 시, */}
-                    <StProfileBox>
-                        <StProfileImg>
-                            <img src={example} />
-                        </StProfileImg>
-                        <StDropBtn onClick={toggleDropdown}>
-                            <img src={dorpArrow} />
-                        </StDropBtn>
-                        {isOpen && <MainProfile />}
-                    </StProfileBox>
-
-                    {/* 로그인 안되어 있는 경우, */}
-                    {/* <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
-                    <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn> */}
+                    {currentUser ? (
+                        <>
+                            {/* 로그인 성공 시, */}
+                            <StProfileBox>
+                                <StProfileImg>
+                                    <img src={example} />
+                                </StProfileImg>
+                                <StDropBtn onClick={toggleDropdown}>
+                                    <img src={dorpArrow} />
+                                </StDropBtn>
+                                {isOpen && <MainProfile setCurrentUser={setCurrentUser} />}
+                            </StProfileBox>
+                        </>
+                    ) : (
+                        <>
+                            {/* 로그인 안되어 있는 경우, */}
+                            <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
+                            <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
+                        </>
+                    )}
                 </StRightDiv>
             </StDiv>
         </StBox>
@@ -110,6 +126,7 @@ const StRightDiv = styled.div`
     height: 80px;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 `;
 
 const StLoginBtn = styled.button`
