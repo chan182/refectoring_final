@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import mcoiLogo from '../../assets/mbtiTest/mcoiLogo.svg';
 import { questions } from './questions';
 import { typeDescriptions } from './typeDescriptions';
 
-const ResultPage = ({ counts }) => {
+const MbtiResult = ({ counts }) => {
+    const navigate = useNavigate();
+
     const getDominantTraits = () => {
         const sortedCounts = Object.entries(counts).sort(([, a], [, b]) => b - a);
         const dominantTraits = sortedCounts.slice(0, 4).map(([trait]) => trait);
@@ -19,12 +23,34 @@ const ResultPage = ({ counts }) => {
     const dominantType = getDominantTraits();
     const dominantTypeDescription = typeDescriptions[dominantType];
 
+    const handleReloadClick = () => {
+        window.location.reload();
+    };
+
+    const handleReturnHomeClick = () => {
+        navigate('/');
+    };
+
     return (
         <StTestResultContainer>
             <StQuestionContainer>
+                <StResultMent>고생하셨습니다!</StResultMent>
                 <StResultText>{dominantType}</StResultText>
                 <StTypeDescription>{dominantTypeDescription}</StTypeDescription>
             </StQuestionContainer>
+            <StButtonContainer>
+                <StCompleteButton onClick={handleReloadClick} disabled={false}>
+                    다시 시도
+                </StCompleteButton>
+                <StCompleteButton onClick={handleReturnHomeClick} disabled={false}>
+                    홈으로
+                </StCompleteButton>
+            </StButtonContainer>
+            <StLogoImageBox>
+                <StLogoImage>
+                    <img src={mcoiLogo} alt="로고이미지" />
+                </StLogoImage>
+            </StLogoImageBox>
         </StTestResultContainer>
     );
 };
@@ -33,6 +59,8 @@ const MbtiTest = () => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [counts, setCounts] = useState({ I: 0, E: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 });
     const totalQuestions = questions.length;
+    const [testStart, setTestStart] = useState(true);
+    const navigate = useNavigate();
 
     const handleOptionClick = (option) => {
         const currentQuestionData = questions[currentQuestion];
@@ -71,6 +99,10 @@ const MbtiTest = () => {
         }
     };
 
+    const goHomeButton = () => {
+        navigate('/');
+    };
+
     // const handleNextClick = () => {
     //     if (currentQuestion < questions.length - 1) {
     //         setCurrentQuestion(currentQuestion + 1);
@@ -91,59 +123,77 @@ const MbtiTest = () => {
         window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
-            // 컴포넌트가 언마운트될 때, 이벤트 리스너 제거
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
 
     useEffect(() => {
         if (currentQuestion === -1) {
-            // 결과 페이지
-            // 여기에서 결과를 활용하여 추가적인 작업 수행 가능
-
-            // 페이지를 떠날 때 이벤트 리스너 제거
             window.removeEventListener('beforeunload', handleBeforeUnload);
         }
     }, [currentQuestion, counts]);
 
     return (
         <StScreenBox>
-            <StTestContainer>
-                {currentQuestion !== -1 ? (
-                    <div>
-                        <StQuestionContainer>
-                            <StQuestionFont>{`Q${currentQuestion + 1}.`}</StQuestionFont>
-                            <StQuestionText>{questions[currentQuestion].question}</StQuestionText>
-                            <StOptionsContainer>
-                                <StOptionButton onClick={() => handleOptionClick(questions[currentQuestion].option1)}>
-                                    {questions[currentQuestion].option1}
-                                </StOptionButton>
-                                <StOptionButton onClick={() => handleOptionClick(questions[currentQuestion].option2)}>
-                                    {questions[currentQuestion].option2}
-                                </StOptionButton>
-                            </StOptionsContainer>
-                        </StQuestionContainer>
-                        {/* {currentQuestion === questions.length - 1 ? (
-                            <StCompleteButton onClick={handleNextClick} disabled={currentQuestion === -1}>
-                                완료
-                            </StCompleteButton>
-                        ) : (
-                            <StOptionButton onClick={handleNextClick} disabled={currentQuestion === -1}>
-                                다음
-                            </StOptionButton>
-                        )} */}
+            {testStart ? (
+                <StTestContainer>
+                    <StTestStartComment>
+                        MBTI 검사하고 저희 서비스를 더 재미있고 적극적으로 이용해보세요!
+                    </StTestStartComment>
+                    <StTestStartText>
+                        성격 테스트를 통해 자신의 성향과 행동에 대한 정확한 분석 결과를 확인해 보세요.
+                    </StTestStartText>
+                    <StButtonContainer>
+                        <StTestStartButton onClick={goHomeButton}>홈 으로 돌아가기</StTestStartButton>
+                        <StTestStartButton onClick={() => setTestStart(!testStart)}>검사 시작하기</StTestStartButton>
+                    </StButtonContainer>
+                    <StLogoImageBox>
+                        <StLogoImage>
+                            <img src={mcoiLogo} alt="로고이미지" />
+                        </StLogoImage>
+                    </StLogoImageBox>
+                </StTestContainer>
+            ) : (
+                <StTestContainer>
+                    {currentQuestion !== -1 ? (
+                        <div>
+                            <StQuestionContainer>
+                                <StQuestionFont>{`Q. ${currentQuestion + 1}/${totalQuestions}`}</StQuestionFont>
+                                <StQuestionText>{questions[currentQuestion].question}</StQuestionText>
+                                <StOptionsContainer>
+                                    <StOptionButton
+                                        onClick={() => handleOptionClick(questions[currentQuestion].option1)}
+                                    >
+                                        {questions[currentQuestion].option1}
+                                    </StOptionButton>
+                                    <StOptionButton
+                                        onClick={() => handleOptionClick(questions[currentQuestion].option2)}
+                                    >
+                                        {questions[currentQuestion].option2}
+                                    </StOptionButton>
+                                </StOptionsContainer>
+                            </StQuestionContainer>
+                            <StButtonContainer>
+                                <StCompleteButton onClick={goHomeButton}>검사 종료하기</StCompleteButton>
+                            </StButtonContainer>
+                            <StLogoImageBox>
+                                <StLogoImage>
+                                    <img src={mcoiLogo} alt="로고이미지" />
+                                </StLogoImage>
+                            </StLogoImageBox>
 
-                        <StProgressContainer>
+                            {/* <StProgressContainer>
                             <StProgressBarBox>
                                 <StProgressBar style={{ width: `${progress * 100}%` }} />
                             </StProgressBarBox>
                             <StProgressText>{`${currentQuestion + 1}/${totalQuestions}`}</StProgressText>
-                        </StProgressContainer>
-                    </div>
-                ) : (
-                    <ResultPage counts={counts} />
-                )}
-            </StTestContainer>
+                        </StProgressContainer> */}
+                        </div>
+                    ) : (
+                        <MbtiResult counts={counts} />
+                    )}
+                </StTestContainer>
+            )}
         </StScreenBox>
     );
 };
@@ -151,33 +201,45 @@ const MbtiTest = () => {
 export default MbtiTest;
 
 const StScreenBox = styled.div`
-    height: 90vh;
+    height: 70vh;
     display: flex;
     align-items: center;
 `;
 
+// const StScreenBox = styled.div`
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     display: ${({ isModalOpen }) => (isModalOpen ? 'flex' : 'none')};
+//     align-items: center;
+//     justify-content: center;
+//     background-color: rgba(0, 0, 0, 0.5); /* 배경 어둡게 하기 */
+// `;
+
 const StTestResultContainer = styled.div`
-    width: 600px;
-    height: 500px;
+    width: 1200px;
+    height: 640px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #ffe5e5;
-    border-radius: 2rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     position: absolute;
-    top: 50%;
+    top: 43.3%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
 `;
 
 const StTestContainer = styled.div`
-    width: 600px;
-    height: 500px;
+    width: 1200px;
+    height: 640px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #ffe5e5;
-    border-radius: 2rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
@@ -189,13 +251,14 @@ const StQuestionContainer = styled.div`
 const StQuestionFont = styled.h1`
     font-size: 2.1875rem;
     font-weight: 500;
-    color: #d1453d;
+    margin-top: 40px;
+    color: black;
 `;
 
 const StQuestionText = styled.h2`
-    font-size: 18px;
-    margin-top: 40px;
-    margin-bottom: 60px;
+    font-size: 32px;
+    margin-top: 11px;
+    margin-bottom: 40px;
     padding: 10px;
     width: 100%;
     height: 80px;
@@ -207,12 +270,15 @@ const StQuestionText = styled.h2`
     background-color: #fff;
 `;
 
+const StResultMent = styled.h1`
+    font-size: 32px;
+    margin-top: 113px;
+`;
+
 const StResultText = styled.h1`
     font-size: 35px;
     font-weight: 800;
-    margin-top: 20px;
-    margin-bottom: 100px;
-    padding: 10px;
+    margin-top: 80px;
     width: 100%;
     color: #756ab6;
 `;
@@ -221,19 +287,51 @@ const StOptionsContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 21px;
     height: 180px;
+    padding: 0 200px;
 `;
 
 const StOptionButton = styled.button`
     margin-bottom: 20px;
     padding: 10px 40px;
-    font-size: 16px;
-    background-color: #fff;
+    font-size: 24px;
+    background-color: #f8f8f8;
     color: #000000;
     border: none;
-    border-radius: 2rem;
+    border-radius: 0.5rem;
     cursor: pointer;
-    width: 80%;
+    width: 680px;
+    height: 86px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+        transition: ease-in-out 0.2s;
+        background-color: #abaad8;
+        color: #ffffff;
+        /* box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575); */
+    }
+`;
+
+const StButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    gap: 15px;
+`;
+
+const StCompleteButton = styled.button`
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    background-color: #f8f8f8;
+    color: #000000;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 20%;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 
     &:hover {
@@ -242,39 +340,15 @@ const StOptionButton = styled.button`
         color: #fff;
         box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575);
     }
-
-    /* &:disabled {
-        background-color: #bdc3c7;
-        cursor: not-allowed;
-    } */
-`;
-
-const StCompleteButton = styled.button`
-    padding: 10px;
-    font-size: 16px;
-    background-color: #27ae60;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #21905a;
-    }
-
-    &:disabled {
-        background-color: #bdc3c7;
-        cursor: not-allowed;
-    }
 `;
 const StTypeDescription = styled.p`
     font-size: 16px;
-    margin-top: 10px;
-    padding: 0px 25px;
+    padding: 0px 295px 40px;
     color: #333;
     background-color: #fff;
-    border-radius: 2rem;
-    height: 200px;
+    height: 125px;
     display: flex;
+    justify-content: center;
     align-items: center;
 `;
 
@@ -303,4 +377,59 @@ const StProgressBarBox = styled.div`
     border: none;
     background-color: #fff;
     border-radius: 2rem;
+`;
+
+const StLogoImage = styled.div`
+    width: 87px;
+    height: 48px;
+    margin-top: 50px;
+`;
+
+const StLogoImageBox = styled.div`
+    width: 1150px;
+    display: flex;
+    justify-content: center;
+`;
+
+const StTestStartComment = styled.h1`
+    font-size: 54px;
+    width: 914px;
+    height: 136px;
+    margin-top: 82px;
+    margin-left: 130px;
+    padding: 0px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+`;
+
+const StTestStartText = styled.p`
+    font-size: 22px;
+    margin-top: 23px;
+    margin-bottom: 143px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+`;
+
+const StTestStartButton = styled.button`
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    background-color: #f8f8f8;
+    color: #000000;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 20%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+        transition: ease-in-out 0.2s;
+        background-color: #ac87c5;
+        color: #fff;
+        box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575);
+    }
 `;
