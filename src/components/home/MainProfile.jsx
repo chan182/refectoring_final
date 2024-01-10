@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase/firebase.config';
 import { signOut } from 'firebase/auth';
 
-const MainProfile = ({ setCurrentUser }) => {
+const MainProfile = ({ setCurrentUser, toggleDropdown }) => {
     const navigate = useNavigate();
     return (
         <StProfileBox>
@@ -33,6 +33,7 @@ const MainProfile = ({ setCurrentUser }) => {
                 <StMypageBtn
                     onClick={() => {
                         navigate('/profile');
+                        toggleDropdown();
                     }}
                 >
                     마이페이지
@@ -42,6 +43,7 @@ const MainProfile = ({ setCurrentUser }) => {
                         alert('로그아웃 할까?');
                         await signOut(auth);
                         setCurrentUser(null);
+                        toggleDropdown();
                     }}
                 >
                     로그아웃
