@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from '@firebase/auth';
 import { addDoc, collection } from '@firebase/firestore';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import logo from '../../assets/home/logo.png';
@@ -12,6 +12,12 @@ const Signup = () => {
     const [userPw, setUserPw] = useState('');
     const [pwCheck, setPwCheck] = useState('');
     const [nickName, setNickName] = useState('');
+
+    const idRef = useRef('');
+
+    useEffect(() => {
+        idRef.current.focus();
+    }, []);
 
     const onChange = (event) => {
         const {
@@ -33,21 +39,24 @@ const Signup = () => {
     //회원가입 버튼
     const signUpButton = async (event) => {
         event.preventDefault();
-
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, userId, userPw);
-            const user = userCredential.user;
-            const userDocRef = await addDoc(collection(db, 'users'), {
-                uid: user.uid,
-                email: user.email
-            });
-            console.log('user =>', user);
-            console.log('db', db);
-            alert('회원가입 성공 !!!', userCredential.user);
-        } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log('err', errorCode, errorMessage);
+        if (userPw !== pwCheck) {
+            alert('비밀번호가 다릅니다');
+        } else {
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, userId, userPw);
+                const user = userCredential.user;
+                const userDocRef = await addDoc(collection(db, 'users'), {
+                    uid: user.uid,
+                    email: user.email
+                });
+                console.log('user =>', user);
+                console.log('db', db);
+                alert('회원가입 성공 !!!', userCredential.user);
+            } catch (error) {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log('err', errorCode, errorMessage);
+            }
         }
     };
     return (
@@ -63,6 +72,7 @@ const Signup = () => {
                         onChange={onChange}
                         required
                         placeholder="abcd@naver.com"
+                        ref={idRef}
                     />
                     <StText>사용할 비밀번호 입력</StText>
                     <StSignUpPw

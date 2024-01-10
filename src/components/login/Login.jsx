@@ -1,5 +1,5 @@
 import { onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled, { css } from 'styled-components';
@@ -11,11 +11,12 @@ import { loginIdAtom } from '../../recoil/loginAtom';
 
 const Login = () => {
     const [uuid, setUuid] = useRecoilState(loginIdAtom);
+    const idRef = useRef('');
 
     //사용자 정보확인
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-            console.log('user', user);
+            idRef.current.focus();
         });
     }, []);
 
@@ -78,6 +79,7 @@ const Login = () => {
                         name="userId"
                         onChange={onChange}
                         required
+                        ref={idRef}
                     ></StUserId>
                     <StUserPw
                         placeholder="비밀번호를 입력해주세요"
