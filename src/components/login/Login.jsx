@@ -1,4 +1,4 @@
-import { onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -36,21 +36,7 @@ const Login = () => {
             setUserPw(value);
         }
     };
-    // 비밀번호 변경 버튼
-    const pwChangeButton = (event) => {
-        event.preventDefault();
-        if (userId === '') {
-            alert('이메일을 입력해주세요');
-        } else {
-            try {
-                sendPasswordResetEmail(auth, userId);
-            } catch (error) {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log('err', errorCode, errorMessage);
-            }
-        }
-    };
+
     //로그인 버튼
     const loginButton = async (event) => {
         event.preventDefault();
@@ -88,7 +74,13 @@ const Login = () => {
                     onChange={onChange}
                     required
                 ></StUserPw>
-                <StPwChange onClick={pwChangeButton}>비밀번호 변경 </StPwChange>
+                <StPwChange
+                    onClick={() => {
+                        nav('/pwchange');
+                    }}
+                >
+                    비밀번호 변경{' '}
+                </StPwChange>
                 <StLoginSignUpWarp>
                     <StLoginButton disabled={!userId || !userPw} onClick={loginButton}>
                         로그인
