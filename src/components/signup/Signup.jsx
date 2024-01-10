@@ -66,10 +66,6 @@ const Signup = () => {
                         <StSignUpButton onClick={signUpButton}>회원가입</StSignUpButton>
                     </StBackSignUpWarp>
                 </form>
-                <StExternalLoginWrap>
-                    <StExternalLogin></StExternalLogin>
-                    <StExternalLogin></StExternalLogin>
-                </StExternalLoginWrap>
             </StSignUpWrap>
         </StSignUpPage>
     );
@@ -148,19 +144,4 @@ const StSignUpButton = styled.button`
         background-color: var(--main-button-color);
         color: white;
     }
-`;
-const StExternalLoginWrap = styled.div`
-    width: 96px;
-    height: 42px;
-    margin: 20px auto;
-    display: flex;
-    gap: 12px;
-`;
-
-const StExternalLogin = styled.button`
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 0px;
-    cursor: pointer;
 `;
