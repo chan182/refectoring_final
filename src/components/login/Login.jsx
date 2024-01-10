@@ -1,12 +1,12 @@
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import styled, { css } from 'styled-components';
 import logo from '../../assets/home/logo.png';
 import google from '../../assets/login/Google.png';
 import kakao from '../../assets/login/kakao.png';
 import { auth } from '../../firebase/firebase.config';
-import { useRecoilState } from 'recoil';
 import { loginIdAtom } from '../../recoil/loginAtom';
 
 const Login = () => {
@@ -18,6 +18,7 @@ const Login = () => {
             console.log('user', user);
         });
     }, []);
+
     const nav = useNavigate();
 
     const [userId, setUserId] = useState('');
@@ -121,6 +122,7 @@ const StUserId = styled.input`
     outline: none;
     border-radius: 5px;
     border: 1px solid var(--main-button-color);
+    background-color: var(--light-gray);
     font-size: large;
     color: black;
 `;
@@ -132,6 +134,7 @@ const StUserPw = styled.input`
     border-radius: 5px;
     border: 0px;
     font-size: large;
+    background-color: var(--light-gray);
 `;
 const StPwSearch = styled.div`
     text-decoration: underline;
@@ -158,6 +161,7 @@ const StLoginButton = styled.button`
         }
         return css`
             background-color: var(--main-button-color);
+            color: white;
         `;
     }}
 `;
@@ -169,6 +173,8 @@ const StSignUpButton = styled.button`
     margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
+    background-color: var(--light-gray);
+    color: var(--bold-gray);
     &:hover {
         background-color: var(--main-button-color);
         color: white;

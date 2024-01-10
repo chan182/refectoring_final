@@ -1,10 +1,10 @@
 import { createUserWithEmailAndPassword } from '@firebase/auth';
+import { addDoc, collection } from '@firebase/firestore';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../../assets/home/logo.png';
 import { auth, db } from '../../firebase/firebase.config';
-import { addDoc, collection } from 'firebase/firestore';
 
 const Signup = () => {
     const nav = useNavigate();
@@ -41,7 +41,8 @@ const Signup = () => {
                 uid: user.uid,
                 email: user.email
             });
-            console.log('회원가입 성공 !!!', userCredential.user);
+
+            alert('회원가입 성공 !!!', userCredential.user);
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -54,13 +55,42 @@ const Signup = () => {
                 <StLogoImg src={logo} alt="logo" />
                 <form>
                     <StText>사용할 이메일 입력</StText>
-                    <StSignUpId type="email" value={userId} name="userId" onChange={onChange} required />
+                    <StSignUpId
+                        type="email"
+                        value={userId}
+                        name="userId"
+                        onChange={onChange}
+                        required
+                        placeholder="abcd@naver.com"
+                    />
                     <StText>사용할 비밀번호 입력</StText>
-                    <StSignUpPw type="password" value={userPw} name="userPw" onChange={onChange} required />
+                    <StSignUpPw
+                        type="password"
+                        value={userPw}
+                        name="userPw"
+                        onChange={onChange}
+                        required
+                        minLength={6}
+                        placeholder="6자리 이상 입력해주세요"
+                    />
                     <StText>사용할 비밀번호 확인</StText>
-                    <StSignUpPwCheck type="password" value={pwCheck} name="pwCheck" onChange={onChange} required />
+                    <StSignUpPwCheck
+                        type="password"
+                        value={pwCheck}
+                        name="pwCheck"
+                        onChange={onChange}
+                        required
+                        placeholder="6자리 이상 입력해주세요"
+                    />
                     <StText>사용할 닉네임 입력</StText>
-                    <StSignUpNickName type="text" value={nickName} name="nickName" onChange={onChange} required />
+                    <StSignUpNickName
+                        type="text"
+                        value={nickName}
+                        name="nickName"
+                        onChange={onChange}
+                        required
+                        placeholder="닉네임을 입력해주세요"
+                    />
                     <StBackSignUpWarp>
                         <StBackButton
                             onClick={() => {
@@ -96,7 +126,7 @@ const StLogoImg = styled.img`
     margin-bottom: 60px;
 `;
 const StText = styled.div`
-    margin: 10px 0px 10px 10px;
+    margin: 20px 0px 5px;
 `;
 const StSignUpId = styled.input`
     width: 402px;
@@ -104,13 +134,27 @@ const StSignUpId = styled.input`
     border-radius: 5px;
     border: 0px;
     margin: 0px auto;
+    background-color: var(--light-gray);
+    font-size: large;
+    color: black;
+    &:focus {
+        border: 2px solid var(--border-color);
+        outline: none;
+    }
 `;
 const StSignUpPw = styled.input`
     width: 402px;
     height: 47px;
-    margin: 10px auto;
+    margin: 0px auto;
     border-radius: 5px;
     border: 0px;
+    background-color: var(--light-gray);
+    font-size: large;
+    color: black;
+    &:focus {
+        border: 2px solid var(--border-color);
+        outline: none;
+    }
 `;
 const StSignUpPwCheck = styled.input`
     width: 402px;
@@ -118,16 +162,31 @@ const StSignUpPwCheck = styled.input`
     margin: 0px auto;
     border-radius: 5px;
     border: 0px;
+    background-color: var(--light-gray);
+    font-size: large;
+    color: black;
+    &:focus {
+        border: 2px solid var(--border-color);
+        outline: none;
+    }
 `;
 const StSignUpNickName = styled.input`
     width: 402px;
     height: 47px;
-    margin: 10px auto;
+    margin: 0px auto;
     border-radius: 5px;
     border: 0px;
+    background-color: var(--light-gray);
+    font-size: large;
+    color: black;
+    &:focus {
+        border: 2px solid var(--border-color);
+        outline: none;
+    }
 `;
 const StBackSignUpWarp = styled.div`
     display: flex;
+    margin-top: 30px;
 `;
 const StBackButton = styled.button`
     width: 196px;
@@ -137,6 +196,12 @@ const StBackButton = styled.button`
     margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
+    background-color: var(--light-gray);
+    color: var(--bold-gray);
+    &:hover {
+        background-color: var(--main-button-color);
+        color: white;
+    }
 `;
 const StSignUpButton = styled.button`
     width: 196px;
@@ -146,6 +211,8 @@ const StSignUpButton = styled.button`
     margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
+    background-color: var(--light-gray);
+    color: var(--bold-gray);
     &:hover {
         background-color: var(--main-button-color);
         color: white;
