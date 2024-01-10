@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import example from '../../assets/home/suin.jpg';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../../firebase/firebase.config';
+import { signOut } from 'firebase/auth';
 
-const MainProfile = () => {
+const MainProfile = ({ setCurrentUser }) => {
+    const navigate = useNavigate();
     return (
         <StProfileBox>
             <StProfileImg>
@@ -26,8 +30,22 @@ const MainProfile = () => {
                 </StPostsInfo>
             </StPostsBox>
             <StBtns>
-                <StMypageBtn>마이페이지</StMypageBtn>
-                <StLogoutBtn>로그아웃</StLogoutBtn>
+                <StMypageBtn
+                    onClick={() => {
+                        navigate('/profile');
+                    }}
+                >
+                    마이페이지
+                </StMypageBtn>
+                <StLogoutBtn
+                    onClick={async () => {
+                        alert('로그아웃 할까?');
+                        await signOut(auth);
+                        setCurrentUser(null);
+                    }}
+                >
+                    로그아웃
+                </StLogoutBtn>
             </StBtns>
         </StProfileBox>
     );
