@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { db, storage } from '../../firebase/firebase.config';
 import Avatar from '../common/avatar';
-import profileImage from './image.png';
+import profileImage from '../../assets/profile/image.png';
 import { loginIdAtom } from '../../recoil/loginAtom';
 import { useRecoilValue } from 'recoil';
 
@@ -20,8 +20,6 @@ const Profile = () => {
     const [userBlood, setUserBlood] = useState('');
     const [userLocation, setUserLocation] = useState('');
     const [userIntro, setUserIntro] = useState('');
-    const [isImageEditing, setIsImageEditing] = useState(false);
-    const [showConfirmation, setShowConfirmation] = useState(false);
     const userUuId = useRecoilValue(loginIdAtom);
 
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
@@ -145,6 +143,7 @@ const Profile = () => {
                                                 <input
                                                     placeholder="홍길동"
                                                     value={userName}
+                                                    defaultValue={users.name}
                                                     onChange={(e) => {
                                                         setUserName(e.target.value);
                                                     }}
