@@ -6,7 +6,7 @@ const GlobalColor = createGlobalStyle`
         --content-border-color: #ededed;
         --button-border-color: #abaad8;
         --hr-border-color: #ececec;
-        --footer-border-color: #d3d3d3;
+        --box-border-color: #d3d3d3;
         --background-color: #fcfcfc;
         --light-purple: #ac87c5;
         --light-pink: #e0aed0;

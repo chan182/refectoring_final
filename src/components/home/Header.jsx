@@ -102,7 +102,7 @@ const StPositionBox = styled.div`
     display: flex;
     justify-content: center;
     background-color: white;
-    border: 1px solid var(--footer-border-color);
+    border: 1px solid var(--box-border-color);
     border-width: 0 0 1px 0;
 `;
 

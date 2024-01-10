@@ -208,6 +208,7 @@ const StSignUpButton = styled.button`
     cursor: pointer;
     background-color: var(--light-gray);
     color: var(--bold-gray);
+
     &:hover {
         background-color: var(--main-button-color);
         color: white;
