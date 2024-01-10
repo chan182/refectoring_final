@@ -95,16 +95,6 @@ const StUserId = styled.input`
     color: black;
 `;
 
-const StUserPw = styled.input`
-    width: 402px;
-    height: 47px;
-    margin: 20px auto 0px;
-    outline: none;
-    border-radius: 5px;
-    border: 0px;
-    font-size: large;
-    background-color: var(--light-gray);
-`;
 const StPwChange = styled.button`
     text-decoration: underline;
     margin: 10px 0px 40px 20px;
