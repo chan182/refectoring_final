@@ -5,11 +5,15 @@ import styled from 'styled-components';
 import { db, storage } from '../../firebase/firebase.config';
 import Avatar from '../common/avatar';
 import profileImage from '../../assets/profile/image.png';
-import { loginIdAtom } from '../../recoil/loginAtom';
-import { useRecoilValue } from 'recoil';
+import { UserMbtiAtom, UserNameAtom, loginIdAtom } from '../../recoil/Atom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { UserImageAtom } from '../../recoil/Atom';
 
 const Profile = () => {
-    const [users, setUsers] = useState({});
+    const userProfileSmallImage = useSetRecoilState(UserImageAtom);
+    const userNameRecoil = useSetRecoilState(UserNameAtom);
+    const userMbtiRecoil = useSetRecoilState(UserMbtiAtom);
+    const [user, setUser] = useState({});
     const [isEditing, setIsEditing] = useState(false);
     const [previewURL, setPreviewURL] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -21,7 +25,17 @@ const Profile = () => {
     const [userLocation, setUserLocation] = useState('');
     const [userIntro, setUserIntro] = useState('');
     const userUuId = useRecoilValue(loginIdAtom);
-
+    useEffect(() => {
+        if (user) {
+            setUserName(user.name);
+            setUsernickname(user.nickname);
+            setUserBirth(user.birth);
+            setUserMbti(user.mbti);
+            setUserBlood(user.blood);
+            setUserLocation(user.location);
+            setUserIntro(user.introduce);
+        }
+    }, [user]);
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
 
     const fileSelectHandler = (event) => {
@@ -42,7 +56,7 @@ const Profile = () => {
     //  이펙트 내에서의 onSnapshot 콜백 함수
     const handleSnapshot = (querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            setUsers({
+            setUser({
                 id: doc.id,
                 ...doc.data()
             });
@@ -64,8 +78,8 @@ const Profile = () => {
 
     // 프로필 수정 버튼 입력 후 입력한 값이 수정(추가)이 된다.
     const updateUserinfo = async () => {
-        const userRef = doc(db, 'users', users.id);
-        const storageRef = ref(storage, 'user_images/' + users.id);
+        const userRef = doc(db, 'users', user.id);
+        const storageRef = ref(storage, 'user_images/' + user.id);
 
         try {
             const imageFile = selectedFile;
@@ -88,6 +102,9 @@ const Profile = () => {
                     introduce: userIntro,
                     imageUrl: imageUrl
                 });
+                userProfileSmallImage(imageUrl);
+                userNameRecoil(userName);
+                userMbtiRecoil(userMbti);
             } else {
                 await updateDoc(userRef, {
                     nickname: userNickname,
@@ -98,6 +115,8 @@ const Profile = () => {
                     location: userLocation,
                     introduce: userIntro
                 });
+                userNameRecoil(userName);
+                userMbtiRecoil(userMbti);
             }
             console.log('update successful');
         } catch (error) {
@@ -114,14 +133,14 @@ const Profile = () => {
                             {isEditing ? (
                                 <label htmlFor="inputFile">
                                     <ProfilePointerAvatar
-                                        src={previewURL || users.imageUrl}
+                                        src={previewURL || user.imageUrl}
                                         for="inputFile"
                                         size="large"
                                     />
                                     <Stinput type="file" id="inputFile" accept="image/*" onChange={fileSelectHandler} />
                                 </label>
                             ) : (
-                                <Avatar src={users.imageUrl || profileImage} size="large" />
+                                <Avatar src={user.imageUrl || profileImage} size="large" />
                             )}
                         </StProfileImage>
                         {/* <StProfileImageButton
@@ -143,7 +162,7 @@ const Profile = () => {
                                                 <input
                                                     placeholder="홍길동"
                                                     value={userName}
-                                                    defaultValue={users.name}
+                                                    defaultValue={user.name}
                                                     onChange={(e) => {
                                                         setUserName(e.target.value);
                                                     }}
@@ -232,38 +251,38 @@ const Profile = () => {
                                     <StlistWrapper>
                                         <Stlist>
                                             <StminiTitle>이름</StminiTitle>
-                                            <StminiContent>{users.name}</StminiContent>
+                                            <StminiContent>{user.name}</StminiContent>
                                         </Stlist>
 
                                         <Stlist>
                                             <StminiTitle>닉네임</StminiTitle>
-                                            <StminiContent>{users.nickname}</StminiContent>
+                                            <StminiContent>{user.nickname}</StminiContent>
                                         </Stlist>
                                     </StlistWrapper>
                                     <StlistWrapper>
                                         <Stlist>
                                             <StminiTitle>생년월일</StminiTitle>
-                                            <StminiContent>{users.birth}</StminiContent>
+                                            <StminiContent>{user.birth}</StminiContent>
                                         </Stlist>
                                         <Stlist>
                                             <StminiTitle>거주지</StminiTitle>
-                                            <StminiContent>{users.location}</StminiContent>
+                                            <StminiContent>{user.location}</StminiContent>
                                         </Stlist>
                                     </StlistWrapper>
                                     <StlistWrapper>
                                         <Stlist>
                                             <StminiTitle>MBTI</StminiTitle>
-                                            <StminiContent>{users.mbti}</StminiContent>
+                                            <StminiContent>{user.mbti}</StminiContent>
                                         </Stlist>
                                         <Stlist>
                                             <StminiTitle>혈액형</StminiTitle>
-                                            <StminiContent>{users.blood}</StminiContent>
+                                            <StminiContent>{user.blood}</StminiContent>
                                         </Stlist>
                                     </StlistWrapper>
                                     <StlistWrapper>
                                         <Stlist>
                                             <StminiTitle>한줄소개</StminiTitle>
-                                            <StminiContent2>{users.introduce}</StminiContent2>
+                                            <StminiContent2>{user.introduce}</StminiContent2>
                                         </Stlist>
                                     </StlistWrapper>
                                 </>
