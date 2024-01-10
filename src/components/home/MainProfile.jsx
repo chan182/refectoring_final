@@ -1,19 +1,27 @@
 import styled from 'styled-components';
-import example from '../../assets/home/suin.jpg';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase/firebase.config';
 import { signOut } from 'firebase/auth';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { UserMbtiAtom, loginIdAtom } from '../../recoil/Atom';
+import { UserImageAtom } from '../../recoil/Atom';
+import { UserNameAtom } from '../../recoil/Atom';
 
 const MainProfile = ({ setCurrentUser, toggleDropdown }) => {
+    const clearUserAtom = useResetRecoilState(loginIdAtom);
+    const profileminiImage = useRecoilValue(UserImageAtom);
+    const userName = useRecoilValue(UserNameAtom);
+    const userMbti = useRecoilValue(UserMbtiAtom);
+
     const navigate = useNavigate();
     return (
         <StProfileBox>
             <StProfileImg>
-                <img src={example} />
+                <img src={profileminiImage} />
             </StProfileImg>
             <StUserInfo>
-                <StProfileName>최수인</StProfileName>
-                <StProfileMbti>ENTJ</StProfileMbti>
+                <StProfileName>{userName}</StProfileName>
+                <StProfileMbti>{userMbti}</StProfileMbti>
             </StUserInfo>
             <StPostsBox>
                 <StPostsInfo>
@@ -43,7 +51,9 @@ const MainProfile = ({ setCurrentUser, toggleDropdown }) => {
                         alert('로그아웃 할까?');
                         await signOut(auth);
                         setCurrentUser(null);
+                        clearUserAtom(loginIdAtom);
                         toggleDropdown();
+                        navigate('/');
                     }}
                 >
                     로그아웃

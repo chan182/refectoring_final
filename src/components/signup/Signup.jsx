@@ -125,6 +125,8 @@ const StSignUpPage = styled.div`
     display: flex;
     justify-content: center;
     background-color: var(--light-gray);
+    width: 100%;
+    height: 100vh;
 `;
 const StSignUpWrap = styled.div`
     margin-top: 50px;

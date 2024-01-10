@@ -7,7 +7,7 @@ import logo from '../../assets/home/logo.png';
 import google from '../../assets/login/Google.png';
 import kakao from '../../assets/login/kakao.png';
 import { auth } from '../../firebase/firebase.config';
-import { loginIdAtom } from '../../recoil/loginAtom';
+import { loginIdAtom } from '../../recoil/Atom';
 
 const Login = () => {
     const [uuid, setUuid] = useRecoilState(loginIdAtom);
