@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../../assets/home/logo.png';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase/firebase.config';
+import { addDoc, collection } from 'firebase/firestore';
 
 const Signup = () => {
     const nav = useNavigate();
@@ -35,7 +36,12 @@ const Signup = () => {
 
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, userId, userPw);
-            console.log('user', userCredential.user);
+            const user = userCredential.user;
+            const userDocRef = await addDoc(collection(db, 'users'), {
+                uid: user.uid,
+                email: user.email
+            });
+            console.log('회원가입 성공 !!!', userCredential.user);
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;

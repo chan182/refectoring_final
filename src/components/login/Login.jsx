@@ -5,9 +5,13 @@ import styled, { css } from 'styled-components';
 import logo from '../../assets/home/logo.png';
 import google from '../../assets/login/Google.png';
 import kakao from '../../assets/login/kakao.png';
-import { auth } from '../../firebase';
+import { auth } from '../../firebase/firebase.config';
+import { useRecoilState } from 'recoil';
+import { loginIdAtom } from '../../recoil/loginAtom';
 
 const Login = () => {
+    const [uuid, setUuid] = useRecoilState(loginIdAtom);
+
     //사용자 정보확인
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -33,16 +37,18 @@ const Login = () => {
     //로그인 버튼
     const loginButton = async (event) => {
         event.preventDefault();
-        console.log('제출');
-        // try {
-        //     const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
-        //     console.log('user', userCredential.user);
-        //     nav('/');
-        // } catch (error) {
-        //     const errorCode = error.code;
-        //     const errorMessage = error.message;
-        //     console.log('err', errorCode, errorMessage);
-        // }
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
+            const user = userCredential.user;
+            nav('/profile');
+            console.log(user);
+            setUuid(user.uid);
+            console.log('로그인 성공 !!!!', userCredential.user);
+        } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log('err', errorCode, errorMessage);
+        }
     };
     return (
         <StPage>
