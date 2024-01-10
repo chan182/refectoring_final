@@ -137,7 +137,7 @@ const StSignUpWrap = styled.div`
 `;
 const StLogoImg = styled.img`
     width: 408px;
-    margin: 30px auto;
+    margin: 20px auto;
 `;
 const StText = styled.div`
     margin: 20px 0px 5px 25px;
@@ -200,7 +200,7 @@ const StSignUpNickName = styled.input`
 `;
 const StBackSignUpWarp = styled.div`
     display: flex;
-    margin-top: 30px;
+    margin-top: 50px;
 `;
 const StBackButton = styled.button`
     width: 196px;
