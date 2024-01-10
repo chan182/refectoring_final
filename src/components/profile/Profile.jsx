@@ -20,8 +20,6 @@ const Profile = () => {
     const [userBlood, setUserBlood] = useState('');
     const [userLocation, setUserLocation] = useState('');
     const [userIntro, setUserIntro] = useState('');
-    const [isImageEditing, setIsImageEditing] = useState(false);
-    const [showConfirmation, setShowConfirmation] = useState(false);
     const userUuId = useRecoilValue(loginIdAtom);
 
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
