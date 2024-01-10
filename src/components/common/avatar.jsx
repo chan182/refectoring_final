@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import profileImage from './image.png';
+import profileImage from '../../assets/profile/image.png';
 import { addDoc } from 'firebase/firestore';
 
 export default function Avatar({ src, size, className }) {
