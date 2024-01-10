@@ -71,25 +71,23 @@ const Login = () => {
         <StPage>
             <StLoginWrap>
                 <StLogo src={logo} alt="logo" />
-                <form>
-                    <StUserId
-                        placeholder="이메일을 입력해주세요"
-                        type="email"
-                        value={userId}
-                        name="userId"
-                        onChange={onChange}
-                        required
-                        ref={idRef}
-                    ></StUserId>
-                    <StUserPw
-                        placeholder="비밀번호를 입력해주세요"
-                        type="password"
-                        value={userPw}
-                        name="userPw"
-                        onChange={onChange}
-                        required
-                    ></StUserPw>
-                </form>
+                <StUserId
+                    placeholder="이메일을 입력해주세요"
+                    type="email"
+                    value={userId}
+                    name="userId"
+                    onChange={onChange}
+                    required
+                    ref={idRef}
+                ></StUserId>
+                <StUserPw
+                    placeholder="비밀번호를 입력해주세요"
+                    type="password"
+                    value={userPw}
+                    name="userPw"
+                    onChange={onChange}
+                    required
+                ></StUserPw>
                 <StPwChange onClick={pwChangeButton}>비밀번호 변경 </StPwChange>
                 <StLoginSignUpWarp>
                     <StLoginButton disabled={!userId || !userPw} onClick={loginButton}>
@@ -122,22 +120,27 @@ export default Login;
 const StPage = styled.div`
     display: flex;
     justify-content: center;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--light-gray);
 `;
 const StLoginWrap = styled.div`
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 450px;
     height: 600px;
+    background-color: white;
+    border-radius: 10px;
 `;
 const StLogo = styled.img`
     width: 408px;
-    height: 68px;
+    margin: 20px auto;
 `;
 const StUserId = styled.input`
     width: 402px;
     height: 47px;
-    margin: 50px auto 0px;
+    margin: 10px auto 0px;
     outline: none;
     border-radius: 5px;
     border: 1px solid var(--main-button-color);
@@ -157,7 +160,7 @@ const StUserPw = styled.input`
 `;
 const StPwChange = styled.button`
     text-decoration: underline;
-    margin: 10px 0px 40px;
+    margin: 10px 0px 40px 20px;
     color: var(--bold-gray);
     cursor: pointer;
     width: 90px;
@@ -165,13 +168,15 @@ const StPwChange = styled.button`
 `;
 const StLoginSignUpWarp = styled.div`
     display: flex;
+    justify-content: center;
+    margin: 0px auto;
+    gap: 10px;
 `;
 const StLoginButton = styled.button`
     width: 196px;
     height: 48px;
     border-radius: 5px;
     border: 0px;
-    margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
     ${(props) => {
@@ -191,7 +196,6 @@ const StSignUpButton = styled.button`
     height: 48px;
     border-radius: 5px;
     border: 0px;
-    margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
     background-color: var(--light-gray);

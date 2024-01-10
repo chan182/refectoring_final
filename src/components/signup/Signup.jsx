@@ -47,7 +47,8 @@ const Signup = () => {
                 const user = userCredential.user;
                 const userDocRef = await addDoc(collection(db, 'users'), {
                     uid: user.uid,
-                    email: user.email
+                    email: user.email,
+                    nickname: nickName
                 });
                 console.log('user =>', user);
                 console.log('db', db);
@@ -63,58 +64,56 @@ const Signup = () => {
         <StSignUpPage>
             <StSignUpWrap>
                 <StLogoImg src={logo} alt="logo" />
-                <form>
-                    <StText>사용할 이메일 입력</StText>
-                    <StSignUpId
-                        type="email"
-                        value={userId}
-                        name="userId"
-                        onChange={onChange}
-                        required
-                        placeholder="abcd@naver.com"
-                        ref={idRef}
-                    />
-                    <StText>사용할 비밀번호 입력</StText>
-                    <StSignUpPw
-                        type="password"
-                        value={userPw}
-                        name="userPw"
-                        onChange={onChange}
-                        required
-                        minLength={6}
-                        placeholder="6자리 이상 입력해주세요"
-                    />
-                    <StText>사용할 비밀번호 확인</StText>
-                    <StSignUpPwCheck
-                        type="password"
-                        value={pwCheck}
-                        name="pwCheck"
-                        onChange={onChange}
-                        required
-                        placeholder="6자리 이상 입력해주세요"
-                    />
-                    <StText>사용할 닉네임 입력</StText>
-                    <StSignUpNickName
-                        type="text"
-                        value={nickName}
-                        name="nickName"
-                        onChange={onChange}
-                        required
-                        placeholder="닉네임을 입력해주세요"
-                    />
-                    <StBackSignUpWarp>
-                        <StBackButton
-                            onClick={() => {
-                                nav('/login');
-                            }}
-                        >
-                            돌아가기
-                        </StBackButton>
-                        <StSignUpButton disabled={!userId || !userPw || !pwCheck || !nickName} onClick={signUpButton}>
-                            회원가입
-                        </StSignUpButton>
-                    </StBackSignUpWarp>
-                </form>
+                <StText>사용할 이메일 입력</StText>
+                <StSignUpId
+                    type="email"
+                    value={userId}
+                    name="userId"
+                    onChange={onChange}
+                    required
+                    placeholder="abcd@naver.com"
+                    ref={idRef}
+                />
+                <StText>사용할 비밀번호 입력</StText>
+                <StSignUpPw
+                    type="password"
+                    value={userPw}
+                    name="userPw"
+                    onChange={onChange}
+                    required
+                    minLength={6}
+                    placeholder="6자리 이상 입력해주세요"
+                />
+                <StText>사용할 비밀번호 확인</StText>
+                <StSignUpPwCheck
+                    type="password"
+                    value={pwCheck}
+                    name="pwCheck"
+                    onChange={onChange}
+                    required
+                    placeholder="6자리 이상 입력해주세요"
+                />
+                <StText>사용할 닉네임 입력</StText>
+                <StSignUpNickName
+                    type="text"
+                    value={nickName}
+                    name="nickName"
+                    onChange={onChange}
+                    required
+                    placeholder="닉네임을 입력해주세요"
+                />
+                <StBackSignUpWarp>
+                    <StBackButton
+                        onClick={() => {
+                            nav('/login');
+                        }}
+                    >
+                        돌아가기
+                    </StBackButton>
+                    <StSignUpButton disabled={!userId || !userPw || !pwCheck || !nickName} onClick={signUpButton}>
+                        회원가입
+                    </StSignUpButton>
+                </StBackSignUpWarp>
             </StSignUpWrap>
         </StSignUpPage>
     );
@@ -125,21 +124,23 @@ export default Signup;
 const StSignUpPage = styled.div`
     display: flex;
     justify-content: center;
+    background-color: var(--light-gray);
 `;
 const StSignUpWrap = styled.div`
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    width: 410px;
+    width: 450px;
     height: 600px;
+    background-color: white;
+    border-radius: 10px;
 `;
 const StLogoImg = styled.img`
     width: 408px;
-    height: 68px;
-    margin-bottom: 60px;
+    margin: 30px auto;
 `;
 const StText = styled.div`
-    margin: 20px 0px 5px;
+    margin: 20px 0px 5px 25px;
 `;
 const StSignUpId = styled.input`
     width: 402px;
