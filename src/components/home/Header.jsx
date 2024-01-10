@@ -33,9 +33,9 @@ const Header = () => {
                         <img src={logo} onClick={() => navigate('/')} />
                     </StLogo>
                     <StP onClick={() => navigate('/mbti/test')}>MBTI 검사</StP>
-                    <StP>MBTI 모임</StP>
-                    <StP>MBTI 궁합</StP>
-                    <StP>커뮤니티</StP>
+                    <StP onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StP>
+                    <StP onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StP>
+                    <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
                 </StLeftDiv>
                 <StRightDiv>
                     {currentUser ? (
@@ -48,7 +48,9 @@ const Header = () => {
                                 <StDropBtn onClick={toggleDropdown}>
                                     <img src={dorpArrow} />
                                 </StDropBtn>
-                                {isOpen && <MainProfile setCurrentUser={setCurrentUser} />}
+                                {isOpen && (
+                                    <MainProfile setCurrentUser={setCurrentUser} toggleDropdown={toggleDropdown} />
+                                )}
                             </StProfileBox>
                         </>
                     ) : (
