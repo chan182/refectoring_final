@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { db, storage } from '../../firebase/firebase.config';
 import Avatar from '../common/avatar';
-import profileImage from './image.png';
+import profileImage from '../../assets/profile/image.png';
 import { loginIdAtom } from '../../recoil/loginAtom';
 import { useRecoilValue } from 'recoil';
 
@@ -145,6 +145,7 @@ const Profile = () => {
                                                 <input
                                                     placeholder="홍길동"
                                                     value={userName}
+                                                    defaultValue={users.name}
                                                     onChange={(e) => {
                                                         setUserName(e.target.value);
                                                     }}
