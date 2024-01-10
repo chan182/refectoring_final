@@ -124,6 +124,7 @@ const StPage = styled.div`
     height: 100vh;
     background-color: var(--light-gray);
 `;
+
 const StLoginWrap = styled.div`
     margin-top: 50px;
     display: flex;
@@ -133,10 +134,12 @@ const StLoginWrap = styled.div`
     background-color: white;
     border-radius: 10px;
 `;
+
 const StLogo = styled.img`
     width: 408px;
     margin: 20px auto;
 `;
+
 const StUserId = styled.input`
     width: 402px;
     height: 47px;
@@ -148,6 +151,7 @@ const StUserId = styled.input`
     font-size: large;
     color: black;
 `;
+
 const StUserPw = styled.input`
     width: 402px;
     height: 47px;
@@ -166,12 +170,14 @@ const StPwChange = styled.button`
     width: 90px;
     height: 20px;
 `;
+
 const StLoginSignUpWarp = styled.div`
     display: flex;
     justify-content: center;
     margin: 0px auto;
     gap: 10px;
 `;
+
 const StLoginButton = styled.button`
     width: 196px;
     height: 48px;
@@ -191,6 +197,7 @@ const StLoginButton = styled.button`
         `;
     }}
 `;
+
 const StSignUpButton = styled.button`
     width: 196px;
     height: 48px;
@@ -205,11 +212,13 @@ const StSignUpButton = styled.button`
         color: white;
     }
 `;
+
 const StStartText = styled.div`
     text-align: center;
     margin-top: 60px;
     user-select: none;
 `;
+
 const StExternalLoginWrap = styled.div`
     width: 106px;
     height: 42px;
@@ -226,10 +235,12 @@ const StKakaoLogin = styled.button`
     cursor: pointer;
     background-color: white;
 `;
+
 const StKakaoImg = styled.img`
     width: 42px;
     height: 42px;
 `;
+
 const StGoogleLogin = styled.button`
     width: 42px;
     height: 42px;
@@ -237,6 +248,7 @@ const StGoogleLogin = styled.button`
     border: 0px;
     cursor: pointer;
 `;
+
 const StGoogleImg = styled.img`
     width: 30px;
     height: 30px;

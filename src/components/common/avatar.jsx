@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
-import profileImage from './image.png';
+import profileImage from '../../assets/profile/image.png';
+import { addDoc } from 'firebase/firestore';
 
 export default function Avatar({ src, size, className }) {
     return (
@@ -14,26 +15,26 @@ const AvatarFigure = styled.figure`
         switch (props.size) {
             case 'large':
                 return css`
-                    width: 250px;
-                    height: 250px;
-                    margin: 10px 50px 10px 50px;
-                    border-radius: 346px;
+                    width: 80%;
+                    height: 80%;
+                    margin: 0px 56px 0px 0px;
+                    border-radius: 50%;
                     background: lightgray 50% / cover no-repeat, #d9d9;
                 `;
             default:
                 return css`
-                    width: 50px;
-                    height: 50px;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
                 `;
         }
     }}
 
-    border-radius: 50%;
-    overflow: hidden;
     & img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        width: 95%;
+        height: 95%;
+        margin: 20px 0px 20px 40px;
+        overflow: hidden;
         border-radius: 50%;
     }
 `;
