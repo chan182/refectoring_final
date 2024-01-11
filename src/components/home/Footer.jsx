@@ -5,22 +5,26 @@ import logo from '../../assets/home/logo.png';
 const Footer = () => {
     return (
         <StBox>
-            <StLogo>
-                <img src={logo} />
-            </StLogo>
-            <StDiv>
-                <StLeftDiv>
-                    <StTitle>“MBTI 커뮤니티 플랫폼”</StTitle>
-                    <StContent>
-                        사람마다 각기 다른 MBTI를 주제로 다양한 의견들을 나누며 소통하고 모임을 만드는 커뮤니티 플랫폼을
-                        소개합니다!
-                    </StContent>
-                </StLeftDiv>
-                <StRightDiv>
-                    <StContent>리더 : 최수인 I 부리더 : 김희찬 I 디자이너 : 차상현 I 팀원 : 박길훈, 진영호</StContent>
-                    <StContent>내일배움캠프 I 서비스 런칭 프로젝트 B6 I REACT 3기</StContent>
-                </StRightDiv>
-            </StDiv>
+            <StPostingBox>
+                <StLogo>
+                    <img src={logo} />
+                </StLogo>
+                <StDiv>
+                    <StLeftDiv>
+                        <StTitle>“MBTI 커뮤니티 플랫폼”</StTitle>
+                        <StContent>
+                            사람마다 각기 다른 MBTI를 주제로 다양한 의견들을 나누며 소통하고 모임을 만드는 커뮤니티
+                            플랫폼을 소개합니다!
+                        </StContent>
+                    </StLeftDiv>
+                    <StRightDiv>
+                        <StContent>
+                            리더 : 최수인 I 부리더 : 김희찬 I 디자이너 : 차상현 I 팀원 : 박길훈, 진영호
+                        </StContent>
+                        <StContent>내일배움캠프 I 서비스 런칭 프로젝트 B6 I REACT 3기</StContent>
+                    </StRightDiv>
+                </StDiv>
+            </StPostingBox>
         </StBox>
     );
 };
@@ -28,6 +32,12 @@ const Footer = () => {
 export default Footer;
 
 const StBox = styled.div`
+    width: 100%;
+    height: 140px;
+    position: relative;
+`;
+
+const StPostingBox = styled.div`
     width: 100%;
     height: 140px;
     position: fixed;

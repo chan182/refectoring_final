@@ -17,7 +17,6 @@ const Layout = () => {
 export default Layout;
 
 const StDiv = styled.div`
-    min-height: 100vh;
     position: relative;
     box-sizing: border-box;
 `;
