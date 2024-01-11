@@ -23,16 +23,12 @@ const PwChange = () => {
     //   비밀번호 변경 버튼
     const pwChangeButton = (event) => {
         event.preventDefault();
-        if (userId === '') {
-            alert('이메일을 입력해주세요');
-        } else {
-            try {
-                sendPasswordResetEmail(auth, userId);
-            } catch (error) {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log('err', errorCode, errorMessage);
-            }
+        try {
+            sendPasswordResetEmail(auth, userId);
+        } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log('err', errorCode, errorMessage);
         }
     };
 
@@ -40,6 +36,7 @@ const PwChange = () => {
         <StPage>
             <StLoginWrap>
                 <StLogo src={logo} alt="logo" />
+                <StPwCheckText>비밀번호를 찾고자하는 이메일을 입력해주세요</StPwCheckText>
                 <StUserId
                     placeholder="이메일을 입력해주세요"
                     type="email"
@@ -49,10 +46,14 @@ const PwChange = () => {
                     required
                     ref={idRef}
                 ></StUserId>
-                <StPwChange onClick={pwChangeButton}>비밀번호 변경 </StPwChange>
-                <StLoginSignUpWarp>
-                    <StLoginButton disabled={!userId}>로그인</StLoginButton>
-                </StLoginSignUpWarp>
+                <StPwChangeWarp>
+                    <StPwChange disabled={!userId} onClick={pwChangeButton}>
+                        다음
+                    </StPwChange>
+                </StPwChangeWarp>
+                <StSearchId>
+                    아이디가 기억나지 않는다면? <span>아이디찾기 </span>
+                </StSearchId>
             </StLoginWrap>
         </StPage>
     );
@@ -80,9 +81,14 @@ const StLoginWrap = styled.div`
 
 const StLogo = styled.img`
     width: 408px;
-    margin: 20px auto;
+    margin: 20px auto 5px;
 `;
 
+const StPwCheckText = styled.div`
+    text-align: center;
+    font-size: large;
+    margin-bottom: 40px;
+`;
 const StUserId = styled.input`
     width: 402px;
     height: 47px;
@@ -95,33 +101,25 @@ const StUserId = styled.input`
     color: black;
 `;
 
-const StPwChange = styled.button`
-    text-decoration: underline;
-    margin: 10px 0px 40px 20px;
-    color: var(--bold-gray);
-    cursor: pointer;
-    width: 90px;
-    height: 20px;
-`;
-
-const StLoginSignUpWarp = styled.div`
+const StPwChangeWarp = styled.div`
     display: flex;
     justify-content: center;
     margin: 0px auto;
     gap: 10px;
 `;
 
-const StLoginButton = styled.button`
-    width: 196px;
+const StPwChange = styled.button`
+    width: 402px;
     height: 48px;
+    margin-top: 20px;
     border-radius: 5px;
     border: 0px;
     font-size: 20px;
-    cursor: pointer;
     ${(props) => {
         if (props.disabled) {
             return css`
                 background-color: var(--light-gray);
+                cursor: default;
             `;
         }
         return css`
@@ -129,4 +127,13 @@ const StLoginButton = styled.button`
             color: white;
         `;
     }}
+`;
+
+const StSearchId = styled.div`
+    text-align: center;
+    margin-top: 40px;
+    > span {
+        color: var(--light-pink);
+        cursor: pointer;
+    }
 `;
