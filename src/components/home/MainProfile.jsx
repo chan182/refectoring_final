@@ -1,11 +1,11 @@
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase/firebase.config';
 import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { UserMbtiAtom, loginIdAtom } from '../../recoil/Atom';
-import { UserImageAtom } from '../../recoil/Atom';
-import { UserNameAtom } from '../../recoil/Atom';
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_community.png';
+import { auth } from '../../firebase/firebase.config';
+import { UserImageAtom, UserMbtiAtom, UserNameAtom, loginIdAtom } from '../../recoil/Atom';
 
 const MainProfile = ({ setCurrentUser, toggleDropdown }) => {
     const clearUserAtom = useResetRecoilState(loginIdAtom);
@@ -48,12 +48,20 @@ const MainProfile = ({ setCurrentUser, toggleDropdown }) => {
                 </StMypageBtn>
                 <StLogoutBtn
                     onClick={async () => {
-                        alert('로그아웃 할까?');
                         await signOut(auth);
                         setCurrentUser(null);
                         clearUserAtom(loginIdAtom);
                         toggleDropdown();
                         navigate('/');
+                        Swal.fire({
+                            title: '로그아웃 성공!',
+                            text: '저희 MBTI Community에 자주 방문해주세요 ! ♥',
+                            imageUrl: modal_logo,
+                            imageWidth: 300,
+                            imageAlt: 'Custom image',
+                            confirmButtonText: '♥ 네 ♥',
+                            confirmButtonColor: '#756ab6'
+                        });
                     }}
                 >
                     로그아웃

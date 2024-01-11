@@ -3,7 +3,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import profileImage from '../../assets/profile/image.png';
+import profileImage from '../../assets/profile/profileImg.png';
 import { db, storage } from '../../firebase/firebase.config';
 import { UserImageAtom, UserMbtiAtom, UserNameAtom, loginIdAtom } from '../../recoil/Atom';
 import Avatar from '../common/avatar';
@@ -301,7 +301,6 @@ const UserInfo = () => {
                             ) : (
                                 <StEditBtn>프로필 수정</StEditBtn>
                             )}
-                            --border
                         </StBtnDiv>
                     </StInputBox>
                 </StUserwrapper>
