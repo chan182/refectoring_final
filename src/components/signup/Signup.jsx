@@ -1,5 +1,6 @@
 import { createUserWithEmailAndPassword } from '@firebase/auth';
-import { addDoc, collection } from '@firebase/firestore';
+import { setDoc, doc } from '@firebase/firestore';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -45,18 +46,19 @@ const Signup = () => {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, userId, userPw);
                 const user = userCredential.user;
-                const userDocRef = await addDoc(collection(db, 'users'), {
-                    uid: user.uid,
+                const data = {
                     email: user.email,
                     nickname: nickName
-                });
-                console.log('user =>', user);
-                console.log('db', db);
+                };
+                const result = await setDoc(doc(db, 'users', user.uid), data);
+
+                console.log(result);
+
                 alert('회원가입 성공 !!!', userCredential.user);
             } catch (error) {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log('err', errorCode, errorMessage);
+                console.log('err', errorCode, errorMessage, error);
             }
         }
     };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../layout/Layout';
 import LoginPage from '../pages/LoginPage';
@@ -11,8 +11,32 @@ import MbtiTestPage from './../pages/MbtiTestPage';
 import MbtiMatchingPage from '../pages/MbtiMatchingPage';
 import MbtiMeetingPage from './../pages/MbtiMeetingPage';
 import MbtiCommunityPage from '../pages/MbtiCommunityPage';
+import { auth, db } from '../firebase/firebase.config';
+import { useRecoilState } from 'recoil';
+import { userAtom } from '../recoil/Atom';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Router = () => {
+    const [_, setUser] = useRecoilState(userAtom);
+
+    useEffect(() => {
+        console.log(1111111111111);
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                const docRef = doc(db, 'users', user.uid);
+
+                // 데이터 가져오기
+                getDoc(docRef).then((docSnapshot) => {
+                    const data = docSnapshot.data();
+                    console.log(data);
+                    setUser({ uid: user.uid, ...data });
+                });
+            } else {
+                setUser(null);
+            }
+        });
+    }, [setUser]);
+
     return (
         <>
             <GlobalStyle />

@@ -1,72 +1,35 @@
-import { onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
-import React, { useEffect, useRef, useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import logo from '../../assets/home/logo.png';
 import google from '../../assets/login/Google.png';
 import kakao from '../../assets/login/kakao.png';
 import { auth } from '../../firebase/firebase.config';
-import { loginIdAtom } from '../../recoil/Atom';
+import { useRecoilState } from 'recoil';
+import { userAtom } from '../../recoil/Atom';
 
 const Login = () => {
-    const [uuid, setUuid] = useRecoilState(loginIdAtom);
-    const idRef = useRef('');
-
-    //사용자 정보확인
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            idRef.current.focus();
-        });
-    }, []);
-
-    const nav = useNavigate();
-
+    const [_, setUser] = useRecoilState(userAtom);
+    const navigate = useNavigate();
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
 
-    const onChange = (event) => {
-        const {
-            target: { name, value }
-        } = event;
-        if (name === 'userId') {
-            setUserId(value);
-        }
-        if (name === 'userPw') {
-            setUserPw(value);
-        }
-    };
-    // 비밀번호 변경 버튼
-    const pwChangeButton = (event) => {
-        event.preventDefault();
-        if (userId === '') {
-            alert('이메일을 입력해주세요');
-        } else {
-            try {
-                sendPasswordResetEmail(auth, userId);
-            } catch (error) {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log('err', errorCode, errorMessage);
-            }
-        }
-    };
-    //로그인 버튼
-    const loginButton = async (event) => {
-        event.preventDefault();
+    const handleClickLoginButton = async () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
             const user = userCredential.user;
-            nav('/profile');
             console.log(user);
-            setUuid(user.uid);
-            console.log('로그인 성공 !!!!', userCredential.user);
+            setUser(user);
+
+            navigate('/profile');
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log('err', errorCode, errorMessage);
         }
     };
+
     return (
         <StPage>
             <StLoginWrap>
@@ -76,26 +39,23 @@ const Login = () => {
                     type="email"
                     value={userId}
                     name="userId"
-                    onChange={onChange}
+                    onChange={(e) => setUserId(e.target.value)}
                     required
-                    ref={idRef}
                 ></StUserId>
                 <StUserPw
                     placeholder="비밀번호를 입력해주세요"
                     type="password"
                     value={userPw}
                     name="userPw"
-                    onChange={onChange}
+                    onChange={(e) => setUserPw(e.target.value)}
                     required
                 ></StUserPw>
-                <StPwChange onClick={pwChangeButton}>비밀번호 변경 </StPwChange>
+                <StPwSearch>비밀번호 찾기 </StPwSearch>
                 <StLoginSignUpWarp>
-                    <StLoginButton disabled={!userId || !userPw} onClick={loginButton}>
-                        로그인
-                    </StLoginButton>
+                    <StLoginButton onClick={handleClickLoginButton}>로그인</StLoginButton>
                     <StSignUpButton
                         onClick={() => {
-                            nav('/signup');
+                            navigate('/signup');
                         }}
                     >
                         회원가입
@@ -122,33 +82,34 @@ const StPage = styled.div`
     justify-content: center;
     width: 100%;
     height: 100vh;
-    background-color: var(--background-color);
+    background-color: var(--light-gray);
 `;
 
 const StLoginWrap = styled.div`
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    width: 450px;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
     height: 600px;
     background-color: white;
+    padding: 50px 0px 0px 0px;
     border-radius: 10px;
-    border: 1px solid var(--content-border-color);
 `;
 
 const StLogo = styled.img`
     width: 408px;
-    margin: 20px auto;
+    height: 68px;
 `;
 
 const StUserId = styled.input`
     width: 402px;
     height: 47px;
-    margin: 10px auto 0px;
+    margin: 50px auto 0px;
     outline: none;
     border-radius: 5px;
     border: 1px solid var(--main-button-color);
-    background-color: var(--light-gray);
     font-size: large;
     color: black;
 `;
@@ -161,22 +122,17 @@ const StUserPw = styled.input`
     border-radius: 5px;
     border: 0px;
     font-size: large;
-    background-color: var(--light-gray);
 `;
-const StPwChange = styled.button`
+
+const StPwSearch = styled.div`
     text-decoration: underline;
-    margin: 10px 0px 40px 20px;
+    margin: 20px 0px;
     color: var(--bold-gray);
     cursor: pointer;
-    width: 90px;
-    height: 20px;
 `;
 
 const StLoginSignUpWarp = styled.div`
     display: flex;
-    justify-content: center;
-    margin: 0px auto;
-    gap: 10px;
 `;
 
 const StLoginButton = styled.button`
@@ -184,19 +140,9 @@ const StLoginButton = styled.button`
     height: 48px;
     border-radius: 5px;
     border: 0px;
+    margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
-    ${(props) => {
-        if (props.disabled) {
-            return css`
-                background-color: var(--light-gray);
-            `;
-        }
-        return css`
-            background-color: var(--main-button-color);
-            color: white;
-        `;
-    }}
 `;
 
 const StSignUpButton = styled.button`
@@ -204,10 +150,10 @@ const StSignUpButton = styled.button`
     height: 48px;
     border-radius: 5px;
     border: 0px;
+    margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
-    background-color: var(--light-gray);
-    color: var(--bold-gray);
+
     &:hover {
         background-color: var(--main-button-color);
         color: white;
@@ -217,7 +163,6 @@ const StSignUpButton = styled.button`
 const StStartText = styled.div`
     text-align: center;
     margin-top: 60px;
-    user-select: none;
 `;
 
 const StExternalLoginWrap = styled.div`
@@ -234,7 +179,6 @@ const StKakaoLogin = styled.button`
     border-radius: 50%;
     border: 0px;
     cursor: pointer;
-    background-color: white;
 `;
 
 const StKakaoImg = styled.img`

@@ -1,31 +1,37 @@
-import { collection, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { db, storage } from '../../firebase/firebase.config';
 import Avatar from '../common/avatar';
 import profileImage from '../../assets/profile/image.png';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import UserWritelist from './UserWritelist';
-import { UserImageAtom, UserMbtiAtom, UserNameAtom, loginIdAtom } from '../../recoil/Atom';
+import { useRecoilState } from 'recoil';
+import { userAtom } from '../../recoil/Atom';
+
 const UserInfo = () => {
-    const userProfileSmallImage = useSetRecoilState(UserImageAtom);
-    const userNameRecoil = useSetRecoilState(UserNameAtom);
-    const userMbtiRecoil = useSetRecoilState(UserMbtiAtom);
-    const [user, setUsers] = useState({});
+    const [user, setUser] = useRecoilState(userAtom);
     const [isEditing, setIsEditing] = useState(false);
     const [previewURL, setPreviewURL] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [userName, setUserName] = useState('');
-    const [userNickname, setUsernickname] = useState('');
-    const [userBirth, setUserBirth] = useState('');
-    const [userMbti, setUserMbti] = useState('');
-    const [userBlood, setUserBlood] = useState('');
-    const [userLocation, setUserLocation] = useState('');
-    const [userIntro, setUserIntro] = useState('');
-    const [isImageEditing, setIsImageEditing] = useState(false);
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const userUuId = useRecoilValue(loginIdAtom);
+    const [name, setName] = useState('');
+    const [nickname, setNickname] = useState('');
+    const [birth, setBirth] = useState('');
+    const [mbti, setMbti] = useState('');
+    const [blood, setBlood] = useState('');
+    const [location, setLocation] = useState('');
+    const [introduce, setIntroduce] = useState('');
+
+    useEffect(() => {
+        if (user) {
+            setName(user.name);
+            setNickname(user.nickname);
+            setBirth(user.birth);
+            setMbti(user.mbti);
+            setBlood(user.blood);
+            setLocation(user.location);
+            setIntroduce(user.introduce);
+        }
+    }, [user]);
 
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
     const fileSelectHandler = (event) => {
@@ -40,77 +46,42 @@ const UserInfo = () => {
         }
         setSelectedFile(file);
     };
-    //  이펙트 내에서의 onSnapshot 콜백 함수
-    const handleSnapshot = (querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            setUsers({
-                id: doc.id,
-                ...doc.data()
-            });
-        });
-    };
-    // 해당 uid값만 가져온다
-    useEffect(() => {
-        console.log(userUuId);
-        const fetchData = onSnapshot(query(collection(db, 'users'), where('uid', '==', userUuId)), handleSnapshot);
-        return fetchData; // cleanup 함수
-    }, []);
+
     // 버튼 클릭시 boolean 값 바꾸기
     const toggleInput = () => {
         setIsEditing((prevState) => !prevState);
     };
 
-    useEffect(() => {
-        if (user) {
-            setUserName(user.name);
-            setUsernickname(user.nickname);
-            setUserBirth(user.birth);
-            setUserMbti(user.mbti);
-            setUserBlood(user.blood);
-            setUserLocation(user.location);
-            setUserIntro(user.introduce);
-        }
-    }, [user]);
-
     // 프로필 수정 버튼 입력 후 입력한 값이 수정(추가)이 된다.
     const updateUserinfo = async () => {
-        const userRef = doc(db, 'users', user.id);
-        const storageRef = ref(storage, 'user_images/' + user.id);
+        const userRef = doc(db, 'users', user.uid);
+        const storageRef = ref(storage, 'user_images/' + user.uid);
+
         try {
             const imageFile = selectedFile;
+            const data = {
+                nickname,
+                name,
+                birth,
+                mbti,
+                blood,
+                location,
+                introduce
+            };
+
             if (imageFile) {
                 // 이미지 파일이 선택되었을 때만 업로드
                 await uploadBytes(storageRef, imageFile);
                 // 업로드된 이미지의 다운로드 URL 가져오기
                 const imageUrl = await getDownloadURL(storageRef);
-                // 사용자 정보 업데이트
-                await updateDoc(userRef, {
-                    nickname: userNickname,
-                    name: userName,
-                    birth: userBirth,
-                    mbti: userMbti,
-                    blood: userBlood,
-                    location: userLocation,
-                    introduce: userIntro,
-                    imageUrl: imageUrl
-                });
-                userProfileSmallImage(imageUrl);
-                userNameRecoil(userName);
-                userMbtiRecoil(userMbti);
+                data['imageUrl'] = imageUrl;
             } else {
-                await updateDoc(userRef, {
-                    nickname: userNickname,
-                    name: userName,
-                    birth: userBirth,
-                    mbti: userMbti,
-                    blood: userBlood,
-                    location: userLocation,
-                    introduce: userIntro
-                });
-                userNameRecoil(userName);
-                userMbtiRecoil(userMbti);
             }
-            console.log('update successful');
+
+            await updateDoc(userRef, data);
+            setUser((prevUser) => ({ ...prevUser, data }));
+            setIsEditing(false);
+            alert('프로필 업로드 성공');
         } catch (error) {
             console.error('업로드 실패', error);
         }
@@ -154,10 +125,9 @@ const UserInfo = () => {
                                             <StminiContent>
                                                 <input
                                                     placeholder="홍길동"
-                                                    value={userName}
-                                                    defaultValue={user.name}
+                                                    value={name}
                                                     onChange={(e) => {
-                                                        setUserName(e.target.value);
+                                                        setName(e.target.value);
                                                     }}
                                                 />
                                             </StminiContent>
@@ -167,9 +137,9 @@ const UserInfo = () => {
                                             <StminiContent>
                                                 <input
                                                     placeholder="20자 이내(띄어쓰기 포함)로 작성해주세요."
-                                                    value={userNickname}
+                                                    value={nickname}
                                                     onChange={(e) => {
-                                                        setUsernickname(e.target.value);
+                                                        setNickname(e.target.value);
                                                     }}
                                                 />
                                             </StminiContent>
@@ -181,9 +151,9 @@ const UserInfo = () => {
                                             <StminiContent>
                                                 <input
                                                     placeholder="0000.00.00"
-                                                    value={userBirth}
+                                                    value={birth}
                                                     onChange={(e) => {
-                                                        setUserBirth(e.target.value);
+                                                        setBirth(e.target.value);
                                                     }}
                                                 />
                                             </StminiContent>
@@ -193,9 +163,9 @@ const UserInfo = () => {
                                             <StminiContent>
                                                 <input
                                                     placeholder="OO시 OO구"
-                                                    value={userLocation}
+                                                    value={location}
                                                     onChange={(e) => {
-                                                        setUserLocation(e.target.value);
+                                                        setLocation(e.target.value);
                                                     }}
                                                 />
                                             </StminiContent>
@@ -207,9 +177,9 @@ const UserInfo = () => {
                                             <StminiContent>
                                                 <input
                                                     placeholder="자신의 MBTI를 입력하세요."
-                                                    value={userMbti}
+                                                    value={mbti}
                                                     onChange={(e) => {
-                                                        setUserMbti(e.target.value);
+                                                        setMbti(e.target.value);
                                                     }}
                                                 />
                                             </StminiContent>
@@ -219,9 +189,9 @@ const UserInfo = () => {
                                             <StminiContent>
                                                 <input
                                                     placeholder="자신의 혈액형을 입력하세요."
-                                                    value={userBlood}
+                                                    value={blood}
                                                     onChange={(e) => {
-                                                        setUserBlood(e.target.value);
+                                                        setBlood(e.target.value);
                                                     }}
                                                 />
                                             </StminiContent>
@@ -233,9 +203,9 @@ const UserInfo = () => {
                                             <StminiContent2>
                                                 <input
                                                     placeholder="간단하게 나를 소개해보세요 !"
-                                                    value={userIntro}
+                                                    value={introduce}
                                                     onChange={(e) => {
-                                                        setUserIntro(e.target.value);
+                                                        setIntroduce(e.target.value);
                                                     }}
                                                     autoFocus
                                                 />
@@ -287,13 +257,7 @@ const UserInfo = () => {
                         <StBtnDiv onClick={() => toggleInput()}>
                             {isEditing ? (
                                 <ButtonWrapper>
-                                    <StEditBtn
-                                        onClick={() => {
-                                            updateUserinfo();
-                                        }}
-                                    >
-                                        프로필 수정 완료
-                                    </StEditBtn>
+                                    <StEditBtn onClick={updateUserinfo}>프로필 수정 완료</StEditBtn>
                                     <StCancelBtn
                                         onClick={() => {
                                             setIsEditing(true);
@@ -348,6 +312,7 @@ const StProfileImage = styled.div`
         margin-top: 25px;
     }
 `;
+
 const StUserInfo = styled.div`
     display: flex;
     flex-direction: column;
@@ -360,6 +325,7 @@ const StUserInfo = styled.div`
         background-color: transparent;
     }
 `;
+
 const StUserwrapper = styled.div`
     width: 100%;
     height: 100%;
@@ -383,11 +349,13 @@ const StProfileImageButton = styled.button`
     margin-left: 80px;
     cursor: pointer;
 `;
+
 const StBtnDiv = styled.div`
     position: absolute;
     bottom: 10;
     left: 0;
 `;
+
 const StEditBtn = styled.button`
     width: 180px;
     height: 40px;
@@ -396,6 +364,7 @@ const StEditBtn = styled.button`
     background-color: var(--main-button-color);
     color: white;
 `;
+
 const StCancelBtn = styled.button`
     width: 180px;
     height: 40px;
@@ -404,23 +373,28 @@ const StCancelBtn = styled.button`
     background-color: var(--light-gray);
     color: var(--bold-gray);
 `;
+
 const ProfilePointerAvatar = styled(Avatar)`
     cursor: pointer;
 `;
+
 const Stinput = styled.input`
     display: none;
 `;
+
 const StlistWrapper = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 66px;
 `;
+
 const Stlist = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
 `;
+
 const StminiTitle = styled.div`
     width: 50%;
     font-size: 14px;
@@ -428,6 +402,7 @@ const StminiTitle = styled.div`
     padding-bottom: 5px;
     padding-left: 10px;
 `;
+
 const StminiContent = styled.div`
     width: 90%;
     border-radius: 5px;
@@ -451,6 +426,7 @@ const StminiContent = styled.div`
         }
     }
 `;
+
 const StminiContent2 = styled.div`
     width: 95%;
     border-radius: 5px;
@@ -474,6 +450,7 @@ const StminiContent2 = styled.div`
         }
     }
 `;
+
 const StInputBox = styled.div`
     position: relative;
     width: 100%;
@@ -481,10 +458,12 @@ const StInputBox = styled.div`
     padding: 0;
     margin: 0;
 `;
+
 const ButtonWrapper = styled.div`
     gap: 10px;
     display: flex;
 `;
+
 const StHr = styled.hr`
     color: var(--light-gray);
     margin: 80px;
