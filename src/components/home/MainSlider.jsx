@@ -77,7 +77,7 @@ const List = styled.div`
     width: 100%;
     height: 350px;
     padding: 100px 0px 0px 250px;
-    background-color: var(--light-gray);
+    background-color: var(--box-border-color);
 `;
 
 const StH1 = styled.h1`
