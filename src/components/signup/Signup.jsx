@@ -102,18 +102,11 @@ const Signup = () => {
                     required
                     placeholder="닉네임을 입력해주세요"
                 />
-                <StBackSignUpWarp>
-                    <StBackButton
-                        onClick={() => {
-                            nav('/login');
-                        }}
-                    >
-                        돌아가기
-                    </StBackButton>
+                <StSignUpWarp>
                     <StSignUpButton disabled={!userId || !userPw || !pwCheck || !nickName} onClick={signUpButton}>
                         회원가입
                     </StSignUpButton>
-                </StBackSignUpWarp>
+                </StSignUpWarp>
             </StSignUpWrap>
         </StSignUpPage>
     );
@@ -124,6 +117,7 @@ export default Signup;
 const StSignUpPage = styled.div`
     display: flex;
     justify-content: center;
+    background-color: var(--light-gray);
     width: 100%;
     height: 100vh;
     background-color: var(--background-color);
@@ -159,7 +153,7 @@ const StSignUpId = styled.input`
     font-size: large;
     color: black;
     &:focus {
-        border: 2px solid var(--border-color);
+        border: 2px solid var(--button-border-color);
         outline: none;
     }
 `;
@@ -174,7 +168,7 @@ const StSignUpPw = styled.input`
     font-size: large;
     color: black;
     &:focus {
-        border: 2px solid var(--border-color);
+        border: 2px solid var(--button-border-color);
         outline: none;
     }
 `;
@@ -189,7 +183,7 @@ const StSignUpPwCheck = styled.input`
     font-size: large;
     color: black;
     &:focus {
-        border: 2px solid var(--border-color);
+        border: 2px solid var(--button-border-color);
         outline: none;
     }
 `;
@@ -204,34 +198,18 @@ const StSignUpNickName = styled.input`
     font-size: large;
     color: black;
     &:focus {
-        border: 2px solid var(--border-color);
+        border: 2px solid var(--button-border-color);
         outline: none;
     }
 `;
 
-const StBackSignUpWarp = styled.div`
+const StSignUpWarp = styled.div`
     display: flex;
     margin-top: 50px;
 `;
 
-const StBackButton = styled.button`
-    width: 196px;
-    height: 48px;
-    border-radius: 5px;
-    border: 0px;
-    margin: 0px auto;
-    font-size: 20px;
-    cursor: pointer;
-    background-color: var(--light-gray);
-    color: var(--bold-gray);
-    &:hover {
-        background-color: var(--main-button-color);
-        color: white;
-    }
-`;
-
 const StSignUpButton = styled.button`
-    width: 196px;
+    width: 402px;
     height: 48px;
     border-radius: 5px;
     border: 0px;
@@ -240,14 +218,11 @@ const StSignUpButton = styled.button`
     cursor: pointer;
     background-color: var(--light-gray);
     color: var(--bold-gray);
-    /* &:hover {
-        background-color: var(--main-button-color);
-        color: white;
-    } */
     ${(props) => {
         if (props.disabled) {
             return css`
                 background-color: var(--light-gray);
+                cursor: default;
             `;
         }
         return css`
