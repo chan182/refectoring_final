@@ -102,18 +102,11 @@ const Signup = () => {
                     required
                     placeholder="닉네임을 입력해주세요"
                 />
-                <StBackSignUpWarp>
-                    <StBackButton
-                        onClick={() => {
-                            nav('/login');
-                        }}
-                    >
-                        돌아가기
-                    </StBackButton>
+                <StSignUpWarp>
                     <StSignUpButton disabled={!userId || !userPw || !pwCheck || !nickName} onClick={signUpButton}>
                         회원가입
                     </StSignUpButton>
-                </StBackSignUpWarp>
+                </StSignUpWarp>
             </StSignUpWrap>
         </StSignUpPage>
     );
@@ -210,29 +203,13 @@ const StSignUpNickName = styled.input`
     }
 `;
 
-const StBackSignUpWarp = styled.div`
+const StSignUpWarp = styled.div`
     display: flex;
     margin-top: 50px;
 `;
 
-const StBackButton = styled.button`
-    width: 196px;
-    height: 48px;
-    border-radius: 5px;
-    border: 0px;
-    margin: 0px auto;
-    font-size: 20px;
-    cursor: pointer;
-    background-color: var(--light-gray);
-    color: var(--bold-gray);
-    &:hover {
-        background-color: var(--main-button-color);
-        color: white;
-    }
-`;
-
 const StSignUpButton = styled.button`
-    width: 196px;
+    width: 402px;
     height: 48px;
     border-radius: 5px;
     border: 0px;
@@ -241,14 +218,11 @@ const StSignUpButton = styled.button`
     cursor: pointer;
     background-color: var(--light-gray);
     color: var(--bold-gray);
-    /* &:hover {
-        background-color: var(--main-button-color);
-        color: white;
-    } */
     ${(props) => {
         if (props.disabled) {
             return css`
                 background-color: var(--light-gray);
+                cursor: default;
             `;
         }
         return css`
