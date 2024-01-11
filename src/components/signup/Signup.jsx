@@ -3,7 +3,9 @@ import { addDoc, collection } from '@firebase/firestore';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import Swal from 'sweetalert2';
 import logo from '../../assets/home/logo.png';
+import modal_logo from '../../assets/home/mbti_community.png';
 import { auth, db } from '../../firebase/firebase.config';
 
 const Signup = () => {
@@ -40,7 +42,15 @@ const Signup = () => {
     const signUpButton = async (event) => {
         event.preventDefault();
         if (userPw !== pwCheck) {
-            alert('비밀번호가 다릅니다');
+            Swal.fire({
+                icon: 'warning',
+                position: 'center',
+                title: '비밀번호를 확인해주세요.',
+                text: '비밀번호가 일치하지 않습니다.',
+                // padding: '20px',
+                confirmButtonColor: '#756ab6',
+                confirmButtonText: '확인'
+            });
         } else {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, userId, userPw);
@@ -50,13 +60,61 @@ const Signup = () => {
                     email: user.email,
                     nickname: nickName
                 });
-                console.log('user =>', user);
-                console.log('db', db);
-                alert('회원가입 성공 !!!', userCredential.user);
+                Swal.fire({
+                    title: '회원가입 성공!',
+                    text: '나의 프로필 정보를 입력한 후에 커뮤니티 활동을 시작해보세요 !',
+                    imageUrl: modal_logo,
+                    imageWidth: 300,
+                    imageAlt: 'Custom image',
+                    confirmButtonText: '마이페이지로 이동',
+                    confirmButtonColor: '#756ab6'
+                }).then(() => {
+                    // 프로필 페이지로 이동
+                    nav('/profile');
+                });
             } catch (error) {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log('err', errorCode, errorMessage);
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        return Swal.fire({
+                            icon: 'error',
+                            position: 'center',
+                            title: '이미 가입되어 있는 이메일입니다.',
+                            text: '이메일 주소를 확인해주세요.',
+                            confirmButtonColor: '#756ab6'
+                        });
+                    case 'auth/weak-password':
+                        return Swal.fire({
+                            icon: 'error',
+                            position: 'center',
+                            title: '잘못된 비밀번호를 입력하였습니다.',
+                            text: '비밀번호는 6글자 이상이어야 합니다.',
+                            confirmButtonColor: '#756ab6'
+                        });
+                    case 'auth/network-request-failed':
+                        return Swal.fire({
+                            icon: 'error',
+                            position: 'center',
+                            title: '네트워크 연결에 실패 하였습니다.',
+                            text: '잠시 후에 다시 시도해 주세요.',
+                            confirmButtonColor: '#756ab6'
+                        });
+                    case 'auth/invalid-email':
+                        return Swal.fire({
+                            icon: 'error',
+                            position: 'center',
+                            title: '잘못된 이메일 형식입니다.',
+                            text: '유효한 이메일 형식으로 작성해주세요.',
+                            confirmButtonColor: '#756ab6'
+                        });
+                    default:
+                        return Swal.fire({
+                            icon: 'error',
+                            position: 'center',
+                            title: '회원가입에 실패하였습니다.',
+                            text: '이메일 주소와 비밀번호를 확인해주세요.',
+                            confirmButtonColor: '#756ab6'
+                        });
+                }
             }
         }
     };
