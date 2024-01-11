@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import GoogleLogin from '../components/login/GoogleLogin';
+import KakaoLogin from '../components/login/KakaoLogin';
 import Layout from '../layout/Layout';
 import LoginPage from '../pages/LoginPage';
 import MbtiCommunityPage from '../pages/MbtiCommunityPage';
@@ -30,6 +32,8 @@ const Router = () => {
                         <Route path="/mbti/matching" element={<MbtiMatchingPage />} />
                         <Route path="/mbti/meeting" element={<MbtiMeetingPage />} />
                         <Route path="/mbti/community" element={<MbtiCommunityPage />} />
+                        <Route path="/kakaologin" element={<KakaoLogin />} />
+                        <Route path="/googlelogin" element={<GoogleLogin />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
