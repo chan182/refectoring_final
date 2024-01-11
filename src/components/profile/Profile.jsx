@@ -14,8 +14,9 @@ const Profile = () => {
 export default Profile;
 const StBox = styled.div`
     width: 100%;
-    /* height: 200vh; */
+    min-height: 100vh;
     padding: 50px 0px 0px 0px;
+    padding-bottom: 100px;
     position: relative;
     display: flex;
     align-items: center;
