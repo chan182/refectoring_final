@@ -73,14 +73,20 @@ export const StQuestionText = styled.h2`
 `;
 
 export const StResultMent = styled.h1`
-    font-size: 32px;
-    margin-top: 113px;
+    font-size: 18px;
+    width: 50%;
+    margin-left: 26%;
+    white-space: pre-line;
+    line-height: 1.5;
+    max-height: calc(18px * 11);
+    overflow: auto;
+    text-align: left;
 `;
 
 export const StResultText = styled.h1`
     font-size: 35px;
     font-weight: 800;
-    margin-top: 80px;
+    margin-top: 30px;
     width: 100%;
     color: #756ab6;
 `;
@@ -146,7 +152,7 @@ export const StCompleteButton = styled.button`
 `;
 export const StTypeDescription = styled.p`
     font-size: 16px;
-    padding: 0px 295px 40px;
+    padding: 0px 295px 50px;
     color: #333;
     background-color: #fff;
     height: 125px;
