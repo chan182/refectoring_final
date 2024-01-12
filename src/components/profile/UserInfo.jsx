@@ -1,12 +1,12 @@
 import { doc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { db, storage } from '../../firebase/firebase.config';
-import Avatar from '../common/avatar';
-import profileImage from '../../assets/profile/image.png';
 import { useRecoilState } from 'recoil';
+import styled from 'styled-components';
+import profileImage from '../../assets/profile/profileImg.png';
+import { db, storage } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
+import Avatar from '../common/avatar';
 
 const UserInfo = () => {
     const [user, setUser] = useRecoilState(userAtom);
@@ -32,7 +32,6 @@ const UserInfo = () => {
             setIntroduce(user.introduce);
         }
     }, [user]);
-
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
     const fileSelectHandler = (event) => {
         const file = event.target.files[0];
@@ -80,7 +79,6 @@ const UserInfo = () => {
 
             await updateDoc(userRef, data);
             setUser((prevUser) => ({ ...prevUser, data }));
-
             setIsEditing(false);
             alert('프로필 업로드 성공');
         } catch (error) {
@@ -288,12 +286,14 @@ const StWrapper = styled.div`
     width: 60%;
     height: 400px;
 `;
+
 const StProfileTitle = styled.div`
     font-size: 24px;
     color: var(--bold-gray);
     width: 60%;
     padding: 0px 0px 0px 10px;
 `;
+
 const StProfileImage = styled.div`
     display: flex;
     justify-content: center;
@@ -336,6 +336,7 @@ const StUserwrapper = styled.div`
     border-radius: 10px;
     background: white;
 `;
+
 const StProfileImageButton = styled.button`
     display: inline-flex;
     height: 48px;

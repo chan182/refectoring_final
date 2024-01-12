@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import { default as React, useState } from 'react';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import dorpArrow from '../../assets/home/dropArrow.png';
 import logo from '../../assets/home/logo.png';
+import { userAtom } from '../../recoil/Atom';
 import MbtiTest from '../mbti_test/MbtiTest';
 import MainProfile from './MainProfile';
-import { useRecoilState } from 'recoil';
-import { userAtom } from '../../recoil/Atom';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -86,7 +86,7 @@ const StPositionBox = styled.div`
     display: flex;
     justify-content: center;
     background-color: white;
-    border: 1px solid var(--footer-border-color);
+    border: 1px solid var(--box-border-color);
     border-width: 0 0 1px 0;
 `;
 
@@ -172,7 +172,9 @@ const StSignupBtn = styled.button`
     cursor: pointer;
 
     &:hover {
-        transform: scale(1.05);
+        /* transform: scale(1.015); */
+        background-color: var(--main-button-color);
+        color: white;
     }
 `;
 

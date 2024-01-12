@@ -1,12 +1,14 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import React, { useState } from 'react';
+import { default as React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 import logo from '../../assets/home/logo.png';
+import modal_logo from '../../assets/home/mbti_community.png';
 import google from '../../assets/login/Google.png';
 import kakao from '../../assets/login/kakao.png';
 import { auth } from '../../firebase/firebase.config';
-import { useRecoilState } from 'recoil';
 import { userAtom } from '../../recoil/Atom';
 
 const Login = () => {
@@ -19,14 +21,54 @@ const Login = () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
             const user = userCredential.user;
+            navigate('/profile');
             console.log(user);
             setUser(user);
-
-            navigate('/profile');
+            Swal.fire({
+                title: '로그인 성공!',
+                text: '다양한 유형의 사람들과 자유롭게 소통하세요 !',
+                imageUrl: modal_logo,
+                imageWidth: 300,
+                imageAlt: 'Custom image',
+                confirmButtonText: '♥ 네 ♥'
+            });
         } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log('err', errorCode, errorMessage);
+            console.log('error.code : ', error.code);
+            switch (error.code) {
+                case 'auth/user-not-found" || "auth/wrong-password':
+                case 'auth/network-request-failed':
+                    return Swal.fire({
+                        icon: 'error',
+                        position: 'center',
+                        title: '네트워크 연결에 실패 하였습니다.',
+                        text: '잠시 후에 다시 시도해 주세요.',
+                        confirmButtonColor: '#756ab6'
+                    });
+                case 'auth/invalid-email':
+                    return Swal.fire({
+                        icon: 'error',
+                        position: 'center',
+                        title: '잘못된 이메일 형식입니다.',
+                        text: '유효한 이메일 형식으로 작성해주세요.',
+                        confirmButtonColor: '#756ab6'
+                    });
+                case 'auth/invalid-credential':
+                    return Swal.fire({
+                        icon: 'error',
+                        position: 'center',
+                        title: '잘못된 정보를 입력하였습니다.',
+                        text: '가입한 계정의 정보를 입력해주세요.',
+                        confirmButtonColor: '#756ab6'
+                    });
+                default:
+                    return Swal.fire({
+                        icon: 'error',
+                        position: 'center',
+                        title: '로그인에 실패하였습니다.',
+                        text: '이메일 주소와 비밀번호를 확인해주세요.',
+                        confirmButtonColor: '#756ab6'
+                    });
+            }
         }
     };
 
@@ -51,6 +93,13 @@ const Login = () => {
                     required
                 ></StUserPw>
                 <StPwSearch>비밀번호 찾기 </StPwSearch>
+                <StPwChange
+                    onClick={() => {
+                        navigate('/pwchange');
+                    }}
+                >
+                    비밀번호 변경
+                </StPwChange>
                 <StLoginSignUpWarp>
                     <StLoginButton onClick={handleClickLoginButton}>로그인</StLoginButton>
                     <StSignUpButton
@@ -124,6 +173,15 @@ const StUserPw = styled.input`
     font-size: large;
 `;
 
+const StPwChange = styled.button`
+    text-decoration: underline;
+    margin: 10px 0px 40px 20px;
+    color: var(--bold-gray);
+    cursor: pointer;
+    width: 90px;
+    height: 20px;
+`;
+
 const StPwSearch = styled.div`
     text-decoration: underline;
     margin: 20px 0px;
@@ -153,7 +211,8 @@ const StSignUpButton = styled.button`
     margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
-
+    background-color: var(--light-gray);
+    color: var(--bold-gray);
     &:hover {
         background-color: var(--main-button-color);
         color: white;
