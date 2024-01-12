@@ -1,6 +1,5 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -8,7 +7,6 @@ import dorpArrow from '../../assets/home/dropArrow.png';
 import logo from '../../assets/home/logo.png';
 import { auth } from '../../firebase/firebase.config';
 import { UserImageAtom } from '../../recoil/Atom';
-import MbtiTest from '../mbti_test/MbtiTest';
 import MainProfile from './MainProfile';
 
 const Header = () => {
@@ -17,8 +15,6 @@ const Header = () => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -40,7 +36,7 @@ const Header = () => {
                         <StLogo>
                             <img src={logo} onClick={() => navigate('/')} />
                         </StLogo>
-                        <StP onClick={() => setIsModalOpen(true)}>MBTI 검사</StP>
+                        <StP onClick={() => navigate('/mbti/test')}>MBTI 검사</StP>
                         <StP onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StP>
                         <StP onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StP>
                         <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
@@ -71,16 +67,6 @@ const Header = () => {
                     </StRightDiv>
                 </StDiv>
             </StPositionBox>
-            {/* MBTI 검사 모달 */}
-            <Modal
-                isOpen={isModalOpen}
-                onRequestClose={() => setIsModalOpen(false)}
-                style={customModalStyles}
-                shouldCloseOnOverlayClick={false}
-                contentLabel="MBTI Test Modal"
-            >
-                <MbtiTest isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-            </Modal>
         </StBox>
     );
 };
@@ -235,23 +221,3 @@ const StDropBtn = styled.div`
         opacity: 0.6;
     }
 `;
-
-const customModalStyles = {
-    overlay: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)'
-    },
-    content: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '65%',
-        height: '71.5%',
-        // maxWidth: '90vw',
-        // maxHeight: '90vh',
-        padding: '20px',
-        borderRadius: '10px',
-        backgroundColor: '#fff',
-        overflow: 'auto'
-    }
-};
