@@ -69,7 +69,7 @@ const StSlide = styled.div`
     }
 
     .slick-dots {
-        bottom: 25px;
+        bottom: 10px;
     }
 `;
 

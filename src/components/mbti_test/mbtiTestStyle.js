@@ -8,6 +8,14 @@ export const StScreenBox = styled.div`
     align-items: center;
 `;
 
+export const StScreenBox2 = styled.div`
+    height: 80vh;
+    background-color: #fcfcfc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
 // export const StScreenBox = styled.div`
 //     position: fixed;
 //     top: 0;
@@ -111,7 +119,7 @@ export const StOptionButton = styled.button`
     cursor: pointer;
     width: 680px;
     height: 86px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
 
     &:hover {
         transition: ease-in-out 0.2s;
@@ -141,13 +149,13 @@ export const StCompleteButton = styled.button`
     border-radius: 0.5rem;
     cursor: pointer;
     width: 20%;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
 
     &:hover {
         transition: ease-in-out 0.2s;
         background-color: #756ab6;
         color: #fff;
-        box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575);
+        /* box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575); */
     }
 `;
 export const StTypeDescription = styled.p`
@@ -210,7 +218,7 @@ export const StTestStartComment = styled.h1`
     height: 136px;
     margin-top: 82px;
     margin-left: 130px;
-    padding: 0px 25px;
+    padding: 0px 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -237,12 +245,12 @@ export const StTestStartButton = styled.button`
     border-radius: 0.5rem;
     cursor: pointer;
     width: 20%;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
 
     &:hover {
         transition: ease-in-out 0.2s;
         background-color: #756ab6;
         color: #fff;
-        box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575);
+        /* box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575); */
     }
 `;

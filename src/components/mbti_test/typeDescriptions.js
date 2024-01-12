@@ -1,7 +1,7 @@
 export const typeDescriptions = {
     ISTJ: `세상의 소금형 (ISTJ)
     한번 시작한 일은 끝까지 해내는 성격`,
-    ISFJ: `임금뒷편의 권력형(ISFJ)
+    ISFJ: `권력형(ISFJ)
     성실하고 온화하여 협조를 잘하는 사람`,
     INFJ: `예언자형(INFJ)
     사람에 관한 뛰어난 통찰력을 가진 사람`,

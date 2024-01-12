@@ -14,7 +14,7 @@ const MbtiTest = () => {
     };
 
     return (
-        <T.StScreenBox>
+        <T.StScreenBox2>
             <T.StTestContainer>
                 <T.StTestStartComment>
                     MBTI 검사하고 저희 서비스를 더 재미있고 적극적으로 이용해보세요!
@@ -42,7 +42,7 @@ const MbtiTest = () => {
                     </T.StLogoImage>
                 </T.StLogoImageBox>
             </T.StTestContainer>
-        </T.StScreenBox>
+        </T.StScreenBox2>
     );
 };
 
@@ -52,6 +52,7 @@ const customModalStyles = {
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)'
     },
+
     content: {
         position: 'absolute',
         top: '50%',
