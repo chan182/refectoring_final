@@ -2,7 +2,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { default as React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Swal from 'sweetalert2';
 import logo from '../../assets/home/logo.png';
 import modal_logo from '../../assets/home/mbti_community.png';
@@ -83,6 +83,7 @@ const Login = () => {
                     name="userId"
                     onChange={(e) => setUserId(e.target.value)}
                     required
+                    autoFocus
                 ></StUserId>
                 <StUserPw
                     placeholder="비밀번호를 입력해주세요"
@@ -101,7 +102,9 @@ const Login = () => {
                     비밀번호 변경
                 </StPwChange>
                 <StLoginSignUpWarp>
-                    <StLoginButton onClick={handleClickLoginButton}>로그인</StLoginButton>
+                    <StLoginButton disabled={!userId || !userPw} onClick={handleClickLoginButton}>
+                        로그인
+                    </StLoginButton>
                     <StSignUpButton
                         onClick={() => {
                             navigate('/signup');
@@ -131,34 +134,33 @@ const StPage = styled.div`
     justify-content: center;
     width: 100%;
     height: 100vh;
-    background-color: var(--light-gray);
+    background-color: var(--background-color);
 `;
 
 const StLoginWrap = styled.div`
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 30%;
+    width: 450px;
     height: 600px;
     background-color: white;
-    padding: 50px 0px 0px 0px;
     border-radius: 10px;
+    border: 1px solid var(--content-border-color);
 `;
 
 const StLogo = styled.img`
     width: 408px;
-    height: 68px;
+    margin: 20px auto;
 `;
 
 const StUserId = styled.input`
     width: 402px;
     height: 47px;
-    margin: 50px auto 0px;
+    margin: 10px auto 0px;
     outline: none;
     border-radius: 5px;
     border: 1px solid var(--main-button-color);
+    background-color: var(--light-gray);
     font-size: large;
     color: black;
 `;
@@ -171,6 +173,7 @@ const StUserPw = styled.input`
     border-radius: 5px;
     border: 0px;
     font-size: large;
+    background-color: var(--light-gray);
 `;
 
 const StPwChange = styled.button`
@@ -182,15 +185,11 @@ const StPwChange = styled.button`
     height: 20px;
 `;
 
-const StPwSearch = styled.div`
-    text-decoration: underline;
-    margin: 20px 0px;
-    color: var(--bold-gray);
-    cursor: pointer;
-`;
-
 const StLoginSignUpWarp = styled.div`
     display: flex;
+    justify-content: center;
+    margin: 0px auto;
+    gap: 10px;
 `;
 
 const StLoginButton = styled.button`
@@ -198,9 +197,19 @@ const StLoginButton = styled.button`
     height: 48px;
     border-radius: 5px;
     border: 0px;
-    margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
+    ${(props) => {
+        if (props.disabled) {
+            return css`
+                background-color: var(--light-gray);
+            `;
+        }
+        return css`
+            background-color: var(--main-button-color);
+            color: white;
+        `;
+    }}
 `;
 
 const StSignUpButton = styled.button`
@@ -208,11 +217,11 @@ const StSignUpButton = styled.button`
     height: 48px;
     border-radius: 5px;
     border: 0px;
-    margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
     background-color: var(--light-gray);
     color: var(--bold-gray);
+
     &:hover {
         background-color: var(--main-button-color);
         color: white;
@@ -222,6 +231,7 @@ const StSignUpButton = styled.button`
 const StStartText = styled.div`
     text-align: center;
     margin-top: 60px;
+    user-select: none;
 `;
 
 const StExternalLoginWrap = styled.div`
@@ -238,6 +248,7 @@ const StKakaoLogin = styled.button`
     border-radius: 50%;
     border: 0px;
     cursor: pointer;
+    background-color: white;
 `;
 
 const StKakaoImg = styled.img`
