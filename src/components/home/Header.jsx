@@ -1,32 +1,22 @@
-import { onAuthStateChanged } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import dorpArrow from '../../assets/home/dropArrow.png';
 import logo from '../../assets/home/logo.png';
-import { auth } from '../../firebase/firebase.config';
-import { UserImageAtom } from '../../recoil/Atom';
+import { userAtom } from '../../recoil/Atom';
 import MainProfile from './MainProfile';
 
 const Header = () => {
-    const userProfileImage = useRecoilValue(UserImageAtom);
-
     const navigate = useNavigate();
+    const [user] = useRecoilState(userAtom);
     const [isOpen, setIsOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
-        console.log('isOpen : ', isOpen);
     };
-
-    // useEffect를 활용하여 로그인 유무 판단
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            setCurrentUser(user?.email);
-        });
-    }, []);
 
     return (
         <StBox>
@@ -42,19 +32,17 @@ const Header = () => {
                         <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
                     </StLeftDiv>
                     <StRightDiv>
-                        {currentUser ? (
+                        {user ? (
                             <>
                                 {/* 로그인 성공 시, */}
                                 <StProfileBox>
                                     <StProfileImg>
-                                        <img src={userProfileImage} />
+                                        <img src={user.imageUrl} />
                                     </StProfileImg>
                                     <StDropBtn onClick={toggleDropdown}>
                                         <img src={dorpArrow} />
                                     </StDropBtn>
-                                    {isOpen && (
-                                        <MainProfile setCurrentUser={setCurrentUser} toggleDropdown={toggleDropdown} />
-                                    )}
+                                    {isOpen && <MainProfile toggleDropdown={toggleDropdown} />}
                                 </StProfileBox>
                             </>
                         ) : (

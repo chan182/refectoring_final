@@ -1,27 +1,24 @@
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
 import { auth } from '../../firebase/firebase.config';
-import { UserImageAtom, UserMbtiAtom, UserNameAtom, loginIdAtom } from '../../recoil/Atom';
+import { userAtom } from '../../recoil/Atom';
 
-const MainProfile = ({ setCurrentUser, toggleDropdown }) => {
-    const clearUserAtom = useResetRecoilState(loginIdAtom);
-    const profileminiImage = useRecoilValue(UserImageAtom);
-    const userName = useRecoilValue(UserNameAtom);
-    const userMbti = useRecoilValue(UserMbtiAtom);
+const MainProfile = ({ toggleDropdown }) => {
+    const [user] = useRecoilState(userAtom);
 
     const navigate = useNavigate();
     return (
         <StProfileBox>
             <StProfileImg>
-                <img src={profileminiImage} />
+                <img src={user.imageUrl} />
             </StProfileImg>
             <StUserInfo>
-                <StProfileName>{userName}</StProfileName>
-                <StProfileMbti>{userMbti}</StProfileMbti>
+                <StProfileName>{user.name}</StProfileName>
+                <StProfileMbti>{user.mbti}</StProfileMbti>
             </StUserInfo>
             <StPostsBox>
                 <StPostsInfo>
@@ -49,8 +46,6 @@ const MainProfile = ({ setCurrentUser, toggleDropdown }) => {
                 <StLogoutBtn
                     onClick={async () => {
                         await signOut(auth);
-                        setCurrentUser(null);
-                        clearUserAtom(loginIdAtom);
                         toggleDropdown();
                         navigate('/');
                         Swal.fire({

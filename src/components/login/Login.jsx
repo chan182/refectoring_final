@@ -1,5 +1,5 @@
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
-import React, { useEffect, useRef, useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { default as React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled, { css } from 'styled-components';
@@ -9,45 +9,21 @@ import modal_logo from '../../assets/home/mbti_community.png';
 import google from '../../assets/login/Google.png';
 import kakao from '../../assets/login/kakao.png';
 import { auth } from '../../firebase/firebase.config';
-import { loginIdAtom } from '../../recoil/Atom';
+import { userAtom } from '../../recoil/Atom';
 
 const Login = () => {
-    const [uuid, setUuid] = useRecoilState(loginIdAtom);
-    const idRef = useRef('');
-
-    //사용자 정보확인
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            idRef.current.focus();
-        });
-    }, []);
-
-    const nav = useNavigate();
-
+    const [_, setUser] = useRecoilState(userAtom);
+    const navigate = useNavigate();
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
 
-    const onChange = (event) => {
-        const {
-            target: { name, value }
-        } = event;
-        if (name === 'userId') {
-            setUserId(value);
-        }
-        if (name === 'userPw') {
-            setUserPw(value);
-        }
-    };
-
-    //로그인 버튼
-    const loginButton = async (event) => {
-        event.preventDefault();
+    const handleClickLoginButton = async () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
             const user = userCredential.user;
-            nav('/');
+            navigate('/profile');
             console.log(user);
-            setUuid(user.uid);
+            setUser(user);
             Swal.fire({
                 title: '로그인 성공!',
                 text: '다양한 유형의 사람들과 자유롭게 소통하세요 !',
@@ -95,6 +71,7 @@ const Login = () => {
             }
         }
     };
+
     return (
         <StPage>
             <StLoginWrap>
@@ -104,32 +81,33 @@ const Login = () => {
                     type="email"
                     value={userId}
                     name="userId"
-                    onChange={onChange}
+                    onChange={(e) => setUserId(e.target.value)}
                     required
-                    ref={idRef}
+                    autoFocus
                 ></StUserId>
                 <StUserPw
                     placeholder="비밀번호를 입력해주세요"
                     type="password"
                     value={userPw}
                     name="userPw"
-                    onChange={onChange}
+                    onChange={(e) => setUserPw(e.target.value)}
                     required
                 ></StUserPw>
+
                 <StPwChange
                     onClick={() => {
-                        nav('/pwchange');
+                        navigate('/pwchange');
                     }}
                 >
-                    비밀번호 변경{' '}
+                    비밀번호 변경
                 </StPwChange>
                 <StLoginSignUpWarp>
-                    <StLoginButton disabled={!userId || !userPw} onClick={loginButton}>
+                    <StLoginButton disabled={!userId || !userPw} onClick={handleClickLoginButton}>
                         로그인
                     </StLoginButton>
                     <StSignUpButton
                         onClick={() => {
-                            nav('/signup');
+                            navigate('/signup');
                         }}
                     >
                         회원가입
@@ -137,7 +115,7 @@ const Login = () => {
                 </StLoginSignUpWarp>
                 <StStartText>SNS로 간편하게 시작하기</StStartText>
                 <StExternalLoginWrap>
-                    <StKakaoLogin type="button">
+                    <StKakaoLogin type="button" onClick={() => {}}>
                         <StKakaoImg src={kakao} alt="" />
                     </StKakaoLogin>
                     <StGoogleLogin>
@@ -197,6 +175,7 @@ const StUserPw = styled.input`
     font-size: large;
     background-color: var(--light-gray);
 `;
+
 const StPwChange = styled.button`
     text-decoration: underline;
     margin: 10px 0px 40px 20px;

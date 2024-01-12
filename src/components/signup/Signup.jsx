@@ -1,5 +1,6 @@
 import { createUserWithEmailAndPassword } from '@firebase/auth';
-import { addDoc, collection } from '@firebase/firestore';
+import { doc, setDoc } from '@firebase/firestore';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -55,11 +56,13 @@ const Signup = () => {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, userId, userPw);
                 const user = userCredential.user;
-                const userDocRef = await addDoc(collection(db, 'users'), {
-                    uid: user.uid,
+                const data = {
                     email: user.email,
                     nickname: nickName
-                });
+                };
+                const result = await setDoc(doc(db, 'users', user.uid), data);
+
+                console.log(result);
                 Swal.fire({
                     title: '회원가입 성공!',
                     text: '나의 프로필 정보를 입력한 후에 커뮤니티 활동을 시작해보세요 !',
@@ -72,6 +75,7 @@ const Signup = () => {
                     // 프로필 페이지로 이동
                     nav('/profile');
                 });
+                alert('회원가입 성공 !!!', userCredential.user);
             } catch (error) {
                 switch (error.code) {
                     case 'auth/email-already-in-use':

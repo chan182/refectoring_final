@@ -12,7 +12,7 @@ const GlobalColor = createGlobalStyle`
         --light-pink: #e0aed0;
         --light-beige: #ffe5e5;
         --bold-gray: #73777B;
-        --light-gray: #f8f8f8;        
+        --light-gray: #F8F8F8;
     }
 `;
 
