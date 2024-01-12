@@ -95,7 +95,7 @@ const Login = () => {
                 </StLoginSignUpWarp>
                 <StStartText>SNS로 간편하게 시작하기</StStartText>
                 <StExternalLoginWrap>
-                    <StKakaoLogin type="button">
+                    <StKakaoLogin type="button" onClick={() => {}}>
                         <StKakaoImg src={kakao} alt="" />
                     </StKakaoLogin>
                     <StGoogleLogin>

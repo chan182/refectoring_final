@@ -48,7 +48,7 @@ const PwChange = () => {
                 ></StUserId>
                 <StPwChangeWarp>
                     <StPwChange disabled={!userId} onClick={pwChangeButton}>
-                        다음
+                        이메일 전송
                     </StPwChange>
                 </StPwChangeWarp>
                 <StSearchId>
@@ -99,6 +99,7 @@ const StUserId = styled.input`
     background-color: var(--light-gray);
     font-size: large;
     color: black;
+    padding: 10px;
 `;
 
 const StPwChangeWarp = styled.div`
