@@ -92,7 +92,7 @@ const Login = () => {
                     onChange={(e) => setUserPw(e.target.value)}
                     required
                 ></StUserPw>
-                <StPwSearch>비밀번호 찾기 </StPwSearch>
+
                 <StPwChange
                     onClick={() => {
                         navigate('/pwchange');
