@@ -32,6 +32,7 @@ const UserInfo = () => {
             setIntroduce(user.introduce);
         }
     }, [user]);
+
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
     const fileSelectHandler = (event) => {
         const file = event.target.files[0];
@@ -71,6 +72,7 @@ const UserInfo = () => {
             if (imageFile) {
                 // 이미지 파일이 선택되었을 때만 업로드
                 await uploadBytes(storageRef, imageFile);
+
                 // 업로드된 이미지의 다운로드 URL 가져오기
                 const imageUrl = await getDownloadURL(storageRef);
                 data['imageUrl'] = imageUrl;
@@ -85,6 +87,7 @@ const UserInfo = () => {
             console.error('업로드 실패', error);
         }
     };
+
     return (
         <>
             <StProfileTitle>마이페이지</StProfileTitle>
@@ -310,7 +313,12 @@ const StProfileImage = styled.div`
         color: var(--bold-gray);
         border: 1px solid var(--button-border-color);
         border-radius: 5px;
-        margin-top: 25px;
+        margin-top: 23px;
+
+        &:hover {
+            background-color: var(--main-button-color);
+            color: white;
+        }
     }
 `;
 
@@ -374,6 +382,11 @@ const StCancelBtn = styled.button`
     font-size: 18px;
     background-color: var(--light-gray);
     color: var(--bold-gray);
+
+    &:hover {
+        background-color: var(--main-button-color);
+        color: white;
+    }
 `;
 
 const ProfilePointerAvatar = styled(Avatar)`
