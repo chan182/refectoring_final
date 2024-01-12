@@ -1,13 +1,13 @@
-import { collection, query, where, onSnapshot, doc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, doc, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { db, storage } from '../../firebase/firebase.config';
-import Avatar from '../common/avatar';
-import profileImage from '../../assets/profile/image.png';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import UserWritelist from './UserWritelist';
+import styled from 'styled-components';
+import profileImage from '../../assets/profile/profileImg.png';
+import { db, storage } from '../../firebase/firebase.config';
 import { UserImageAtom, UserMbtiAtom, UserNameAtom, loginIdAtom } from '../../recoil/Atom';
+import Avatar from '../common/avatar';
+
 const UserInfo = () => {
     const userProfileSmallImage = useSetRecoilState(UserImageAtom);
     const userNameRecoil = useSetRecoilState(UserNameAtom);
@@ -26,6 +26,7 @@ const UserInfo = () => {
     const [isImageEditing, setIsImageEditing] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const userUuId = useRecoilValue(loginIdAtom);
+
     useEffect(() => {
         if (user) {
             setUserName(user.name);
@@ -51,6 +52,7 @@ const UserInfo = () => {
         }
         setSelectedFile(file);
     };
+
     //  이펙트 내에서의 onSnapshot 콜백 함수
     const handleSnapshot = (querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -60,27 +62,33 @@ const UserInfo = () => {
             });
         });
     };
+
     // 해당 uid값만 가져온다
     useEffect(() => {
         console.log(userUuId);
         const fetchData = onSnapshot(query(collection(db, 'users'), where('uid', '==', userUuId)), handleSnapshot);
         return fetchData; // cleanup 함수
     }, []);
+
     // 버튼 클릭시 boolean 값 바꾸기
     const toggleInput = () => {
         setIsEditing((prevState) => !prevState);
     };
+
     // 프로필 수정 버튼 입력 후 입력한 값이 수정(추가)이 된다.
     const updateUserinfo = async () => {
         const userRef = doc(db, 'users', user.id);
         const storageRef = ref(storage, 'user_images/' + user.id);
+
         try {
             const imageFile = selectedFile;
             if (imageFile) {
                 // 이미지 파일이 선택되었을 때만 업로드
                 await uploadBytes(storageRef, imageFile);
+
                 // 업로드된 이미지의 다운로드 URL 가져오기
                 const imageUrl = await getDownloadURL(storageRef);
+
                 // 사용자 정보 업데이트
                 await updateDoc(userRef, {
                     nickname: userNickname,
@@ -113,6 +121,7 @@ const UserInfo = () => {
             console.error('업로드 실패', error);
         }
     };
+
     return (
         <>
             <StProfileTitle>마이페이지</StProfileTitle>
@@ -311,20 +320,24 @@ const UserInfo = () => {
     );
 };
 export default UserInfo;
+
 const StWrapper = styled.div`
     background-color: white;
+    border: 1px solid var(--content-border-color);
     border-radius: 10px;
     display: flex;
     margin: 10px auto;
     width: 60%;
     height: 400px;
 `;
+
 const StProfileTitle = styled.div`
     font-size: 24px;
     color: var(--bold-gray);
     width: 60%;
     padding: 0px 0px 0px 10px;
 `;
+
 const StProfileImage = styled.div`
     display: flex;
     justify-content: center;
@@ -333,27 +346,36 @@ const StProfileImage = styled.div`
     margin-left: 50px;
     margin-right: 50px;
     width: 40%;
+
     & button {
         width: 180px;
         height: 40px;
         font-size: 18px;
         color: var(--bold-gray);
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--button-border-color);
         border-radius: 5px;
-        margin-top: 25px;
+        margin-top: 23px;
+
+        &:hover {
+            background-color: var(--main-button-color);
+            color: white;
+        }
     }
 `;
+
 const StUserInfo = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 90%;
+
     input {
         width: 70px;
         margin: -10px 10px -10px 10px;
         background-color: transparent;
     }
 `;
+
 const StUserwrapper = styled.div`
     width: 100%;
     height: 100%;
@@ -363,6 +385,7 @@ const StUserwrapper = styled.div`
     border-radius: 10px;
     background: white;
 `;
+
 const StProfileImageButton = styled.button`
     display: inline-flex;
     height: 48px;
@@ -377,11 +400,13 @@ const StProfileImageButton = styled.button`
     margin-left: 80px;
     cursor: pointer;
 `;
+
 const StBtnDiv = styled.div`
     position: absolute;
     bottom: 10;
     left: 0;
 `;
+
 const StEditBtn = styled.button`
     width: 180px;
     height: 40px;
@@ -390,6 +415,7 @@ const StEditBtn = styled.button`
     background-color: var(--main-button-color);
     color: white;
 `;
+
 const StCancelBtn = styled.button`
     width: 180px;
     height: 40px;
@@ -397,24 +423,34 @@ const StCancelBtn = styled.button`
     font-size: 18px;
     background-color: var(--light-gray);
     color: var(--bold-gray);
+
+    &:hover {
+        background-color: var(--main-button-color);
+        color: white;
+    }
 `;
+
 const ProfilePointerAvatar = styled(Avatar)`
     cursor: pointer;
 `;
+
 const Stinput = styled.input`
     display: none;
 `;
+
 const StlistWrapper = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 66px;
 `;
+
 const Stlist = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
 `;
+
 const StminiTitle = styled.div`
     width: 50%;
     font-size: 14px;
@@ -422,6 +458,7 @@ const StminiTitle = styled.div`
     padding-bottom: 5px;
     padding-left: 10px;
 `;
+
 const StminiContent = styled.div`
     width: 90%;
     border-radius: 5px;
@@ -431,12 +468,21 @@ const StminiContent = styled.div`
     padding: 10px;
     display: flex;
     align-items: center;
+
     input {
         width: 100%;
         border: none;
         padding: 10px;
+
+        &:focus {
+            border: 1px solid #abaad8;
+            border-radius: 5px;
+            width: 100%;
+            outline: none;
+        }
     }
 `;
+
 const StminiContent2 = styled.div`
     width: 95%;
     border-radius: 5px;
@@ -446,12 +492,21 @@ const StminiContent2 = styled.div`
     padding: 10px;
     display: flex;
     align-items: center;
+
     input {
         width: 100%;
         border: none;
         padding: 10px;
+
+        &:focus {
+            border: 1px solid #abaad8;
+            border-radius: 5px;
+            width: 100%;
+            outline: none;
+        }
     }
 `;
+
 const StInputBox = styled.div`
     position: relative;
     width: 100%;
@@ -459,10 +514,12 @@ const StInputBox = styled.div`
     padding: 0;
     margin: 0;
 `;
+
 const ButtonWrapper = styled.div`
     gap: 10px;
     display: flex;
 `;
+
 const StHr = styled.hr`
     color: var(--light-gray);
     margin: 80px;

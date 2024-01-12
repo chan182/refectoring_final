@@ -2,19 +2,18 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalColor = createGlobalStyle`
     :root {
-        --main-button-color: #756AB6;
-        --content-border-color: #EDEDED;
-        --button-border-color: #ABAAD8;
-        --hr-border-color: #ECECEC;
-        --box-border-color: #D3D3D3;
-        --background-color: #FCFCFC;
-        --light-purple: #AC87C5;
-        --light-pink: #E0AED0;
-        --light-beige: #FFE5E5;
+        --main-button-color: #756ab6;
+        --content-border-color: #ededed;
+        --button-border-color: #abaad8;
+        --hr-border-color: #ececec;
+        --box-border-color: #d3d3d3;
+        --background-color: #fcfcfc;
+        --light-purple: #ac87c5;
+        --light-pink: #e0aed0;
+        --light-beige: #ffe5e5;
         --bold-gray: #73777B;
-        --light-gray: #F8F8F8;
+        --light-gray: #f8f8f8;        
     }
-
 `;
 
 export default GlobalColor;

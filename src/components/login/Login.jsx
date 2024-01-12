@@ -1,23 +1,27 @@
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import styled, { css } from 'styled-components';
+import Swal from 'sweetalert2';
 import logo from '../../assets/home/logo.png';
+import modal_logo from '../../assets/home/mbti_community.png';
 import google from '../../assets/login/Google.png';
 import kakao from '../../assets/login/kakao.png';
 import { auth } from '../../firebase/firebase.config';
-import { useRecoilState } from 'recoil';
 import { loginIdAtom } from '../../recoil/Atom';
 
 const Login = () => {
     const [uuid, setUuid] = useRecoilState(loginIdAtom);
+    const idRef = useRef('');
 
     //사용자 정보확인
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-            console.log('user', user);
+            idRef.current.focus();
         });
     }, []);
+
     const nav = useNavigate();
 
     const [userId, setUserId] = useState('');
@@ -35,19 +39,60 @@ const Login = () => {
         }
     };
 
+    //로그인 버튼
     const loginButton = async (event) => {
         event.preventDefault();
         try {
             const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
             const user = userCredential.user;
-            nav('/profile');
+            nav('/');
             console.log(user);
             setUuid(user.uid);
-            console.log('로그인 성공 !!!!', userCredential.user);
+            Swal.fire({
+                title: '로그인 성공!',
+                text: '다양한 유형의 사람들과 자유롭게 소통하세요 !',
+                imageUrl: modal_logo,
+                imageWidth: 300,
+                imageAlt: 'Custom image',
+                confirmButtonText: '♥ 네 ♥'
+            });
         } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log('err', errorCode, errorMessage);
+            console.log('error.code : ', error.code);
+            switch (error.code) {
+                case 'auth/user-not-found" || "auth/wrong-password':
+                case 'auth/network-request-failed':
+                    return Swal.fire({
+                        icon: 'error',
+                        position: 'center',
+                        title: '네트워크 연결에 실패 하였습니다.',
+                        text: '잠시 후에 다시 시도해 주세요.',
+                        confirmButtonColor: '#756ab6'
+                    });
+                case 'auth/invalid-email':
+                    return Swal.fire({
+                        icon: 'error',
+                        position: 'center',
+                        title: '잘못된 이메일 형식입니다.',
+                        text: '유효한 이메일 형식으로 작성해주세요.',
+                        confirmButtonColor: '#756ab6'
+                    });
+                case 'auth/invalid-credential':
+                    return Swal.fire({
+                        icon: 'error',
+                        position: 'center',
+                        title: '잘못된 정보를 입력하였습니다.',
+                        text: '가입한 계정의 정보를 입력해주세요.',
+                        confirmButtonColor: '#756ab6'
+                    });
+                default:
+                    return Swal.fire({
+                        icon: 'error',
+                        position: 'center',
+                        title: '로그인에 실패하였습니다.',
+                        text: '이메일 주소와 비밀번호를 확인해주세요.',
+                        confirmButtonColor: '#756ab6'
+                    });
+            }
         }
     };
     return (
@@ -61,6 +106,7 @@ const Login = () => {
                     name="userId"
                     onChange={onChange}
                     required
+                    ref={idRef}
                 ></StUserId>
                 <StUserPw
                     placeholder="비밀번호를 입력해주세요"
@@ -70,9 +116,17 @@ const Login = () => {
                     onChange={onChange}
                     required
                 ></StUserPw>
-                <StPwSearch>비밀번호 찾기 </StPwSearch>
+                <StPwChange
+                    onClick={() => {
+                        nav('/pwchange');
+                    }}
+                >
+                    비밀번호 변경{' '}
+                </StPwChange>
                 <StLoginSignUpWarp>
-                    <StLoginButton onClick={loginButton}>로그인</StLoginButton>
+                    <StLoginButton disabled={!userId || !userPw} onClick={loginButton}>
+                        로그인
+                    </StLoginButton>
                     <StSignUpButton
                         onClick={() => {
                             nav('/signup');
@@ -102,34 +156,33 @@ const StPage = styled.div`
     justify-content: center;
     width: 100%;
     height: 100vh;
-    background-color: var(--light-gray);
+    background-color: var(--background-color);
 `;
 
 const StLoginWrap = styled.div`
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 30%;
+    width: 450px;
     height: 600px;
     background-color: white;
-    padding: 50px 0px 0px 0px;
     border-radius: 10px;
+    border: 1px solid var(--content-border-color);
 `;
 
 const StLogo = styled.img`
     width: 408px;
-    height: 68px;
+    margin: 20px auto;
 `;
 
 const StUserId = styled.input`
     width: 402px;
     height: 47px;
-    margin: 50px auto 0px;
+    margin: 10px auto 0px;
     outline: none;
     border-radius: 5px;
     border: 1px solid var(--main-button-color);
+    background-color: var(--light-gray);
     font-size: large;
     color: black;
 `;
@@ -142,17 +195,22 @@ const StUserPw = styled.input`
     border-radius: 5px;
     border: 0px;
     font-size: large;
+    background-color: var(--light-gray);
 `;
-
-const StPwSearch = styled.div`
+const StPwChange = styled.button`
     text-decoration: underline;
-    margin: 20px 0px;
+    margin: 10px 0px 40px 20px;
     color: var(--bold-gray);
     cursor: pointer;
+    width: 90px;
+    height: 20px;
 `;
 
 const StLoginSignUpWarp = styled.div`
     display: flex;
+    justify-content: center;
+    margin: 0px auto;
+    gap: 10px;
 `;
 
 const StLoginButton = styled.button`
@@ -160,9 +218,19 @@ const StLoginButton = styled.button`
     height: 48px;
     border-radius: 5px;
     border: 0px;
-    margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
+    ${(props) => {
+        if (props.disabled) {
+            return css`
+                background-color: var(--light-gray);
+            `;
+        }
+        return css`
+            background-color: var(--main-button-color);
+            color: white;
+        `;
+    }}
 `;
 
 const StSignUpButton = styled.button`
@@ -170,9 +238,10 @@ const StSignUpButton = styled.button`
     height: 48px;
     border-radius: 5px;
     border: 0px;
-    margin: 0px auto;
     font-size: 20px;
     cursor: pointer;
+    background-color: var(--light-gray);
+    color: var(--bold-gray);
 
     &:hover {
         background-color: var(--main-button-color);
@@ -183,6 +252,7 @@ const StSignUpButton = styled.button`
 const StStartText = styled.div`
     text-align: center;
     margin-top: 60px;
+    user-select: none;
 `;
 
 const StExternalLoginWrap = styled.div`
@@ -199,6 +269,7 @@ const StKakaoLogin = styled.button`
     border-radius: 50%;
     border: 0px;
     cursor: pointer;
+    background-color: white;
 `;
 
 const StKakaoImg = styled.img`

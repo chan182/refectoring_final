@@ -1,11 +1,11 @@
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase/firebase.config';
 import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { UserMbtiAtom, loginIdAtom } from '../../recoil/Atom';
-import { UserImageAtom } from '../../recoil/Atom';
-import { UserNameAtom } from '../../recoil/Atom';
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_community.png';
+import { auth } from '../../firebase/firebase.config';
+import { UserImageAtom, UserMbtiAtom, UserNameAtom, loginIdAtom } from '../../recoil/Atom';
 
 const MainProfile = ({ setCurrentUser, toggleDropdown }) => {
     const clearUserAtom = useResetRecoilState(loginIdAtom);
@@ -48,12 +48,20 @@ const MainProfile = ({ setCurrentUser, toggleDropdown }) => {
                 </StMypageBtn>
                 <StLogoutBtn
                     onClick={async () => {
-                        alert('로그아웃 할까?');
                         await signOut(auth);
                         setCurrentUser(null);
                         clearUserAtom(loginIdAtom);
                         toggleDropdown();
                         navigate('/');
+                        Swal.fire({
+                            title: '로그아웃 성공!',
+                            text: '저희 MBTI Community에 자주 방문해주세요 ! ♥',
+                            imageUrl: modal_logo,
+                            imageWidth: 300,
+                            imageAlt: 'Custom image',
+                            confirmButtonText: '♥ 네 ♥',
+                            confirmButtonColor: '#756ab6'
+                        });
                     }}
                 >
                     로그아웃
@@ -74,6 +82,7 @@ const StProfileBox = styled.div`
     bottom: 0;
     background-color: white;
     border-radius: 5px;
+    border: 1px solid var(--button-border-color);
 `;
 
 const StProfileImg = styled.div`
@@ -88,7 +97,7 @@ const StProfileImg = styled.div`
         height: 100px;
         overflow: hidden;
         border-radius: 50%;
-        border: 1px solid var(--light-gray);
+        border: 1px solid var(--content-border-color);
     }
 `;
 
@@ -166,15 +175,17 @@ const StMypageBtn = styled.button`
 const StLogoutBtn = styled.button`
     width: 90%;
     height: 30px;
-    background-color: white;
+    background-color: var(--light-gray);
     color: var(--bold-gray);
-    border: 1px solid var(--border-color);
+    border: none;
     border-radius: 5px;
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
 
     &:hover {
-        transform: scale(1.015);
+        /* transform: scale(1.015); */
+        background-color: var(--main-button-color);
+        color: white;
     }
 `;

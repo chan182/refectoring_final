@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-
+import { onAuthStateChanged } from 'firebase/auth';
+import React, { useEffect, useState } from 'react';
+import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import dorpArrow from '../../assets/home/dropArrow.png';
 import logo from '../../assets/home/logo.png';
-import example from '../../assets/home/suin.jpg';
-import MainProfile from './MainProfile';
 import { auth } from '../../firebase/firebase.config';
-import { onAuthStateChanged } from 'firebase/auth';
-import { useRecoilValue } from 'recoil';
 import { UserImageAtom } from '../../recoil/Atom';
+import MbtiTest from '../mbti_test/MbtiTest';
+import MainProfile from './MainProfile';
 
 const Header = () => {
     const userProfileImage = useRecoilValue(UserImageAtom);
@@ -78,15 +78,22 @@ const StBox = styled.div`
     z-index: 1;
     width: 100%;
     height: 80px;
+`;
+
+const StPositionBox = styled.div`
+    width: 100%;
+    height: 80px;
+    position: fixed;
     display: flex;
     justify-content: center;
     background-color: white;
+    border: 1px solid var(--box-border-color);
+    border-width: 0 0 1px 0;
 `;
 
 const StDiv = styled.div`
     width: 75%;
     height: 80px;
-    position: fixed;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -166,7 +173,9 @@ const StSignupBtn = styled.button`
     cursor: pointer;
 
     &:hover {
-        transform: scale(1.05);
+        /* transform: scale(1.015); */
+        background-color: var(--main-button-color);
+        color: white;
     }
 `;
 
