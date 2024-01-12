@@ -21,7 +21,7 @@ const Login = () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
             const user = userCredential.user;
-            navigate('/profile');
+            navigate('/');
             console.log(user);
             setUser(user);
             Swal.fire({
