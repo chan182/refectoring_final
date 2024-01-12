@@ -7,6 +7,7 @@ import profileImage from '../../assets/profile/profileImg.png';
 import { db, storage } from '../../firebase/firebase.config';
 import { UserImageAtom, UserMbtiAtom, UserNameAtom, loginIdAtom } from '../../recoil/Atom';
 import Avatar from '../common/avatar';
+
 const UserInfo = () => {
     const userProfileSmallImage = useSetRecoilState(UserImageAtom);
     const userNameRecoil = useSetRecoilState(UserNameAtom);
@@ -25,6 +26,7 @@ const UserInfo = () => {
     const [isImageEditing, setIsImageEditing] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const userUuId = useRecoilValue(loginIdAtom);
+
     useEffect(() => {
         if (user) {
             setUserName(user.name);
@@ -36,6 +38,7 @@ const UserInfo = () => {
             setUserIntro(user.introduce);
         }
     }, [user]);
+
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
     const fileSelectHandler = (event) => {
         const file = event.target.files[0];
@@ -49,6 +52,7 @@ const UserInfo = () => {
         }
         setSelectedFile(file);
     };
+
     //  이펙트 내에서의 onSnapshot 콜백 함수
     const handleSnapshot = (querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -58,27 +62,33 @@ const UserInfo = () => {
             });
         });
     };
+
     // 해당 uid값만 가져온다
     useEffect(() => {
         console.log(userUuId);
         const fetchData = onSnapshot(query(collection(db, 'users'), where('uid', '==', userUuId)), handleSnapshot);
         return fetchData; // cleanup 함수
     }, []);
+
     // 버튼 클릭시 boolean 값 바꾸기
     const toggleInput = () => {
         setIsEditing((prevState) => !prevState);
     };
+
     // 프로필 수정 버튼 입력 후 입력한 값이 수정(추가)이 된다.
     const updateUserinfo = async () => {
         const userRef = doc(db, 'users', user.id);
         const storageRef = ref(storage, 'user_images/' + user.id);
+
         try {
             const imageFile = selectedFile;
             if (imageFile) {
                 // 이미지 파일이 선택되었을 때만 업로드
                 await uploadBytes(storageRef, imageFile);
+
                 // 업로드된 이미지의 다운로드 URL 가져오기
                 const imageUrl = await getDownloadURL(storageRef);
+
                 // 사용자 정보 업데이트
                 await updateDoc(userRef, {
                     nickname: userNickname,
@@ -111,6 +121,7 @@ const UserInfo = () => {
             console.error('업로드 실패', error);
         }
     };
+
     return (
         <>
             <StProfileTitle>마이페이지</StProfileTitle>
@@ -343,7 +354,12 @@ const StProfileImage = styled.div`
         color: var(--bold-gray);
         border: 1px solid var(--button-border-color);
         border-radius: 5px;
-        margin-top: 25px;
+        margin-top: 23px;
+
+        &:hover {
+            background-color: var(--main-button-color);
+            color: white;
+        }
     }
 `;
 
@@ -407,6 +423,11 @@ const StCancelBtn = styled.button`
     font-size: 18px;
     background-color: var(--light-gray);
     color: var(--bold-gray);
+
+    &:hover {
+        background-color: var(--main-button-color);
+        color: white;
+    }
 `;
 
 const ProfilePointerAvatar = styled(Avatar)`
