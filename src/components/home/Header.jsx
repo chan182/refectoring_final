@@ -18,8 +18,6 @@ const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
         console.log('isOpen : ', isOpen);
@@ -34,53 +32,41 @@ const Header = () => {
 
     return (
         <StBox>
-            <StPositionBox>
-                <StDiv>
-                    <StLeftDiv>
-                        <StLogo>
-                            <img src={logo} onClick={() => navigate('/')} />
-                        </StLogo>
-                        <StP onClick={() => setIsModalOpen(true)}>MBTI 검사</StP>
-                        <StP onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StP>
-                        <StP onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StP>
-                        <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
-                    </StLeftDiv>
-                    <StRightDiv>
-                        {currentUser ? (
-                            <>
-                                {/* 로그인 성공 시, */}
-                                <StProfileBox>
-                                    <StProfileImg>
-                                        <img src={userProfileImage} />
-                                    </StProfileImg>
-                                    <StDropBtn onClick={toggleDropdown}>
-                                        <img src={dorpArrow} />
-                                    </StDropBtn>
-                                    {isOpen && (
-                                        <MainProfile setCurrentUser={setCurrentUser} toggleDropdown={toggleDropdown} />
-                                    )}
-                                </StProfileBox>
-                            </>
-                        ) : (
-                            <>
-                                {/* 로그인 안되어 있는 경우, */}
-                                <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
-                                <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
-                            </>
-                        )}
-                    </StRightDiv>
-                </StDiv>
-            </StPositionBox>
-            {/* MBTI 검사 모달 */}
-            <Modal
-                isOpen={isModalOpen}
-                onRequestClose={() => setIsModalOpen(false)}
-                style={customModalStyles}
-                shouldCloseOnOverlayClick={false}
-                contentLabel="MBTI Test Modal"
-            >
-                <MbtiTest isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-            </Modal>
+            <StDiv>
+                <StLeftDiv>
+                    <StLogo>
+                        <img src={logo} onClick={() => navigate('/')} />
+                    </StLogo>
+                    <StP onClick={() => navigate('/mbti/test')}>MBTI 검사</StP>
+                    <StP onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StP>
+                    <StP onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StP>
+                    <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
+                </StLeftDiv>
+                <StRightDiv>
+                    {currentUser ? (
+                        <>
+                            {/* 로그인 성공 시, */}
+                            <StProfileBox>
+                                <StProfileImg>
+                                    <img src={userProfileImage} />
+                                </StProfileImg>
+                                <StDropBtn onClick={toggleDropdown}>
+                                    <img src={dorpArrow} />
+                                </StDropBtn>
+                                {isOpen && (
+                                    <MainProfile setCurrentUser={setCurrentUser} toggleDropdown={toggleDropdown} />
+                                )}
+                            </StProfileBox>
+                        </>
+                    ) : (
+                        <>
+                            {/* 로그인 안되어 있는 경우, */}
+                            <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
+                            <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
+                        </>
+                    )}
+                </StRightDiv>
+            </StDiv>
         </StBox>
     );
 };
@@ -235,23 +221,3 @@ const StDropBtn = styled.div`
         opacity: 0.6;
     }
 `;
-
-const customModalStyles = {
-    overlay: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)'
-    },
-    content: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '65%',
-        height: '71.5%',
-        // maxWidth: '90vw',
-        // maxHeight: '90vh',
-        padding: '20px',
-        borderRadius: '10px',
-        backgroundColor: '#fff',
-        overflow: 'auto'
-    }
-};
