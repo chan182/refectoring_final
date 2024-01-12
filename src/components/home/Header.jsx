@@ -1,6 +1,5 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -8,7 +7,6 @@ import dorpArrow from '../../assets/home/dropArrow.png';
 import logo from '../../assets/home/logo.png';
 import { auth } from '../../firebase/firebase.config';
 import { UserImageAtom } from '../../recoil/Atom';
-import MbtiTest from '../mbti_test/MbtiTest';
 import MainProfile from './MainProfile';
 
 const Header = () => {
@@ -32,41 +30,43 @@ const Header = () => {
 
     return (
         <StBox>
-            <StDiv>
-                <StLeftDiv>
-                    <StLogo>
-                        <img src={logo} onClick={() => navigate('/')} />
-                    </StLogo>
-                    <StP onClick={() => navigate('/mbti/test')}>MBTI 검사</StP>
-                    <StP onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StP>
-                    <StP onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StP>
-                    <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
-                </StLeftDiv>
-                <StRightDiv>
-                    {currentUser ? (
-                        <>
-                            {/* 로그인 성공 시, */}
-                            <StProfileBox>
-                                <StProfileImg>
-                                    <img src={userProfileImage} />
-                                </StProfileImg>
-                                <StDropBtn onClick={toggleDropdown}>
-                                    <img src={dorpArrow} />
-                                </StDropBtn>
-                                {isOpen && (
-                                    <MainProfile setCurrentUser={setCurrentUser} toggleDropdown={toggleDropdown} />
-                                )}
-                            </StProfileBox>
-                        </>
-                    ) : (
-                        <>
-                            {/* 로그인 안되어 있는 경우, */}
-                            <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
-                            <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
-                        </>
-                    )}
-                </StRightDiv>
-            </StDiv>
+            <StPositionBox>
+                <StDiv>
+                    <StLeftDiv>
+                        <StLogo>
+                            <img src={logo} onClick={() => navigate('/')} />
+                        </StLogo>
+                        <StP onClick={() => navigate('/mbti/test')}>MBTI 검사</StP>
+                        <StP onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StP>
+                        <StP onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StP>
+                        <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
+                    </StLeftDiv>
+                    <StRightDiv>
+                        {currentUser ? (
+                            <>
+                                {/* 로그인 성공 시, */}
+                                <StProfileBox>
+                                    <StProfileImg>
+                                        <img src={userProfileImage} />
+                                    </StProfileImg>
+                                    <StDropBtn onClick={toggleDropdown}>
+                                        <img src={dorpArrow} />
+                                    </StDropBtn>
+                                    {isOpen && (
+                                        <MainProfile setCurrentUser={setCurrentUser} toggleDropdown={toggleDropdown} />
+                                    )}
+                                </StProfileBox>
+                            </>
+                        ) : (
+                            <>
+                                {/* 로그인 안되어 있는 경우, */}
+                                <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
+                                <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
+                            </>
+                        )}
+                    </StRightDiv>
+                </StDiv>
+            </StPositionBox>
         </StBox>
     );
 };
