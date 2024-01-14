@@ -33,6 +33,7 @@ const Router = () => {
 
                     setUser({ uid: user.uid, ...data });
                 });
+                console.log('Router.useEffect 실행 ==>', user);
             } else {
                 setUser(null);
             }
