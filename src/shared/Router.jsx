@@ -7,6 +7,7 @@ import KakaoLogin from '../components/login/KakaoLogin';
 import { auth, db } from '../firebase/firebase.config';
 import Layout from '../layout/Layout';
 import LoginPage from '../pages/LoginPage';
+import MbtiCommunityDetailPage from '../pages/MbtiCommunityDetailPage';
 import MbtiCommunityPage from '../pages/MbtiCommunityPage';
 import MbtiMatchingPage from '../pages/MbtiMatchingPage';
 import ProfilePage from '../pages/ProfilePage';
@@ -33,7 +34,7 @@ const Router = () => {
 
                     setUser({ uid: user.uid, ...data });
                 });
-                console.log('Router.useEffect 실행 ==>', user);
+                // console.log('Router.useEffect 실행 ==>', user);
             } else {
                 setUser(null);
             }
@@ -56,6 +57,7 @@ const Router = () => {
                         <Route path="/mbti/matching" element={<MbtiMatchingPage />} />
                         <Route path="/mbti/meeting" element={<MbtiMeetingPage />} />
                         <Route path="/mbti/community" element={<MbtiCommunityPage />} />
+                        <Route path="/mbti/community/:id" element={<MbtiCommunityDetailPage />} />
                         <Route path="/kakaologin" element={<KakaoLogin />} />
                         <Route path="/googlelogin" element={<GoogleLogin />} />
                     </Route>
