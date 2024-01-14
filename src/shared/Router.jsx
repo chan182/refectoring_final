@@ -2,7 +2,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import GoogleLogin from '../components/login/GoogleLogin';
 import KakaoLogin from '../components/login/KakaoLogin';
 import { auth, db } from '../firebase/firebase.config';
 import Layout from '../layout/Layout';
@@ -56,7 +55,6 @@ const Router = () => {
                         <Route path="/mbti/meeting" element={<MbtiMeetingPage />} />
                         <Route path="/mbti/community" element={<MbtiCommunityPage />} />
                         <Route path="/kakaologin" element={<KakaoLogin />} />
-                        <Route path="/googlelogin" element={<GoogleLogin />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
