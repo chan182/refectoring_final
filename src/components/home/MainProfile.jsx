@@ -5,10 +5,11 @@ import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
 import { auth } from '../../firebase/firebase.config';
-import { userAtom } from '../../recoil/Atom';
+import { isEditingAtom, userAtom } from '../../recoil/Atom';
 
 const MainProfile = ({ toggleDropdown }) => {
     const [user] = useRecoilState(userAtom);
+    const [isEditing, setIsEditing] = useRecoilState(isEditingAtom);
 
     const navigate = useNavigate();
     return (
@@ -47,6 +48,7 @@ const MainProfile = ({ toggleDropdown }) => {
                     onClick={async () => {
                         await signOut(auth);
                         toggleDropdown();
+                        setIsEditing(false);
                         navigate('/');
                         Swal.fire({
                             title: '로그아웃 성공!',

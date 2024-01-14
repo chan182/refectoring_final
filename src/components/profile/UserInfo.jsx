@@ -5,12 +5,12 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import profileImage from '../../assets/profile/profileImg.png';
 import { db, storage } from '../../firebase/firebase.config';
-import { userAtom } from '../../recoil/Atom';
+import { isEditingAtom, userAtom } from '../../recoil/Atom';
 import Avatar from '../common/avatar';
 
 const UserInfo = () => {
     const [user, setUser] = useRecoilState(userAtom);
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useRecoilState(isEditingAtom);
     const [previewURL, setPreviewURL] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [name, setName] = useState('');
@@ -49,7 +49,7 @@ const UserInfo = () => {
 
     // 버튼 클릭시 boolean 값 바꾸기
     const toggleInput = () => {
-        setIsEditing((prevState) => !prevState);
+        setIsEditing((prevIsEditing) => !prevIsEditing);
     };
 
     // 프로필 수정 버튼 입력 후 입력한 값이 수정(추가)이 된다.
@@ -80,7 +80,7 @@ const UserInfo = () => {
             }
 
             await updateDoc(userRef, data);
-            setUser((prevUser) => ({ ...prevUser, data }));
+            setUser((prevUser) => ({ ...prevUser, ...data }));
             setIsEditing(false);
             alert('프로필 업로드 성공');
         } catch (error) {
@@ -95,18 +95,19 @@ const UserInfo = () => {
                 <StUserwrapper>
                     <>
                         <StProfileImage>
-                            {isEditing ? (
+                            {isEditing === true ? (
                                 <label htmlFor="inputFile">
                                     <ProfilePointerAvatar
-                                        src={previewURL || user.imageUrl}
+                                        src={previewURL || (user && user.imageUrl) || profileImage}
                                         for="inputFile"
                                         size="large"
                                     />
                                     <Stinput type="file" id="inputFile" accept="image/*" onChange={fileSelectHandler} />
                                 </label>
                             ) : (
-                                <Avatar src={user.imageUrl || profileImage} size="large" />
+                                <Avatar src={(user && user.imageUrl) || profileImage} size="large" />
                             )}
+
                             <button>프로필 사진 업로드</button>
                         </StProfileImage>
                         {/* <StProfileImageButton
@@ -119,7 +120,46 @@ const UserInfo = () => {
                     </>
                     <StInputBox>
                         <StUserInfo>
-                            {isEditing ? (
+                            {isEditing === false ? (
+                                <>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>이름</StminiTitle>
+                                            <StminiContent>{user?.name || ''}</StminiContent>
+                                        </Stlist>
+                                        <Stlist>
+                                            <StminiTitle>닉네임</StminiTitle>
+                                            <StminiContent>{user?.nickname || ''}</StminiContent>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>생년월일</StminiTitle>
+                                            <StminiContent>{user?.birth || ''}</StminiContent>
+                                        </Stlist>
+                                        <Stlist>
+                                            <StminiTitle>거주지</StminiTitle>
+                                            <StminiContent>{user?.location || ''}</StminiContent>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>MBTI</StminiTitle>
+                                            <StminiContent>{user?.mbti || ''}</StminiContent>
+                                        </Stlist>
+                                        <Stlist>
+                                            <StminiTitle>혈액형</StminiTitle>
+                                            <StminiContent>{user?.blood || ''}</StminiContent>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                    <StlistWrapper>
+                                        <Stlist>
+                                            <StminiTitle>한줄소개</StminiTitle>
+                                            <StminiContent2>{user?.introduce || ''}</StminiContent2>
+                                        </Stlist>
+                                    </StlistWrapper>
+                                </>
+                            ) : (
                                 <>
                                     <StlistWrapper>
                                         <Stlist>
@@ -215,63 +255,30 @@ const UserInfo = () => {
                                         </Stlist>
                                     </StlistWrapper>
                                 </>
-                            ) : (
-                                <>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>이름</StminiTitle>
-                                            <StminiContent>{user.name}</StminiContent>
-                                        </Stlist>
-                                        <Stlist>
-                                            <StminiTitle>닉네임</StminiTitle>
-                                            <StminiContent>{user.nickname}</StminiContent>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>생년월일</StminiTitle>
-                                            <StminiContent>{user.birth}</StminiContent>
-                                        </Stlist>
-                                        <Stlist>
-                                            <StminiTitle>거주지</StminiTitle>
-                                            <StminiContent>{user.location}</StminiContent>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>MBTI</StminiTitle>
-                                            <StminiContent>{user.mbti}</StminiContent>
-                                        </Stlist>
-                                        <Stlist>
-                                            <StminiTitle>혈액형</StminiTitle>
-                                            <StminiContent>{user.blood}</StminiContent>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>한줄소개</StminiTitle>
-                                            <StminiContent2>{user.introduce}</StminiContent2>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                </>
                             )}
                         </StUserInfo>
-                        <StBtnDiv onClick={() => toggleInput()}>
-                            {isEditing ? (
-                                <ButtonWrapper>
-                                    <StEditBtn onClick={updateUserinfo}>프로필 수정 완료</StEditBtn>
-                                    <StCancelBtn
-                                        onClick={() => {
-                                            setIsEditing(true);
-                                        }}
-                                    >
-                                        프로필 수정 취소
-                                    </StCancelBtn>
-                                </ButtonWrapper>
-                            ) : (
-                                <StEditBtn>프로필 수정</StEditBtn>
-                            )}
-                        </StBtnDiv>
+                        {isEditing ? (
+                            // isEditing이 true일 때 나온다.
+                            <ButtonWrapper>
+                                <StEditBtn onClick={updateUserinfo}>프로필 수정 완료</StEditBtn>
+                                <StCancelBtn
+                                    onClick={() => {
+                                        setIsEditing(false);
+                                    }}
+                                >
+                                    프로필 수정 취소
+                                </StCancelBtn>
+                            </ButtonWrapper>
+                        ) : (
+                            // isEditing이 false일 때 나온다.
+                            <StEditBtn
+                                onClick={() => {
+                                    setIsEditing(true);
+                                }}
+                            >
+                                프로필 수정
+                            </StEditBtn>
+                        )}
                     </StInputBox>
                 </StUserwrapper>
             </StWrapper>
