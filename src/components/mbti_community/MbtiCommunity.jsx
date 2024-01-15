@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import blackheart from '../../assets/community/blackheart.svg';
+import chevronLeft from '../../assets/community/chevron-left.svg';
+import chevronRight from '../../assets/community/chevron-right.svg';
 import editImoge from '../../assets/community/edit.svg';
 import eyeImoge from '../../assets/community/eyeImoge.svg';
 import heartImoge from '../../assets/community/heart.svg';
@@ -52,7 +54,7 @@ const MbtiCommunity = () => {
                             navigate(`/mbti/community/${id}`);
                         }}
                     >
-                        <StCommunityCardimg src={data.communityImage} />
+                        <StCommunityCardImg src={data.communityImage} />
                         <StTitleWrapper>
                             <StCommunityTitle>{data.title} </StCommunityTitle>
                             <img src={heartImoge} alt="좋아요 버튼" />
@@ -81,6 +83,15 @@ const MbtiCommunity = () => {
                     </StCardList>
                 );
             })}
+            <StPagination>
+                <img src={chevronLeft} alt="" />
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <img src={chevronRight} alt="" />
+            </StPagination>
         </StBackGround>
     );
 };
@@ -181,7 +192,7 @@ const StCardList = styled.div`
     margin: 40px 482px 0px 482px;
 `;
 
-const StCommunityCardimg = styled.img`
+const StCommunityCardImg = styled.img`
     display: flex;
     width: 924px;
     height: 330px;
@@ -191,6 +202,7 @@ const StCommunityCardimg = styled.img`
     border-radius: 16px;
     background: #efefef;
     margin: 16px;
+    object-fit: cover;
 `;
 
 const StTitleWrapper = styled.div`
@@ -263,4 +275,19 @@ const StViewInformation = styled.div`
     display: flex;
     align-items: flex-start;
     gap: 4px;
+`;
+
+const StPagination = styled.div`
+    display: inline-flex;
+    align-items: center;
+    gap: 26px;
+    margin: 60px 600px 96px 600px;
+
+    div {
+        color: #4e4e4e;
+        font-size: 22px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 120%; /* 26.4px */
+    }
 `;

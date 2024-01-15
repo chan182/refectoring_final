@@ -1,11 +1,33 @@
-import React from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import downVector from '../../assets/community/Vector-down.svg';
 import upVector from '../../assets/community/Vector-up.svg';
 import filteredImoge from '../../assets/community/align-left.svg';
-import examImoge from '../../assets/community/suin.jpg';
+import { db } from '../../firebase/firebase.config';
+import { userAtom } from '../../recoil/Atom';
 
 const CommentList = () => {
+    const [user, setUser] = useRecoilState(userAtom);
+    const [showButtons, setShowButtons] = useState(false);
+    const [comments, setComments] = useState();
+    const params = useParams();
+    console.log(params?.id);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const querySnapshot = await getDocs(collection(db, 'communities', '1xMZWyCCi4yh5lnkNRgk', 'comments'));
+                const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
+                setComments(communityData);
+            } catch (error) {
+                console.log('fetching error data ====>', error);
+            }
+        };
+        fetchData();
+    }, []);
+    console.log(comments);
     return (
         <Stwrapper>
             <StCommentTitleWrapper>
@@ -16,31 +38,49 @@ const CommentList = () => {
                 </StFilteredbutton>
             </StCommentTitleWrapper>
             <StInputWrapper>
-                <StProfileImoge src={examImoge} alt="" />
-                <StInput type="text" />
+                <StImageIntutWrapper>
+                    <StProfileImoge src={user?.imageUrl} alt="" />
+                    <StInput type="text" onClick={() => setShowButtons(true)} onBlur={() => setShowButtons(false)} />
+                </StImageIntutWrapper>
+                {showButtons === true ? (
+                    <StButtonWrapper>
+                        <StButton
+                            onClick={() => {
+                                setShowButtons(false);
+                            }}
+                        >
+                            취소
+                        </StButton>
+                        <StButton>댓글</StButton>
+                    </StButtonWrapper>
+                ) : (
+                    <></>
+                )}
             </StInputWrapper>
-            <StCommentCardList>
-                <StProfileImoge src={examImoge} alt="" />
-                <StCommentWrapper>
-                    <StCommentUserInfo>
-                        <div>유저 1234</div>
-                        <div>1시간 전 </div>
-                    </StCommentUserInfo>
-                    <Stcomment>
-                        댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다댓글입니다.
-                    </Stcomment>
-                    <StUpDown>
-                        <StUp>
-                            <img src={upVector} alt="" />
-                            <div>999m</div>
-                        </StUp>
-                        <StDown>
-                            <img src={downVector} alt="" />
-                            <div>999m</div>
-                        </StDown>
-                    </StUpDown>
-                </StCommentWrapper>
-            </StCommentCardList>
+            {comments?.map(({ id, data }) => {
+                return (
+                    <StCommentCardList>
+                        <StProfileImoge src={data?.ImageUrl} alt="" />
+                        <StCommentWrapper>
+                            <StCommentUserInfo>
+                                <div>{data?.nickname}</div>
+                                <div>{data?.createdAt} 전 </div>
+                            </StCommentUserInfo>
+                            <Stcomment>{data?.content}.</Stcomment>
+                            <StUpDown>
+                                <StUp>
+                                    <img src={upVector} alt="" />
+                                    <div>999m</div>
+                                </StUp>
+                                <StDown>
+                                    <img src={downVector} alt="" />
+                                    <div>999m</div>
+                                </StDown>
+                            </StUpDown>
+                        </StCommentWrapper>
+                    </StCommentCardList>
+                );
+            })}
         </Stwrapper>
     );
 };
@@ -86,9 +126,16 @@ const StProfileImoge = styled.img`
 
 const StInputWrapper = styled.div`
     display: inline-flex;
-    align-items: center;
+
     gap: 4px;
     margin: 0px 24px 68px 24px;
+    flex-direction: column;
+`;
+
+const StImageIntutWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 4px;
 `;
 
 const StInput = styled.input`
@@ -104,6 +151,32 @@ const StInput = styled.input`
     font-weight: 400;
     line-height: 148%; /* 23.68px */
     letter-spacing: -0.08px;
+`;
+
+// 추후 수정 필요
+
+const StButtonWrapper = styled.div`
+    display: flex;
+    gap: 4px;
+    margin: 0px auto 0px 85%;
+`;
+
+const StButton = styled.button`
+    display: flex;
+    width: 76px;
+    height: 34px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    background: #f8f8f8;
+    color: #888;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.3px;
 `;
 
 const StCommentCardList = styled.div`

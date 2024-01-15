@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import heartImoge from '../../assets/profile/heart.svg';
 import eyeImoge from '../../assets/profile/eye.svg';
+import heartImoge from '../../assets/profile/heart.svg';
 import messageSquare from '../../assets/profile/message-square.svg';
 
 const UserWritelist = () => {

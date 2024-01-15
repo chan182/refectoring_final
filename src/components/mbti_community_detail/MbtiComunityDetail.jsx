@@ -1,26 +1,44 @@
-import React from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { React, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import heart from '../../assets/community/blackheart.svg';
-import dummyImage from '../../assets/community/dummyImg.jpg';
 import eyeImoge from '../../assets/community/eyeImoge.svg';
 import redheart from '../../assets/community/heart.svg';
 import messageImoge from '../../assets/community/messageImoge.svg';
+import { db } from '../../firebase/firebase.config';
 
 const MbtiComunityDetail = () => {
-    const paramId = useParams().id;
-    console.log(paramId);
+    const [post, setPost] = useState();
+    const params = useParams();
+    console.log(params?.id);
+
+    const getPost = async (id) => {
+        if (id) {
+            const docRef = doc(db, 'communities', id);
+            const docSnap = await getDoc(docRef);
+
+            setPost({ id: docSnap.id, ...docSnap.data() });
+        }
+    };
+
+    useEffect(() => {
+        if (params?.id) getPost(params?.id);
+    }, [params?.id]);
+    console.log(post);
     return (
         <StCardWrapper>
-            <StCardImage src={dummyImage} alt="컨텐츠의 사진" />
+            <StCardImage src={post?.communityImage} alt="컨텐츠의 사진" />
             <StTitleWrapper>
-                <StCardTitle>내가 작성한 글 제목</StCardTitle>
+                <StCardTitle>{post?.title}</StCardTitle>
                 <img src={redheart} alt="" />
             </StTitleWrapper>
             <StuserInfoWrapper>
                 <StUserInformation>
-                    <StprofileImg src={dummyImage} alt="" />
-                    <div>손흥민 / ESTJ</div>
+                    <StprofileImg src={post?.ImageUrl} alt="" />
+                    <div>
+                        {post?.nickname} / {post?.mbti}
+                    </div>
                 </StUserInformation>
                 <StlikeInformation>
                     <img src={heart} alt="좋아요 이미지" />
@@ -36,12 +54,7 @@ const MbtiComunityDetail = () => {
                 </StViewInformation>
             </StuserInfoWrapper>
             <StHr />
-            <StContent>
-                1절 동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람
-                대한으로 길이 보전하세1절 동해 물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리
-                화려 강산 대한 사람 대한으로 길이 보전하세1절 동해 물과 백두산이 마르고 닳도록 하느님이 보우하사
-                우리나라 만세 무궁화 삼천리 화려 강산 대한 사람 대한으로 길이 보전하세
-            </StContent>
+            <StContent>{post?.content}</StContent>
         </StCardWrapper>
     );
 };
