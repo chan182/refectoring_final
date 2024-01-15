@@ -1,4 +1,4 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, limit, query, startAfter } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -13,12 +13,16 @@ import readingGlasses from '../../assets/community/search.svg';
 import { db } from '../../firebase/firebase.config';
 
 const MbtiCommunity = () => {
-    const [community, setCommunity] = useState();
+    const [community, setCommunity] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 20;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const querySnapshot = await getDocs(collection(db, 'communities'));
+                const q = query(collection(db, 'communities'), limit(itemsPerPage));
+                const querySnapshot = await getDocs(q);
                 const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
                 setCommunity(communityData);
             } catch (error) {
@@ -27,7 +31,20 @@ const MbtiCommunity = () => {
         };
         fetchData();
     }, []);
-    const navigate = useNavigate();
+    console.log(community);
+
+    const handlePageChange = async (newPage) => {
+        try {
+            const q = query(collection(db, 'communities'), startAfter(currentPage * itemsPerPage), limit(itemsPerPage));
+            const querySnapshot = await getDocs(q);
+            const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
+            setCommunity(community.concat(communityData));
+            setCurrentPage(newPage);
+        } catch (error) {
+            console.log('fetching error data ====>', error);
+        }
+    };
+
     console.log(community);
     return (
         <StBackGround>
@@ -84,13 +101,13 @@ const MbtiCommunity = () => {
                 );
             })}
             <StPagination>
-                <img src={chevronLeft} alt="" />
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <img src={chevronRight} alt="" />
+                <img src={chevronLeft} alt="" onClick={() => handlePageChange(currentPage - 1)} />
+                {[...Array(currentPage)].map((_, index) => (
+                    <button key={index} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </button>
+                ))}
+                <img src={chevronRight} alt="" onClick={() => handlePageChange(currentPage + 1)} />
             </StPagination>
         </StBackGround>
     );

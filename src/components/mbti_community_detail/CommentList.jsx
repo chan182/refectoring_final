@@ -1,4 +1,4 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -12,22 +12,53 @@ import { userAtom } from '../../recoil/Atom';
 const CommentList = () => {
     const [user, setUser] = useRecoilState(userAtom);
     const [showButtons, setShowButtons] = useState(false);
-    const [comments, setComments] = useState();
+    const [comments, setComments] = useState([]);
+    const [content, setContent] = useState('');
     const params = useParams();
-    console.log(params?.id);
+    // console.log(params?.id);
+
+    // params.id로 댓글 목록을 가져온다.
+    const fetchData = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, 'communities', params.id, 'comments'));
+            const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
+            setComments(communityData);
+        } catch (error) {
+            console.log('fetching error data ====>', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const querySnapshot = await getDocs(collection(db, 'communities', '1xMZWyCCi4yh5lnkNRgk', 'comments'));
-                const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
-                setComments(communityData);
-            } catch (error) {
-                console.log('fetching error data ====>', error);
-            }
-        };
         fetchData();
-    }, []);
-    console.log(comments);
+    }, [params.id]); // params.id가 변경될 때마다 fetchData 호출
+
+    // console.log(comments);
+
+    // 버튼 클릭시 comments 업로드
+    const handleClickAddCommentButton = async () => {
+        try {
+            const newComment = {
+                ImageUrl: user.imageUrl,
+                content,
+                createdAt: new Date().toLocaleDateString('ko', {
+                    year: '2-digit',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                }),
+                nickname: user.nickname
+            };
+            const docRef = await addDoc(collection(db, 'communities', params.id, 'comments'), newComment);
+            fetchData();
+            console.log('업로드성공');
+            setComments([]);
+        } catch (error) {
+            console.error('댓글 추가시 오류 발생함 ==>', error);
+        }
+    };
+
     return (
         <Stwrapper>
             <StCommentTitleWrapper>
@@ -40,7 +71,14 @@ const CommentList = () => {
             <StInputWrapper>
                 <StImageIntutWrapper>
                     <StProfileImoge src={user?.imageUrl} alt="" />
-                    <StInput type="text" onClick={() => setShowButtons(true)} onBlur={() => setShowButtons(false)} />
+                    <StInput
+                        value={content}
+                        onChange={(e) => {
+                            setContent(e.target.value);
+                        }}
+                        onClick={() => setShowButtons(true)}
+                        // onBlur={() => setShowButtons(false)}
+                    />
                 </StImageIntutWrapper>
                 {showButtons === true ? (
                     <StButtonWrapper>
@@ -51,7 +89,13 @@ const CommentList = () => {
                         >
                             취소
                         </StButton>
-                        <StButton>댓글</StButton>
+                        <StButton
+                            onClick={() => {
+                                handleClickAddCommentButton();
+                            }}
+                        >
+                            댓글
+                        </StButton>
                     </StButtonWrapper>
                 ) : (
                     <></>
@@ -59,12 +103,12 @@ const CommentList = () => {
             </StInputWrapper>
             {comments?.map(({ id, data }) => {
                 return (
-                    <StCommentCardList>
+                    <StCommentCardList key={id}>
                         <StProfileImoge src={data?.ImageUrl} alt="" />
                         <StCommentWrapper>
                             <StCommentUserInfo>
                                 <div>{data?.nickname}</div>
-                                <div>{data?.createdAt} 전 </div>
+                                <div>{data?.createdAt}</div>
                             </StCommentUserInfo>
                             <Stcomment>{data?.content}.</Stcomment>
                             <StUpDown>

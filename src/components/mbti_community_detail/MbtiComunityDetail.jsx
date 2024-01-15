@@ -11,7 +11,7 @@ import { db } from '../../firebase/firebase.config';
 const MbtiComunityDetail = () => {
     const [post, setPost] = useState();
     const params = useParams();
-    console.log(params?.id);
+    // console.log(params?.id);
 
     const getPost = async (id) => {
         if (id) {
@@ -25,7 +25,7 @@ const MbtiComunityDetail = () => {
     useEffect(() => {
         if (params?.id) getPost(params?.id);
     }, [params?.id]);
-    console.log(post);
+    // console.log(post);
     return (
         <StCardWrapper>
             <StCardImage src={post?.communityImage} alt="컨텐츠의 사진" />
