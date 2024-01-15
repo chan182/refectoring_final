@@ -5,9 +5,9 @@ import styled, { css } from 'styled-components';
 import Swal from 'sweetalert2';
 import logo from '../../assets/home/logo.png';
 import modal_logo from '../../assets/home/mbti_community.png';
-import google from '../../assets/login/Google.png';
 import kakao from '../../assets/login/kakao.png';
 import { auth } from '../../firebase/firebase.config';
+import GoogleLogin from './GoogleLogin';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -114,9 +114,7 @@ const Login = () => {
                     <StKakaoLogin type="button" onClick={() => {}}>
                         <StKakaoImg src={kakao} alt="" />
                     </StKakaoLogin>
-                    <StGoogleLogin>
-                        <StGoogleImg src={google} alt="" />
-                    </StGoogleLogin>
+                    <GoogleLogin></GoogleLogin>
                 </StExternalLoginWrap>
             </StLoginWrap>
         </StPage>
@@ -250,17 +248,4 @@ const StKakaoLogin = styled.button`
 const StKakaoImg = styled.img`
     width: 42px;
     height: 42px;
-`;
-
-const StGoogleLogin = styled.button`
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 0px;
-    cursor: pointer;
-`;
-
-const StGoogleImg = styled.img`
-    width: 30px;
-    height: 30px;
 `;

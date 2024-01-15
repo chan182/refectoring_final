@@ -75,7 +75,6 @@ const Signup = () => {
                     // 프로필 페이지로 이동
                     nav('/profile');
                 });
-                alert('회원가입 성공 !!!', userCredential.user);
             } catch (error) {
                 switch (error.code) {
                     case 'auth/email-already-in-use':
