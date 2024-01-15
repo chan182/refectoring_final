@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import heart from '../../assets/community/blackheart.svg';
 import dummyImage from '../../assets/community/dummyImg.jpg';
@@ -7,6 +8,8 @@ import redheart from '../../assets/community/heart.svg';
 import messageImoge from '../../assets/community/messageImoge.svg';
 
 const MbtiComunityDetail = () => {
+    const paramId = useParams().id;
+    console.log(paramId);
     return (
         <StCardWrapper>
             <StCardImage src={dummyImage} alt="컨텐츠의 사진" />

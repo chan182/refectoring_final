@@ -17,7 +17,7 @@ const MbtiCommunity = () => {
         const fetchData = async () => {
             try {
                 const querySnapshot = await getDocs(collection(db, 'communities'));
-                const communityData = querySnapshot.docs.map((doc) => ({ data: doc.data() }));
+                const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
                 setCommunity(communityData);
             } catch (error) {
                 console.log('fetching error data ====>', error);
@@ -26,7 +26,7 @@ const MbtiCommunity = () => {
         fetchData();
     }, []);
     const navigate = useNavigate();
-
+    console.log(community);
     return (
         <StBackGround>
             <StsearchInputWrapper>
@@ -44,10 +44,14 @@ const MbtiCommunity = () => {
                 <button>좋아요 많은 순</button>
                 <button>댓글 많은 순 </button>
             </StfilteredButton>
-            {community?.map(({ data }) => {
-                console.log(data);
+            {community?.map(({ id, data }) => {
                 return (
-                    <StCardList>
+                    <StCardList
+                        key={data.id}
+                        onClick={() => {
+                            navigate(`/mbti/community/${id}`);
+                        }}
+                    >
                         <StCommunityCardimg src={data.communityImage} />
                         <StTitleWrapper>
                             <StCommunityTitle>{data.title} </StCommunityTitle>
