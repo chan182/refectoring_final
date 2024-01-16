@@ -1,18 +1,15 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { default as React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
 import styled, { css } from 'styled-components';
 import Swal from 'sweetalert2';
 import logo from '../../assets/home/logo.png';
 import modal_logo from '../../assets/home/mbti_community.png';
-import google from '../../assets/login/Google.png';
 import kakao from '../../assets/login/kakao.png';
 import { auth } from '../../firebase/firebase.config';
-import { userAtom } from '../../recoil/Atom';
+import GoogleLogin from './GoogleLogin';
 
 const Login = () => {
-    const [_, setUser] = useRecoilState(userAtom);
     const navigate = useNavigate();
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
@@ -22,8 +19,8 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
             const user = userCredential.user;
             navigate('/');
-            console.log(user);
-            setUser(user);
+            // console.log(user);
+            // setUser(user);
             Swal.fire({
                 title: '로그인 성공!',
                 text: '다양한 유형의 사람들과 자유롭게 소통하세요 !',
@@ -118,9 +115,7 @@ const Login = () => {
                     <StKakaoLogin type="button" onClick={() => {}}>
                         <StKakaoImg src={kakao} alt="" />
                     </StKakaoLogin>
-                    <StGoogleLogin>
-                        <StGoogleImg src={google} alt="" />
-                    </StGoogleLogin>
+                    <GoogleLogin></GoogleLogin>
                 </StExternalLoginWrap>
             </StLoginWrap>
         </StPage>
@@ -254,17 +249,4 @@ const StKakaoLogin = styled.button`
 const StKakaoImg = styled.img`
     width: 42px;
     height: 42px;
-`;
-
-const StGoogleLogin = styled.button`
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 0px;
-    cursor: pointer;
-`;
-
-const StGoogleImg = styled.img`
-    width: 30px;
-    height: 30px;
 `;
