@@ -18,8 +18,9 @@ const Login = () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
             const user = userCredential.user;
-            navigate('/profile');
-
+            navigate('/');
+            // console.log(user);
+            // setUser(user);
             Swal.fire({
                 title: '로그인 성공!',
                 text: '다양한 유형의 사람들과 자유롭게 소통하세요 !',
