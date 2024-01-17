@@ -53,6 +53,10 @@ const MbtiComunityDetail = () => {
                     <div>999M</div>
                 </StViewInformation>
             </StuserInfoWrapper>
+            <StButtonWrapper>
+                <Stbutton>글 수정</Stbutton>
+                <Stbutton>글 삭제</Stbutton>
+            </StButtonWrapper>
             <StHr />
             <StContent>{post?.content}</StContent>
         </StCardWrapper>
@@ -66,6 +70,7 @@ const StCardWrapper = styled.div`
     border-radius: 26px;
     border: 1px solid #ededed;
     background: #fff;
+    margin: 142px auto 40px;
 `;
 
 const StCardImage = styled.img`
@@ -128,6 +133,30 @@ const StViewInformation = styled.div`
     display: flex;
     align-items: flex-start;
     gap: 4px;
+`;
+
+const StButtonWrapper = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 32px;
+    gap: 4px;
+`;
+
+const Stbutton = styled.button`
+    width: 76px;
+    height: 34px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    background: #f8f8f8;
+    color: #969696;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.3px;
 `;
 
 const StHr = styled.div`

@@ -1,7 +1,8 @@
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import dayjs from 'dayjs';
+import { addDoc, collection, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import downVector from '../../assets/community/Vector-down.svg';
 import upVector from '../../assets/community/Vector-up.svg';
@@ -10,7 +11,7 @@ import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
 
 const CommentList = () => {
-    const [user, setUser] = useRecoilState(userAtom);
+    const user = useRecoilValue(userAtom);
     const [showButtons, setShowButtons] = useState(false);
     const [comments, setComments] = useState([]);
     const [content, setContent] = useState('');
@@ -18,47 +19,51 @@ const CommentList = () => {
     // console.log(params?.id);
 
     // params.id로 댓글 목록을 가져온다.
-    const fetchData = async () => {
-        try {
-            const querySnapshot = await getDocs(collection(db, 'communities', params.id, 'comments'));
-            const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
-            setComments(communityData);
-        } catch (error) {
-            console.log('fetching error data ====>', error);
-        }
-    };
 
     useEffect(() => {
-        fetchData();
-    }, [params.id]); // params.id가 변경될 때마다 fetchData 호출
+        const fetchData = async () => {
+            try {
+                const querySnapshot = await getDocs(
+                    query(collection(db, 'communities', params.id, 'comments'), orderBy('createdAt', 'desc'))
+                );
+                const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
+                setComments(communityData);
+                // console.log(comments);
+            } catch (error) {
+                console.log('fetching error data ====>', error);
+            }
+        };
 
-    // console.log(comments);
+        fetchData();
+    }, [params.id]);
 
     // 버튼 클릭시 comments 업로드
-    const handleClickAddCommentButton = async () => {
+    const handleAddComment = async () => {
+        const now = dayjs();
         try {
             const newComment = {
                 ImageUrl: user.imageUrl,
                 content,
-                createdAt: new Date().toLocaleDateString('ko', {
-                    year: '2-digit',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                }),
-                nickname: user.nickname
+                createdAt: now.format('YY-MM-DD HH:mm:ss'),
+                nickname: user.nickname,
+                id: user.uid
             };
             const docRef = await addDoc(collection(db, 'communities', params.id, 'comments'), newComment);
-            fetchData();
-            console.log('업로드성공');
-            setComments([]);
+
+            const updatedComments = [{ id: docRef.id, data: newComment }, ...comments];
+            setComments(updatedComments);
+
+            console.log('업로드 성공');
+            setContent('');
         } catch (error) {
             console.error('댓글 추가시 오류 발생함 ==>', error);
         }
     };
-
+    //가져오기
+    const handleDeleteComment = async (id) => {
+        const commentDocRef = await getDoc(query(collection(db, 'communities', params.id, 'comments'), id));
+        const commentDocSnapshot = await getDoc(commentDocRef);
+    };
     return (
         <Stwrapper>
             <StCommentTitleWrapper>
@@ -77,7 +82,6 @@ const CommentList = () => {
                             setContent(e.target.value);
                         }}
                         onClick={() => setShowButtons(true)}
-                        // onBlur={() => setShowButtons(false)}
                     />
                 </StImageIntutWrapper>
                 {showButtons === true ? (
@@ -91,7 +95,7 @@ const CommentList = () => {
                         </StButton>
                         <StButton
                             onClick={() => {
-                                handleClickAddCommentButton();
+                                handleAddComment();
                             }}
                         >
                             댓글
@@ -110,7 +114,7 @@ const CommentList = () => {
                                 <div>{data?.nickname}</div>
                                 <div>{data?.createdAt}</div>
                             </StCommentUserInfo>
-                            <Stcomment>{data?.content}.</Stcomment>
+                            <Stcomment>{data?.content}</Stcomment>
                             <StUpDown>
                                 <StUp>
                                     <img src={upVector} alt="" />
@@ -121,6 +125,21 @@ const CommentList = () => {
                                     <div>999m</div>
                                 </StDown>
                             </StUpDown>
+
+                            {user.uid === data?.id ? (
+                                <div>
+                                    <button>수정</button>
+                                    <button
+                                        onClick={() => {
+                                            handleDeleteComment(data.id);
+                                        }}
+                                    >
+                                        삭제
+                                    </button>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
                         </StCommentWrapper>
                     </StCommentCardList>
                 );
@@ -136,6 +155,7 @@ const Stwrapper = styled.div`
     border-radius: 26px;
     border: 1px solid #ededed;
     background: #fff;
+    margin: 0 auto;
 `;
 
 const StCommentTitleWrapper = styled.div`
