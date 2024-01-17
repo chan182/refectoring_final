@@ -1,6 +1,7 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 export default function UpdateTest() {
@@ -9,6 +10,8 @@ export default function UpdateTest() {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+
+    const nav = useNavigate();
 
     useEffect(() => {
         // 1. DB에서 가져온 HTML이라고 가정
@@ -41,7 +44,7 @@ export default function UpdateTest() {
                 </StPeed>
                 <StBtns>
                     <StEditBtn>저장하기</StEditBtn>
-                    <StCancelBtn>글 작성 취소하기</StCancelBtn>
+                    <StCancelBtn onClick={() => nav('/mbti/community')}>글 작성 취소하기</StCancelBtn>
                 </StBtns>
             </StDiv>
         </StBox>
@@ -117,6 +120,7 @@ const StCancelBtn = styled.button`
     font-size: 18px;
     background-color: var(--light-gray);
     color: var(--bold-gray);
+
     &:hover {
         background-color: var(--main-button-color);
         color: white;

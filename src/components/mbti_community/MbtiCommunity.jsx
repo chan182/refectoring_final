@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import { useNavigate } from 'react-router';
-
-const MbtiCommunity = () => {
-    const nav = useNavigate();
-
-    return (
-        <div>
-            MBTI 커뮤니티 페이지
-            <button onClick={() => nav('/mbti/community/write')}>작성하기</button>
-        </div>
-=======
 import { collection, getDocs, limit, query, startAfter } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -67,7 +54,11 @@ const MbtiCommunity = () => {
                 <StsearchInput placeholder="검색어를 입력하세요" />
             </StsearchInputWrapper>
             <StBoardTitle>자유롭게 의견을 나누고 일상을 공유해보세요</StBoardTitle>
-            <StWriteButton>
+            <StWriteButton
+                onClick={() => {
+                    navigate('/mbti/community/write');
+                }}
+            >
                 <img src={editImoge} alt="글 작성 버튼" />
                 <StWriteButtonName>게시글 작성</StWriteButtonName>
             </StWriteButton>
@@ -124,7 +115,6 @@ const MbtiCommunity = () => {
                 <img src={chevronRight} alt="" onClick={() => handlePageChange(currentPage + 1)} />
             </StPagination>
         </StBackGround>
->>>>>>> ef317de21ce95bae2891d07c21c953987045b9f8
     );
 };
 
@@ -175,6 +165,11 @@ const StWriteButton = styled.button`
     border-radius: 74px;
     background: #abaad8;
     margin: 14px auto 60px;
+
+    &:hover {
+        background-color: var(--main-button-color);
+        color: white;
+    }
 `;
 
 const StWriteButtonName = styled.div`
