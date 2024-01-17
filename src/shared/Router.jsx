@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import KakaoLogin from '../components/login/KakaoLogin';
+import CommunityWrite from '../components/mbti_community/CommunityWrite';
 import { auth, db } from '../firebase/firebase.config';
 import Layout from '../layout/Layout';
 import LoginPage from '../pages/LoginPage';
@@ -48,6 +49,7 @@ const Router = () => {
                     <Route element={<Layout />}>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/kakaologin" element={<KakaoLogin />} />
                         <Route path="/pwchange" element={<PwChangePage />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/profile" element={<ProfilePage />} />
@@ -55,7 +57,7 @@ const Router = () => {
                         <Route path="/mbti/matching" element={<MbtiMatchingPage />} />
                         <Route path="/mbti/meeting" element={<MbtiMeetingPage />} />
                         <Route path="/mbti/community" element={<MbtiCommunityPage />} />
-                        <Route path="/kakaologin" element={<KakaoLogin />} />
+                        <Route path="/mbti/community/write" element={<CommunityWrite />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
