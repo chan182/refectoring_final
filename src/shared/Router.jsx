@@ -2,6 +2,8 @@ import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import MbtiMeetingCreate from '../components/MeetingDetail/MbtiMeetingCreate';
+import MeetingDetail from '../components/MeetingDetail/MeetingDetail';
 import KakaoLogin from '../components/login/KakaoLogin';
 import { auth, db } from '../firebase/firebase.config';
 import Layout from '../layout/Layout';
@@ -58,6 +60,8 @@ const Router = () => {
                         <Route path="/mbti/community" element={<MbtiCommunityPage />} />
                         <Route path="/mbti/community/:id" element={<MbtiCommunityDetailPage />} />
                         <Route path="/kakaologin" element={<KakaoLogin />} />
+                        <Route path="/mbti/meeting/detail/:id" element={<MeetingDetail />} />
+                        <Route path="/mbti/meeting/create" element={<MbtiMeetingCreate />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
