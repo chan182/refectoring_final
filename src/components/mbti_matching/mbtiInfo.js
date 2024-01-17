@@ -30,7 +30,7 @@ export const mbtiInfo = {
         안맞는궁합: ['INFJ', 'INFP', 'ENFP', 'ENFJ']
     },
     ISFP: {
-        천생연분: ['ESFJ', 'ESTJ', 'ESFJ'],
+        천생연분: ['ESFJ', 'ESTJ', 'ENFJ'],
         좋은궁합: [],
         보통궁합: ['ISFP', 'ESFP', 'ISTP', 'ESTP', 'ISTJ', 'ISFJ', 'INTJ', 'INTP', 'ENTP', 'ENTJ'],
         안맞는궁합: ['INFJ', 'INFP', 'ENFP']
