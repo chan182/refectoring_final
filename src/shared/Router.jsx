@@ -2,7 +2,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import MbtiMeetingCreate from '../components/MeetingDetail/MbtiMeetingCreate';
 import MeetingDetail from '../components/MeetingDetail/MeetingDetail';
 import KakaoLogin from '../components/login/KakaoLogin';
 import CommunityWrite from '../components/mbti_community/CommunityWrite';
@@ -12,6 +11,7 @@ import LoginPage from '../pages/LoginPage';
 import MbtiCommunityDetailPage from '../pages/MbtiCommunityDetailPage';
 import MbtiCommunityPage from '../pages/MbtiCommunityPage';
 import MbtiMatchingPage from '../pages/MbtiMatchingPage';
+import MbtiMeetingCreatePage from '../pages/MbtiMeetingCreatePage';
 import ProfilePage from '../pages/ProfilePage';
 import PwChangePage from '../pages/PwChangePage';
 import SignupPage from '../pages/SignupPage';
@@ -59,12 +59,11 @@ const Router = () => {
                         <Route path="/mbti/test" element={<MbtiTestPage />} />
                         <Route path="/mbti/matching" element={<MbtiMatchingPage />} />
                         <Route path="/mbti/meeting" element={<MbtiMeetingPage />} />
+                        <Route path="/mbti/meeting/detail/:id" element={<MeetingDetail />} />
+                        <Route path="/mbti/meeting/create" element={<MbtiMeetingCreatePage />} />
                         <Route path="/mbti/community" element={<MbtiCommunityPage />} />
                         <Route path="/mbti/community/write" element={<CommunityWrite />} />
                         <Route path="/mbti/community/:id" element={<MbtiCommunityDetailPage />} />
-                        <Route path="/kakaologin" element={<KakaoLogin />} />
-                        <Route path="/mbti/meeting/detail/:id" element={<MeetingDetail />} />
-                        <Route path="/mbti/meeting/create" element={<MbtiMeetingCreate />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
