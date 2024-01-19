@@ -1,52 +1,57 @@
-import { collection, getDocs, limit, query, startAfter } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import blackheart from '../../assets/community/blackheart.svg';
 import chevronLeft from '../../assets/community/chevron-left.svg';
 import chevronRight from '../../assets/community/chevron-right.svg';
 import editImoge from '../../assets/community/edit.svg';
-import eyeImoge from '../../assets/community/eyeImoge.svg';
-import heartImoge from '../../assets/community/heart.svg';
-import messageImoge from '../../assets/community/messageImoge.svg';
+import fullheart from '../../assets/community/fullheart.svg';
+import heart from '../../assets/community/heart.svg';
+import blackheart from '../../assets/community/blackheart.svg';
 import readingGlasses from '../../assets/community/search.svg';
-import { db } from '../../firebase/firebase.config';
+import { userAtom } from '../../recoil/Atom';
+import { useQuery } from 'react-query';
+import { getData } from '../../api/board';
 
 const MbtiCommunity = () => {
+    const user = useRecoilValue(userAtom);
     const [community, setCommunity] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 20;
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const q = query(collection(db, 'communities'), limit(itemsPerPage));
-                const querySnapshot = await getDocs(q);
-                const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
-                setCommunity(communityData);
-            } catch (error) {
-                console.log('fetching error data ====>', error);
-            }
-        };
-        fetchData();
-    }, []);
-    console.log(community);
+    const { isdLoading, isError, data } = useQuery({ queryKey: ['communities'], queryFn: getData });
 
     // pagination
-    const handlePageChange = async (newPage) => {
-        try {
-            const q = query(collection(db, 'communities'), startAfter(currentPage * itemsPerPage), limit(itemsPerPage));
-            const querySnapshot = await getDocs(q);
-            const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
-            setCommunity(community.concat(communityData));
-            setCurrentPage(newPage);
-        } catch (error) {
-            console.log('fetching error data ====>', error);
-        }
-    };
+    // const handlePageChange = async (newPage) => {
+    //     try {
+    //         const q = query(collection(db, 'communities'), startAfter(currentPage * itemsPerPage), limit(itemsPerPage));
+    //         const querySnapshot = await getDocs(q);
+    //         const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
+    //         setCommunity(community.concat(communityData));
+    //         setCurrentPage(newPage);
+    //     } catch (error) {
+    //         console.log('fetching error data ====>', error);
+    //     }
+    // };
+    // console.log(data);
 
-    console.log(community);
+    // const toggleLike = async (uid) => {
+    //     const postRef = doc(db, 'communities', uid);
+    //     const postDoc = await getDoc(postRef);
+    //     console.log(postDoc.data);
+
+    //     if (user?.uid && postDoc.data()?.likes?.includes(user?.uid)) {
+    //         await updateDoc(postRef, {
+    //             likes: arrayRemove(user?.uid),
+    //             likeCount: postDoc.data()?.likeCount ? postDoc.data()?.likeCount - 1 : 0
+    //         });
+    //     } else {
+    //         await updateDoc(postRef, {
+    //             likes: arrayUnion(user?.uid),
+    //             likeCount: postDoc.data()?.likeCount ? postDoc.data()?.likeCount + 1 : 1
+    //         });
+    //     }
+    // };
+
     return (
         <StBackGround>
             <StsearchInputWrapper>
@@ -68,18 +73,22 @@ const MbtiCommunity = () => {
                 <button>좋아요 많은 순</button>
                 <button>댓글 많은 순 </button>
             </StfilteredButton>
-            {community?.map(({ id, data }) => {
+            {data?.map(({ id, data }) => {
                 return (
-                    <StCardList
-                        key={data.id}
-                        onClick={() => {
-                            navigate(`/mbti/community/${id}`);
-                        }}
-                    >
-                        <StCommunityCardImg src={data.communityImage} />
+                    <StCardList key={id}>
+                        <StCommunityCardImg
+                            key={data.communityImage}
+                            onClick={() => {
+                                navigate(`/mbti/community/${id}`);
+                            }}
+                            src={data.communityImage}
+                        />
                         <StTitleWrapper>
                             <StCommunityTitle>{data.title} </StCommunityTitle>
-                            <img src={heartImoge} alt="좋아요 버튼" />
+                            <StButton>
+                                <img src={heart} alt="누르지 않았을 때" />
+                                <img src={fullheart} alt="눌렀을 때" />
+                            </StButton>
                         </StTitleWrapper>
                         <StCommunityContent>{data.content}</StCommunityContent>
                         <StuserInfoWrapper>
@@ -90,22 +99,32 @@ const MbtiCommunity = () => {
                                 </div>
                             </StUserInformation>
                             <StlikeInformation>
-                                <img src={blackheart} alt="좋아요 이미지" />
-                                <div>999M</div>
+                                <button
+                                // onClick={() => {
+                                //     toggleLike(id);
+                                // }}
+                                >
+                                    {user && data?.likes.includes(user.id) ? (
+                                        <img src={fullheart} alt="좋아요 눌린 이미지" />
+                                    ) : (
+                                        <img src={heart} alt="좋아요 안눌린 이미지" />
+                                    )}
+                                    {data?.likeCount}
+                                </button>
                             </StlikeInformation>
-                            <StMessageInformation>
+                            {/* <StMessageInformation>
                                 <img src={messageImoge} alt="" />
-                                <div>999K</div>
+                                <div>0</div>
                             </StMessageInformation>
                             <StViewInformation>
                                 <img src={eyeImoge} alt="" />
-                                <div>999M</div>
-                            </StViewInformation>
+                                <div>0</div>
+                            </StViewInformation> */}
                         </StuserInfoWrapper>
                     </StCardList>
                 );
             })}
-            <StPagination>
+            {/* <StPagination>
                 <img src={chevronLeft} alt="" onClick={() => handlePageChange(currentPage - 1)} />
                 {[...Array(currentPage)].map((_, index) => (
                     <button key={index} onClick={() => handlePageChange(index + 1)}>
@@ -113,7 +132,7 @@ const MbtiCommunity = () => {
                     </button>
                 ))}
                 <img src={chevronRight} alt="" onClick={() => handlePageChange(currentPage + 1)} />
-            </StPagination>
+            </StPagination> */}
         </StBackGround>
     );
 };
@@ -225,6 +244,7 @@ const StCommunityCardImg = styled.img`
     background: #efefef;
     margin: 16px;
     object-fit: cover;
+    cursor: pointer;
 `;
 
 const StTitleWrapper = styled.div`
@@ -241,6 +261,11 @@ const StCommunityTitle = styled.div`
     font-style: normal;
     font-weight: 500;
     line-height: 120%;
+`;
+
+const StButton = styled.button`
+    display: flex;
+    gap: 10px;
 `;
 
 const StCommunityContent = styled.div`
@@ -261,7 +286,7 @@ const StCommunityContent = styled.div`
 const StuserInfoWrapper = styled.div`
     display: inline-flex;
     align-items: center;
-    gap: 48px;
+    gap: 24px;
     margin: 0px 473px 25px 16px;
     width: 100%;
 `;
