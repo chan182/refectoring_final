@@ -249,7 +249,7 @@ export const StTestStartButton = styled.button`
 
     &:hover {
         transition: ease-in-out 0.2s;
-        background-color: #756ab6;
+        background-color: var(--main-button-color);
         color: #fff;
         /* box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575); */
     }

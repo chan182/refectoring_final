@@ -88,7 +88,7 @@ const MbtiMeeting = () => {
                 <StText>자유롭게 모임을 만들고 가입해 활동해보세요!</StText>
                 <StCreateWrap
                     onClick={() => {
-                        nav('/');
+                        nav('/mbti/meeting/create');
                     }}
                 >
                     <StCreateImg src={produce} alt="" />
