@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { addDoc, collection, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -9,61 +9,125 @@ import upVector from '../../assets/community/Vector-up.svg';
 import filteredImoge from '../../assets/community/align-left.svg';
 import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { deleteComment, getComments } from '../../api/comment';
 
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
     const [showButtons, setShowButtons] = useState(false);
     const [comments, setComments] = useState([]);
     const [content, setContent] = useState('');
+    const [editMode, setEditMode] = useState(false);
+
     const params = useParams();
-    // console.log(params?.id);
+    const queryClient = useQueryClient();
 
-    // params.id로 댓글 목록을 가져온다.
+    // 좋아요 버튼
+    const addLike = async (commentId) => {
+        const commentRef = doc(db, 'communities', params.id, 'comments', commentId);
+        const commentSnap = await getDoc(commentRef);
+        const existingLikes = commentSnap.data()?.likes || [];
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const querySnapshot = await getDocs(
-                    query(collection(db, 'communities', params.id, 'comments'), orderBy('createdAt', 'desc'))
-                );
-                const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
-                setComments(communityData);
-                // console.log(comments);
-            } catch (error) {
-                console.log('fetching error data ====>', error);
-            }
-        };
+        const updatedLikes = [...existingLikes, user.uid];
 
-        fetchData();
-    }, [params.id]);
+        await updateDoc(commentRef, { likes: updatedLikes });
 
-    // 버튼 클릭시 comments 업로드
-    const handleAddComment = async () => {
-        const now = dayjs();
-        try {
-            const newComment = {
-                ImageUrl: user.imageUrl,
-                content,
-                createdAt: now.format('YY-MM-DD HH:mm:ss'),
-                nickname: user.nickname,
-                id: user.uid
-            };
-            const docRef = await addDoc(collection(db, 'communities', params.id, 'comments'), newComment);
+        return updatedLikes;
+    };
 
-            const updatedComments = [{ id: docRef.id, data: newComment }, ...comments];
-            setComments(updatedComments);
+    const mutationAddLike = useMutation(addLike, {
+        onMutate: async (commentId) => {
+            await queryClient.cancelQueries(['comments', params.id]);
 
-            console.log('업로드 성공');
-            setContent('');
-        } catch (error) {
-            console.error('댓글 추가시 오류 발생함 ==>', error);
+            const previousComments = queryClient.getQueryData(['comments', params.id]);
+
+            queryClient.setQueryData(['comments', params.id], (oldComments) => {
+                const updatedComments = oldComments.map((comment) => {
+                    if (comment.id === commentId) {
+                        return {
+                            ...comment,
+                            likes: [...comment.likes, user.uid]
+                        };
+                    }
+                    return comment;
+                });
+
+                return updatedComments;
+            });
+
+            return { previousComments };
+        },
+        onError: (error, variables, context) => {
+            queryClient.setQueryData(['comments', params.id], context.previousComments);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(['comments', params.id]);
         }
+    });
+
+    const handleAddLike = async (commentId) => {
+        mutationAddLike.mutate(commentId);
     };
-    //가져오기
+
+    // 댓글 업로드 하기
+
+    const addComment = async (newComment) => {
+        await addDoc(collection(db, 'communities', params.id, 'comments'), newComment);
+    };
+
+    const mutationAdd = useMutation(addComment, {
+        onSuccess: (data) => {
+            queryClient.invalidateQueries('comments');
+            console.log('성공 !!');
+        }
+        // onError: (error) => {
+        //     console.error('Error adding comment:', error);
+        // }
+    });
+
+    const handleAddComment = async (paramsId) => {
+        const now = dayjs();
+
+        const newComment = {
+            ImageUrl: user.imageUrl,
+            content,
+            createdAt: now.format('YY-MM-DD HH:mm:ss'),
+            nickname: user.nickname,
+            id: user.uid,
+            likes: '',
+            likecount: ''
+        };
+        // console.log(newComment);
+        // console.log(paramsId);
+        // setContent('');
+        mutationAdd.mutate(newComment, paramsId);
+    };
+
+    // 댓글 삭제하기
+
+    const deleteComment = async (id) => {
+        await deleteDoc(doc(db, 'communities', params.id, 'comments', id));
+    };
+
+    const DeleteMutation = useMutation(deleteComment, {
+        onSuccess: (data) => {
+            // console.log(data);
+            queryClient.invalidateQueries('comments');
+        }
+        // onError: (error) => {
+        //     console.error('Error adding comment:', error);
+        // }
+    });
+
     const handleDeleteComment = async (id) => {
-        const commentDocRef = await getDoc(query(collection(db, 'communities', params.id, 'comments'), id));
-        const commentDocSnapshot = await getDoc(commentDocRef);
+        console.log(id);
+        DeleteMutation.mutate(id);
     };
+
+    // 댓글들 가져오기
+
+    const { data } = useQuery({ queryKey: ['comments'], queryFn: () => getComments(params.id) });
+    // console.log(data);
     return (
         <Stwrapper>
             <StCommentTitleWrapper>
@@ -95,7 +159,7 @@ const CommentList = () => {
                         </StButton>
                         <StButton
                             onClick={() => {
-                                handleAddComment();
+                                handleAddComment(params.id);
                             }}
                         >
                             댓글
@@ -105,33 +169,47 @@ const CommentList = () => {
                     <></>
                 )}
             </StInputWrapper>
-            {comments?.map(({ id, data }) => {
+            {data?.map(({ id, data }) => {
                 return (
                     <StCommentCardList key={id}>
                         <StProfileImoge src={data?.ImageUrl} alt="" />
                         <StCommentWrapper>
                             <StCommentUserInfo>
                                 <div>{data?.nickname}</div>
+
                                 <div>{data?.createdAt}</div>
                             </StCommentUserInfo>
+
                             <Stcomment>{data?.content}</Stcomment>
                             <StUpDown>
                                 <StUp>
-                                    <img src={upVector} alt="" />
-                                    <div>999m</div>
+                                    <button
+                                        onClick={() => {
+                                            handleAddLike(id);
+                                        }}
+                                    >
+                                        <img src={upVector} alt="좋아요버튼" />
+                                    </button>
+                                    <div>0</div>
                                 </StUp>
                                 <StDown>
                                     <img src={downVector} alt="" />
-                                    <div>999m</div>
                                 </StDown>
                             </StUpDown>
 
                             {user.uid === data?.id ? (
                                 <div>
-                                    <button>수정</button>
                                     <button
                                         onClick={() => {
-                                            handleDeleteComment(data.id);
+                                            setEditMode(!editMode);
+                                            console.log(editMode);
+                                        }}
+                                    >
+                                        수정
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            handleDeleteComment(id);
                                         }}
                                     >
                                         삭제
