@@ -33,6 +33,7 @@ const MbtiCommunity = () => {
     }, []);
     console.log(community);
 
+    // pagination
     const handlePageChange = async (newPage) => {
         try {
             const q = query(collection(db, 'communities'), startAfter(currentPage * itemsPerPage), limit(itemsPerPage));
@@ -53,7 +54,11 @@ const MbtiCommunity = () => {
                 <StsearchInput placeholder="검색어를 입력하세요" />
             </StsearchInputWrapper>
             <StBoardTitle>자유롭게 의견을 나누고 일상을 공유해보세요</StBoardTitle>
-            <StWriteButton>
+            <StWriteButton
+                onClick={() => {
+                    navigate('/mbti/community/write');
+                }}
+            >
                 <img src={editImoge} alt="글 작성 버튼" />
                 <StWriteButtonName>게시글 작성</StWriteButtonName>
             </StWriteButton>
@@ -81,7 +86,7 @@ const MbtiCommunity = () => {
                             <StUserInformation>
                                 <StprofileImg src={data.ImageUrl} alt="" />
                                 <div>
-                                    {data.nickname} / {data.blood}
+                                    {data.nickname} / {data.mbti}
                                 </div>
                             </StUserInformation>
                             <StlikeInformation>
@@ -115,19 +120,16 @@ const MbtiCommunity = () => {
 
 export default MbtiCommunity;
 
-const StBackGround = styled.div`
-    width: 1920px;
-    background: #fcfcfc;
-`;
+const StBackGround = styled.div``;
 
 const StsearchInputWrapper = styled.div`
     background-color: var(--light-gray);
     border-radius: 100px;
     display: flex;
-    width: 1440px;
+    max-width: 1440px;
     padding: 15px 21px;
     gap: 12px;
-    margin: 42px 240px;
+    margin: 60px auto;
 `;
 
 const StsearchInput = styled.input`
@@ -145,13 +147,12 @@ const StsearchInput = styled.input`
 
 const StBoardTitle = styled.div`
     color: #000;
-
     font-size: 42px;
     font-style: normal;
     font-weight: 300;
     line-height: 120%; /* 50.4px */
-    margin: 80px 590px 14px 590px;
-    width: 1920px;
+    margin: 0 auto;
+    max-width: 740px;
 `;
 
 const StWriteButton = styled.button`
@@ -163,50 +164,54 @@ const StWriteButton = styled.button`
     gap: 10px;
     border-radius: 74px;
     background: #abaad8;
-    margin: 0px 869px;
+    margin: 14px auto 60px;
+
+    &:hover {
+        background-color: var(--main-button-color);
+        color: white;
+    }
 `;
 
 const StWriteButtonName = styled.div`
     color: #fff;
-
     font-size: 22px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     letter-spacing: 0.44px;
     width: 150px;
+    margin: 0 auto;
 `;
 
 const StfilteredButton = styled.div`
-    display: inline-flex;
-    align-items: flex-start;
-    gap: 24px;
-    margin: 60px 850px 0px 482px;
-    width: 100%;
+    margin: 0 auto 40px auto;
+    width: 700px;
 
     button {
-        color: #fff;
-
+        color: black;
+        background-color: #f8f8f8;
         font-size: 22px;
         font-style: normal;
         font-weight: 300;
         line-height: normal;
         letter-spacing: 0.44px;
         border-radius: 74px;
-        background: #756ab6;
+
         padding: 12px 14px;
         justify-content: center;
         align-items: center;
+        margin-right: 24px;
+        padding: 15px 20px;
     }
 `;
 
 const StCardList = styled.div`
-    width: 956px;
+    max-width: 956px;
     height: 520px;
     border-radius: 26px;
     border: 1px solid #ededed;
     background: #fff;
-    margin: 40px 482px 0px 482px;
+    margin: 0 auto;
 `;
 
 const StCommunityCardImg = styled.img`
@@ -239,7 +244,7 @@ const StCommunityTitle = styled.div`
 `;
 
 const StCommunityContent = styled.div`
-    width: 924px;
+    max-width: 956px;
     height: 49px;
     overflow: hidden;
     color: #121212;
