@@ -1,4 +1,4 @@
-import { collection, getDocs, query } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -40,6 +40,27 @@ const MbtiMeeting = () => {
         fetchData();
     }, []);
 
+    //데이터 검색
+    const searchData = async () => {
+        const q = query(
+            collection(db, 'meet'),
+            where('title', '>=', searchKeyWord),
+            where('title', '<=', searchKeyWord + '\uf8ff')
+        );
+        const querySnapshot = await getDocs(q);
+
+        const initialMeet = [];
+
+        querySnapshot.forEach((doc) => {
+            const data = {
+                id: doc.id,
+                ...doc.data()
+            };
+            initialMeet.push(data);
+        });
+        setMeet(initialMeet);
+    };
+
     // 위로 올라가기 버튼
     useEffect(() => {
         const scroll = () => {
@@ -72,6 +93,11 @@ const MbtiMeeting = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            searchData();
+        }
+    };
     return (
         <>
             <StSearchMeet>
@@ -83,6 +109,7 @@ const MbtiMeeting = () => {
                         name="searchKeyWord"
                         onChange={(e) => setSearchKeyWord(e.target.value)}
                         autoFocus
+                        onKeyUp={handleKeyDown}
                     ></StSearch>
                 </StSearchImgWrap>
                 <StText>자유롭게 모임을 만들고 가입해 활동해보세요!</StText>
@@ -187,6 +214,7 @@ const StSearchImg = styled.img`
     height: 35px;
     position: relative;
     top: 60px;
+    user-select: none;
 `;
 
 const StSearch = styled.input`
