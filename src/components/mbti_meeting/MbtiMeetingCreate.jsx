@@ -215,6 +215,8 @@ import { useNavigate } from 'react-router';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { eventsState, userAtom } from '../../recoil/Atom';
+import { db } from '../../firebase/firebase.config';
+import { addDoc, collection } from '@firebase/firestore';
 
 const MbtiCreate = () => {
     const [events, setEvents] = useRecoilState(eventsState);
@@ -249,13 +251,28 @@ const MbtiCreate = () => {
         onDrop: handleImageDrop
     });
 
-    const handleCreateEvent = () => {
-        const newEvent = { eventName, kakaoOpenChatUrl, eventDescription, eventImage, userId };
-        setEvents([...events, newEvent]);
-        console.log('생성된 이벤트:', newEvent);
+    const handleCreateEvent = async () => {
+        // 함수를 제외한 데이터로 새로운 객체 생성
+        const cleanEvent = {
+            eventName,
+            kakaoOpenChatUrl,
+            eventDescription,
+            eventImage,
+            userId
+        };
+
+        // Firestore 데이터베이스 업데이트
+        const eventsCollection = collection(db, 'meet');
+        const docRef = await addDoc(eventsCollection, cleanEvent);
+
+        // 문서 참조를 확인하기 위해 로그 남기기
+        console.log('Document written with ID: ', docRef.id);
+
+        // 로컬 상태 업데이트 또는 필요한 다른 작업 수행
+
+        // 모임 페이지로 이동
         navigate('/mbti/meeting');
     };
-
     return (
         <OuterContainer>
             <Container>
