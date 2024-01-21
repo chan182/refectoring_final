@@ -12,6 +12,8 @@ import readingGlasses from '../../assets/community/search.svg';
 import { userAtom } from '../../recoil/Atom';
 import { useQuery } from 'react-query';
 import { getData } from '../../api/board';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebase/firebase.config';
 
 const MbtiCommunity = () => {
     const user = useRecoilValue(userAtom);
@@ -19,44 +21,43 @@ const MbtiCommunity = () => {
     const itemsPerPage = 20;
     const navigate = useNavigate();
     const { isdLoading, isError, data } = useQuery({ queryKey: ['communities'], queryFn: getData });
+    const [searchKeyWord, setSearchKeyWord] = useState('');
+    const [meet, setMeet] = useState([]);
 
-    // pagination
-    // const handlePageChange = async (newPage) => {
-    //     try {
-    //         const q = query(collection(db, 'communities'), startAfter(currentPage * itemsPerPage), limit(itemsPerPage));
-    //         const querySnapshot = await getDocs(q);
-    //         const communityData = querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
-    //         setCommunity(community.concat(communityData));
-    //         setCurrentPage(newPage);
-    //     } catch (error) {
-    //         console.log('fetching error data ====>', error);
-    //     }
-    // };
-    // console.log(data);
-
-    // const toggleLike = async (uid) => {
-    //     const postRef = doc(db, 'communities', uid);
-    //     const postDoc = await getDoc(postRef);
-    //     console.log(postDoc.data);
-
-    //     if (user?.uid && postDoc.data()?.likes?.includes(user?.uid)) {
-    //         await updateDoc(postRef, {
-    //             likes: arrayRemove(user?.uid),
-    //             likeCount: postDoc.data()?.likeCount ? postDoc.data()?.likeCount - 1 : 0
-    //         });
-    //     } else {
-    //         await updateDoc(postRef, {
-    //             likes: arrayUnion(user?.uid),
-    //             likeCount: postDoc.data()?.likeCount ? postDoc.data()?.likeCount + 1 : 1
-    //         });
-    //     }
-    // };
-
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            searchData();
+        }
+    };
+    const searchData = async () => {
+        const q = query(
+            collection(db, 'communities'),
+            where('title', '>=', searchKeyWord),
+            where('title', '<=', searchKeyWord + '\uf8ff')
+        );
+        const querySnapshot = await getDocs(q);
+        const initialMeet = [];
+        querySnapshot.forEach((doc) => {
+            const data = {
+                id: doc.id,
+                ...doc.data()
+            };
+            initialMeet.push(data);
+        });
+        setMeet(initialMeet);
+    };
     return (
         <StBackGround>
             <StsearchInputWrapper>
                 <img src={readingGlasses} alt="검색창" />
-                <StsearchInput placeholder="검색어를 입력하세요" />
+                <StsearchInput
+                    placeholder="검색어를 입력하세요"
+                    value={searchKeyWord}
+                    name="searchKeyWord"
+                    onChange={(e) => setSearchKeyWord(e.target.value)}
+                    autoFocus
+                    onKeyUp={handleKeyDown}
+                />
             </StsearchInputWrapper>
             <StBoardTitle>자유롭게 의견을 나누고 일상을 공유해보세요</StBoardTitle>
             <StWriteButton
