@@ -301,6 +301,7 @@ const MeetingDetail = () => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const user = useRecoilValue(userAtom);
+    const [commentCount, setCommentCount] = useState(0);
 
     useEffect(() => {
         const fetchMeetingData = async () => {
@@ -319,6 +320,7 @@ const MeetingDetail = () => {
                         ...doc.data()
                     }));
                     setComments(commentsData);
+                    setCommentCount(commentsData.length);
                 } else {
                     console.log('모임을 찾을 수 없습니다!');
                 }
@@ -359,6 +361,7 @@ const MeetingDetail = () => {
                     ...doc.data()
                 }));
                 setComments(updatedComments);
+                setCommentCount(updatedComments.length);
 
                 // 댓글 입력을 초기화합니다.
                 setNewComment('');
@@ -427,7 +430,7 @@ const MeetingDetail = () => {
                 댓글
                 <T.StCommentContainer>
                     <T.StCommentBox1>
-                        <T.StCommentCount>모임 후기{` 개`}</T.StCommentCount>
+                        <T.StCommentCount>모임 후기{`  ${commentCount}개`}</T.StCommentCount>
                         <T.StCommentFilter>정렬기준</T.StCommentFilter>
                     </T.StCommentBox1>
                     <T.StCommentBox2>
