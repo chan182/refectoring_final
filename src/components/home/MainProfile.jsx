@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
 import { auth } from '../../firebase/firebase.config';
 import { isEditingAtom, userAtom } from '../../recoil/Atom';
+import profileImage from '../../assets/profile/profileImg.png';
 
 const MainProfile = ({ toggleDropdown }) => {
     const [user] = useRecoilState(userAtom);
@@ -15,7 +16,7 @@ const MainProfile = ({ toggleDropdown }) => {
     return (
         <StProfileBox>
             <StProfileImg>
-                <img src={user.imageUrl} />
+                <img src={user.imageUrl || profileImage} />
             </StProfileImg>
             <StUserInfo>
                 <StProfileName>{user.name}</StProfileName>
@@ -90,11 +91,11 @@ const StProfileImg = styled.div`
     justify-content: center;
 
     & img {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
         overflow: hidden;
         border-radius: 50%;
-        border: 1px solid var(--content-border-color);
+        border: 0px solid var(--content-border-color);
     }
 `;
 
