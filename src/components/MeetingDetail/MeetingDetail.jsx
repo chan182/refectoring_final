@@ -289,13 +289,18 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, addDoc, orderBy, query } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.config';
-import * as T from './meetingDetailStyle'; // Assume you have a separate file for styles
+import * as T from './meetingDetailStyle';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from '../../recoil/Atom';
 
 const MeetingDetail = () => {
     const { id } = useParams();
     const [meeting, setMeeting] = useState(null);
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
+    const user = useRecoilValue(userAtom);
 
     useEffect(() => {
         const fetchMeetingData = async () => {
@@ -306,37 +311,82 @@ const MeetingDetail = () => {
                 if (meetingDocSnap.exists()) {
                     const meetingData = { id: meetingDocSnap.id, ...meetingDocSnap.data() };
                     setMeeting(meetingData);
+
+                    // 'comments' 하위 컬렉션에서 댓글을 가져옵니다.
+                    const commentsQuerySnapshot = await getDocs(collection(db, `meet/${id}/comments`));
+                    const commentsData = commentsQuerySnapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                    setComments(commentsData);
                 } else {
-                    console.log('Meeting not found!');
+                    console.log('모임을 찾을 수 없습니다!');
                 }
             } catch (error) {
-                console.log('Fetching meeting data error:', error);
+                console.log('모임 데이터를 불러오는 중 에러 발생:', error);
             }
         };
 
         fetchMeetingData();
     }, [id]);
 
+    const handleAddComment = async () => {
+        if (newComment.trim() !== '') {
+            try {
+                const commentData = {
+                    content: newComment,
+                    userImageUrl: user.imageUrl,
+                    nickname: user.nickname,
+                    createdAt: new Date().toLocaleDateString('ko', {
+                        year: '2-digit',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    })
+                };
+
+                // 새로운 댓글을 'comments' 하위 컬렉션에 추가합니다.
+                await addDoc(collection(db, `meet/${id}/comments`), commentData);
+
+                // 업데이트된 댓글을 가져옵니다. 정렬된 순서로 가져오기 위해 orderBy 사용
+                const commentsQuerySnapshot = await getDocs(
+                    query(collection(db, `meet/${id}/comments`), orderBy('createdAt', 'desc'))
+                );
+                const updatedComments = commentsQuerySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setComments(updatedComments);
+
+                // 댓글 입력을 초기화합니다.
+                setNewComment('');
+            } catch (error) {
+                console.error('댓글 추가 중 에러 발생: ', error);
+            }
+        } else {
+            alert('댓글을 입력해 주세요!!!');
+        }
+    };
+
     if (!meeting) {
-        // Loading state or handle not found
         return <p>Loading...</p>;
     }
 
     return (
         <T.StWholeContainer>
             <T.StTopContainerBox>
-                {/* Assume you have styles for the top container */}
                 <T.StTopContainer>
                     <T.StImageContainer>
                         <img
-                            src={meeting.imageUrl} // Update with the actual key in your Firebase data
+                            src={meeting.imageUrl}
                             alt={`Meeting Image`}
                             style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '50%' }}
                         />
                     </T.StImageContainer>
                     <T.StContentBox>
                         <T.StTextContainer>
-                            {/* Render other meeting details using 'meeting' state */}
                             <T.StDetailTextBox>
                                 모임 제목
                                 <T.StDetailText>{meeting.title}</T.StDetailText>
@@ -358,14 +408,12 @@ const MeetingDetail = () => {
                                 <T.StDetailText>{meeting.mbti}</T.StDetailText>
                             </T.StDetailTextBox>
                         </T.StTextContainer>
-                        {/* Add other components/buttons as needed */}
                     </T.StContentBox>
                 </T.StTopContainer>
             </T.StTopContainerBox>
-            {/* Add more sections for other details as needed */}
             <T.StTagBox>
                 <T.StTagName>모임 태그</T.StTagName>
-                <T.StTagContent>{/* Add your tag content here */}</T.StTagContent>
+                <T.StTagContent></T.StTagContent>
             </T.StTagBox>
             <T.StDivisionLine />
             <T.StContentContainerBox>
@@ -377,7 +425,41 @@ const MeetingDetail = () => {
             <T.StDivisionLine />
             <T.StCommentContainerBox>
                 댓글
-                {/* Add your comment section here */}
+                <T.StCommentContainer>
+                    <T.StCommentBox1>
+                        <T.StCommentCount>모임 후기{` 개`}</T.StCommentCount>
+                        <T.StCommentFilter>정렬기준</T.StCommentFilter>
+                    </T.StCommentBox1>
+                    <T.StCommentBox2>
+                        <T.StCommentImage>
+                            <img
+                                src={user.imageUrl}
+                                alt={`이벤트 이미지`}
+                                style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '50%' }}
+                            />
+                        </T.StCommentImage>
+                        <T.StCommentInput
+                            placeholder="댓글 추가..."
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                        />
+                        <T.StCommentButton onClick={handleAddComment}>댓글 추가</T.StCommentButton>
+                    </T.StCommentBox2>
+                    <T.StComments>
+                        {comments.map((comment) => (
+                            <div key={comment.id}>
+                                <img src={comment.userImageUrl} alt="User" />
+                                <div className="userDetailsBox">
+                                    <div className="userDetails">
+                                        <p className="nickname">{comment.nickname}</p>
+                                        <p className="createdAt">{comment.createdAt}</p>
+                                    </div>
+                                    <p className="comment">{comment.content}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </T.StComments>
+                </T.StCommentContainer>
             </T.StCommentContainerBox>
         </T.StWholeContainer>
     );
