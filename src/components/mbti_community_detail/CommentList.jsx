@@ -11,7 +11,7 @@ import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { deleteComment, getComments } from '../../api/comment';
-
+import fullheart from '../../assets/community/fullheart.svg';
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
     const [showButtons, setShowButtons] = useState(false);
@@ -22,52 +22,7 @@ const CommentList = () => {
     const params = useParams();
     const queryClient = useQueryClient();
 
-    // 좋아요 버튼
-    const addLike = async (commentId) => {
-        const commentRef = doc(db, 'communities', params.id, 'comments', commentId);
-        const commentSnap = await getDoc(commentRef);
-        const existingLikes = commentSnap.data()?.likes || [];
-
-        const updatedLikes = [...existingLikes, user.uid];
-
-        await updateDoc(commentRef, { likes: updatedLikes });
-
-        return updatedLikes;
-    };
-
-    const mutationAddLike = useMutation(addLike, {
-        onMutate: async (commentId) => {
-            await queryClient.cancelQueries(['comments', params.id]);
-
-            const previousComments = queryClient.getQueryData(['comments', params.id]);
-
-            queryClient.setQueryData(['comments', params.id], (oldComments) => {
-                const updatedComments = oldComments.map((comment) => {
-                    if (comment.id === commentId) {
-                        return {
-                            ...comment,
-                            likes: [...comment.likes, user.uid]
-                        };
-                    }
-                    return comment;
-                });
-
-                return updatedComments;
-            });
-
-            return { previousComments };
-        },
-        onError: (error, variables, context) => {
-            queryClient.setQueryData(['comments', params.id], context.previousComments);
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries(['comments', params.id]);
-        }
-    });
-
-    const handleAddLike = async (commentId) => {
-        mutationAddLike.mutate(commentId);
-    };
+    // 댓글 수정하기
 
     // 댓글 업로드 하기
 
@@ -180,15 +135,27 @@ const CommentList = () => {
                                 <div>{data?.createdAt}</div>
                             </StCommentUserInfo>
 
-                            <Stcomment>{data?.content}</Stcomment>
+                            <Stcomment>
+                                {editMode && user?.uid === data.id ? (
+                                    <Stcomment>
+                                        <input
+                                            type="text"
+                                            value={content}
+                                            onChange={(e) => setContent(e.target.value)}
+                                        />
+                                    </Stcomment>
+                                ) : (
+                                    <Stcomment>{data?.content}</Stcomment>
+                                )}
+                            </Stcomment>
                             <StUpDown>
                                 <StUp>
-                                    <button
-                                        onClick={() => {
-                                            handleAddLike(id);
-                                        }}
-                                    >
-                                        <img src={upVector} alt="좋아요버튼" />
+                                    <button>
+                                        {user?.uid && data?.likes?.includes(user?.uid) ? (
+                                            <img src={fullheart} alt="좋아요버튼" />
+                                        ) : (
+                                            <img src={upVector} alt="좋아요버튼" />
+                                        )}
                                     </button>
                                     <div>0</div>
                                 </StUp>
@@ -196,8 +163,7 @@ const CommentList = () => {
                                     <img src={downVector} alt="" />
                                 </StDown>
                             </StUpDown>
-
-                            {user.uid === data?.id ? (
+                            {user?.uid === data?.id ? (
                                 <div>
                                     <button
                                         onClick={() => {
