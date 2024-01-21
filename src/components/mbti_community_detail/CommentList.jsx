@@ -10,7 +10,7 @@ import filteredImoge from '../../assets/community/align-left.svg';
 import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { deleteComment, getComments } from '../../api/comment';
+import { addComment, deleteComment, getComments, switchComment } from '../../api/comment';
 import fullheart from '../../assets/community/fullheart.svg';
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
@@ -18,26 +18,18 @@ const CommentList = () => {
     const [comments, setComments] = useState([]);
     const [content, setContent] = useState('');
     const [editMode, setEditMode] = useState(false);
-
+    const [userCommentId, setUserCommentId] = useState('');
+    const [updateComment, setUpdateComment] = useState('');
     const params = useParams();
     const queryClient = useQueryClient();
 
-    // 댓글 수정하기
+    // 댓글 추가하기
 
-    // 댓글 업로드 하기
-
-    const addComment = async (newComment) => {
-        await addDoc(collection(db, 'communities', params.id, 'comments'), newComment);
-    };
-
-    const mutationAdd = useMutation(addComment, {
+    const mutationAdd = useMutation((newComment) => addComment(newComment, params.id), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('comments');
             console.log('성공 !!');
         }
-        // onError: (error) => {
-        //     console.error('Error adding comment:', error);
-        // }
     });
 
     const handleAddComment = async (paramsId) => {
@@ -52,37 +44,39 @@ const CommentList = () => {
             likes: '',
             likecount: ''
         };
-        // console.log(newComment);
-        // console.log(paramsId);
-        // setContent('');
+        setContent('');
+
         mutationAdd.mutate(newComment, paramsId);
     };
 
     // 댓글 삭제하기
 
-    const deleteComment = async (id) => {
-        await deleteDoc(doc(db, 'communities', params.id, 'comments', id));
-    };
-
-    const DeleteMutation = useMutation(deleteComment, {
+    const DeleteMutation = useMutation((id) => deleteComment(id, params.id), {
         onSuccess: (data) => {
-            // console.log(data);
             queryClient.invalidateQueries('comments');
         }
-        // onError: (error) => {
-        //     console.error('Error adding comment:', error);
-        // }
     });
 
     const handleDeleteComment = async (id) => {
-        console.log(id);
         DeleteMutation.mutate(id);
+    };
+
+    // 댓글 수정하기
+
+    const UpdateMutation = useMutation((id) => switchComment(id, params.id, updateComment), {
+        onSuccess: (data) => {
+            queryClient.invalidateQueries('comments');
+        }
+    });
+
+    const handlerUpdateComment = async (id) => {
+        UpdateMutation.mutate(id);
     };
 
     // 댓글들 가져오기
 
     const { data } = useQuery({ queryKey: ['comments'], queryFn: () => getComments(params.id) });
-    // console.log(data);
+
     return (
         <Stwrapper>
             <StCommentTitleWrapper>
@@ -136,12 +130,11 @@ const CommentList = () => {
                             </StCommentUserInfo>
 
                             <Stcomment>
-                                {editMode && user?.uid === data.id ? (
+                                {editMode && userCommentId === id ? (
                                     <Stcomment>
-                                        <input
-                                            type="text"
-                                            value={content}
-                                            onChange={(e) => setContent(e.target.value)}
+                                        <StInput
+                                            value={updateComment}
+                                            onChange={(e) => setUpdateComment(e.target.value)}
                                         />
                                     </Stcomment>
                                 ) : (
@@ -167,8 +160,11 @@ const CommentList = () => {
                                 <div>
                                     <button
                                         onClick={() => {
+                                            console.log(id);
                                             setEditMode(!editMode);
-                                            console.log(editMode);
+                                            setUserCommentId(id);
+                                            setUpdateComment(data?.content);
+                                            handlerUpdateComment(id);
                                         }}
                                     >
                                         수정
