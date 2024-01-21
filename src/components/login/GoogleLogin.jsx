@@ -3,7 +3,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import google from '../../assets/login/Google.png';
-import { auth } from '../../firebase/firebase.config';
+import { auth, db } from '../../firebase/firebase.config';
+import { addDoc, collection } from 'firebase/firestore';
 
 const GoogleLogin = () => {
     const nav = useNavigate();
@@ -16,6 +17,16 @@ const GoogleLogin = () => {
                 const token = credential.accessToken;
                 const user = result.user;
                 nav('/profile');
+                try {
+                    const userDocRef = addDoc(collection(db, 'users'), {
+                        uid: user.uid,
+                        email: user.email
+                    });
+                } catch (error) {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log('err', errorCode, errorMessage);
+                }
             })
             .catch((error) => {
                 const errorCode = error.code;
