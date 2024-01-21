@@ -97,7 +97,7 @@ const UserInfo = () => {
                             ) : (
                                 <Avatar src={(user && user.imageUrl) || profileImage} size="large" />
                             )}
-                            <button>프로필 사진 업로드</button>
+                            {/* <button>프로필 사진 업로드</button> */}
                         </StProfileImage>
                         {/* <StProfileImageButton
                             onClick={() => {
