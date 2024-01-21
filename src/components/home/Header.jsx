@@ -6,6 +6,7 @@ import dorpArrow from '../../assets/home/dropArrow.png';
 import logo from '../../assets/home/logo.png';
 import { userAtom } from '../../recoil/Atom';
 import MainProfile from './MainProfile';
+import profileImage from '../../assets/profile/profileImg.png';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Header = () => {
                                 {/* 로그인 성공 시, */}
                                 <StProfileBox>
                                     <StProfileImg>
-                                        <img src={user.imageUrl} />
+                                        <img src={user.imageUrl || profileImage} />
                                     </StProfileImg>
                                     <StDropBtn onClick={toggleDropdown}>
                                         <img src={dorpArrow} />
