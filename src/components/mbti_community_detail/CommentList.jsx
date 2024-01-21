@@ -125,8 +125,6 @@ const CommentList = () => {
                 )}
             </StInputWrapper>
             {data?.map(({ id, data }) => {
-                console.log(user.uid);
-                console.log(data);
                 return (
                     <StCommentCardList key={id}>
                         <StProfileImoge src={data?.ImageUrl} alt="" />
@@ -153,7 +151,7 @@ const CommentList = () => {
                             <StUpDown>
                                 <StUp>
                                     <button>
-                                        {user.uid && data?.likes?.includes(user.uid) ? (
+                                        {user?.uid && data?.likes?.includes(user?.uid) ? (
                                             <img src={fullheart} alt="좋아요버튼" />
                                         ) : (
                                             <img src={upVector} alt="좋아요버튼" />
@@ -165,7 +163,7 @@ const CommentList = () => {
                                     <img src={downVector} alt="" />
                                 </StDown>
                             </StUpDown>
-                            {user.uid === data?.id ? (
+                            {user?.uid === data?.id ? (
                                 <div>
                                     <button
                                         onClick={() => {
