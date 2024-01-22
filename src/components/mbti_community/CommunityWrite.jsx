@@ -12,7 +12,7 @@ export default function UpdateTest() {
     return (
         <StBox>
             <StDiv>
-                <StH1>게시글 작성하기</StH1>
+                <StH1>게시글 작성하기!</StH1>
                 <StPeed>
                     <StInput
                         value={title}
