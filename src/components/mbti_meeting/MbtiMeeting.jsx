@@ -172,7 +172,12 @@ const MbtiMeeting = () => {
             <StMeetingContainer>
                 {meet.map((meet) => {
                     return (
-                        <StMeetingWrap>
+                        <StMeetingWrap
+                            onClick={() => {
+                                nav(`mbti/meeting/detail/${meet.id}`);
+                            }}
+                            key={meet.id}
+                        >
                             <StImg src={meet.imageurl}></StImg>
                             <StContainer>
                                 <StTitle>
