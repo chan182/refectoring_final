@@ -14,7 +14,13 @@ export default function UpdateTest() {
             <StDiv>
                 <StH1>게시글 작성하기</StH1>
                 <StPeed>
-                    <StInput placeholder="제목을 입력해주세요."></StInput>
+                    <StInput
+                        value={title}
+                        onChange={(e) => {
+                            setTitle(e.target.value);
+                        }}
+                        placeholder="제목을 입력해주세요."
+                    ></StInput>
                     <PeedEditor />
                 </StPeed>
                 <StBtns>
