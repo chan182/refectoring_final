@@ -21,6 +21,7 @@ import MbtiMeetingPage from './../pages/MbtiMeetingPage';
 import MbtiTestPage from './../pages/MbtiTestPage';
 import GlobalColor from './../style/GlobalColor';
 import GlobalStyle from './../style/GlobalStyle';
+import MeetingDetailPage from '../pages/MeetingDetailPage';
 
 const Router = () => {
     const setUser = useSetRecoilState(userAtom);
@@ -59,7 +60,7 @@ const Router = () => {
                         <Route path="/mbti/test" element={<MbtiTestPage />} />
                         <Route path="/mbti/matching" element={<MbtiMatchingPage />} />
                         <Route path="/mbti/meeting" element={<MbtiMeetingPage />} />
-                        <Route path="/mbti/meeting/detail/:id" element={<MeetingDetail />} />
+                        <Route path="/mbti/meeting/detail/:id" element={<MeetingDetailPage />} />
                         <Route path="/mbti/meeting/create" element={<MbtiMeetingCreatePage />} />
                         <Route path="/mbti/community" element={<MbtiCommunityPage />} />
                         <Route path="/mbti/community/write" element={<CommunityWrite />} />

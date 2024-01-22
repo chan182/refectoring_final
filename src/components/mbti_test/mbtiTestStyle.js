@@ -239,12 +239,13 @@ export const StTestStartButton = styled.button`
     padding: 10px;
     font-size: 16px;
     margin-bottom: 20px;
-    background-color: #f8f8f8;
-    color: #000000;
+    background-color: #ecebf5;
+    color: #b2afcf;
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
-    width: 20%;
+    width: 17%;
+    height: 80%;
     /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
 
     &:hover {
