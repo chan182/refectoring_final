@@ -181,14 +181,14 @@ export const StCommentBox2 = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    margin-left: 1%;
+    height: 50px;
 `;
 
 export const StCommentImage = styled.image`
     height: 38px;
     width: 38px;
     margin-right: 5px;
-    margin-bottom: 40px;
     border-radius: 50%;
     border: 1px solid #8d8d8d;
 `;
@@ -244,37 +244,63 @@ export const StComments = styled.div`
 `;
 
 export const StCommentInput = styled.input`
-    width: 88%;
+    width: 95%;
     padding: 10px;
-    margin-bottom: 40px;
     border: none;
     border-bottom: 1px solid #ccc;
     outline: none;
 `;
 
-export const StCommentButton = styled.button`
+export const StCommentButtonBox = styled.div`
+    width: 14%;
+    height: 7%;
+    margin-left: 85.5%;
+`;
+
+export const StCommentButton1 = styled.button`
     font-size: 12px;
+    height: 34px;
+    width: 76px;
     padding: 8px 16px;
+    margin-right: 4px;
     margin-bottom: 40px;
-    background-color: #ffffff;
-    color: var(--light-purple);
-    border: 1px solid var(--light-purple);
+    background-color: #ecebf5;
+    color: #b2afcf;
     border-radius: 0.5rem;
     cursor: pointer;
 
-    &:hover {
+    /* &:hover {
         background-color: var(--light-purple);
         color: #ffffff;
         border: none;
-    }
+    } */
+`;
+
+export const StCommentButton2 = styled.button`
+    font-size: 12px;
+    height: 34px;
+    width: 76px;
+    padding: 8px 16px;
+    margin-right: 4px;
+    margin-bottom: 40px;
+    background-color: var(--main-button-color);
+    color: #ffffff;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    /* &:hover {
+        background-color: var(--light-purple);
+        color: #ffffff;
+        border: none;
+    } */
 `;
 
 export const StRequestButton = styled.button`
     font-size: 20px;
     width: 196px;
     height: 48px;
-    margin-left: 53px;
-    margin-top: -50px;
+    margin-left: 82.7%;
+    margin-top: 1%;
     background-color: var(--main-button-color);
     color: #fff;
     border: none;
@@ -294,7 +320,6 @@ export const StBookmarkButton = styled.div`
     width: 76px;
     height: 34px;
     margin-left: 635px;
-    margin-top: -35px;
     display: flex;
     align-items: center;
     justify-content: center;
