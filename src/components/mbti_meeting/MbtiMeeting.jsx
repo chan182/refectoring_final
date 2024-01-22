@@ -7,6 +7,11 @@ import produce from '../../assets/mbtiMeet/produce.png';
 import search from '../../assets/mbtiMeet/search.png';
 import { db } from '../../firebase/firebase.config';
 import { Link } from 'react-router-dom';
+import positionImg from '../../assets/mbtiMeet/positionimg.png';
+import dateImg from '../../assets/mbtiMeet/dateimg.png';
+import userImg from '../../assets/mbtiMeet/userimg.png';
+import usersImg from '../../assets/mbtiMeet/usersimg.png';
+import ageImg from '../../assets/mbtiMeet/ageimg.png';
 
 const MbtiMeeting = () => {
     // const user = useRecoilState(userAtom);
@@ -179,21 +184,36 @@ const MbtiMeeting = () => {
                                 <StTitle>
                                     {meet.title}/{meet.mbti}
                                 </StTitle>
+                                <StPositionDateUserContainer>
+                                    <StContentsImgWrap>
+                                        <StContentsPositionImg src={positionImg}></StContentsPositionImg>
+                                        <StContents>{meet.position}</StContents>
+                                    </StContentsImgWrap>
+                                    <StContentsImgWrap>
+                                        <StContentsDateImg src={dateImg}></StContentsDateImg>
+                                        <StContents>일정 : {meet.date}</StContents>
+                                    </StContentsImgWrap>
+                                    <StContentsImgWrap>
+                                        <StContentsUserImg src={userImg} alt="" />
+                                        <StContents>인원 :0 / {meet.person}</StContents>
+                                    </StContentsImgWrap>
+                                </StPositionDateUserContainer>
                                 <div>
-                                    <StContents>{meet.position}</StContents>
-                                    <StContents>일정 : {meet.date}</StContents>
-                                    <StContents>인원 : {meet.person}</StContents>
-                                </div>
-                                <div>
-                                    <StContents>성별 / {meet.gender}</StContents>
-                                    <StContents>나이 / {meet.age}</StContents>
+                                    <StContentsImgWrap>
+                                        <StContentsUsersImg src={usersImg} alt="" />
+                                        <StContents>성별 / {meet.gender}</StContents>
+                                    </StContentsImgWrap>
+                                    <StContentsImgWrap>
+                                        <StContentsAgeImg src={ageImg} alt="" />
+                                        <StContents>나이 / {meet.age}</StContents>
+                                    </StContentsImgWrap>
                                 </div>
                             </StContainer>
                         </StMeetingWrap>
                     </StMeetingLink>
                 ))}
+                <div>{isVisible && <StUpbutton onClick={upButtonHandler}>↑</StUpbutton>}</div>
             </StMeetingContainer>
-            <div>{isVisible && <StUpbutton onClick={upButtonHandler}>위</StUpbutton>}</div>
         </>
     );
 };
@@ -240,7 +260,7 @@ const StCreateWrap = styled.div`
     height: 45px;
     margin-bottom: 60px;
     position: fixed;
-    right: 47%;
+    right: 48%;
     bottom: 15%;
 `;
 
@@ -339,7 +359,7 @@ const StUpbutton = styled.button`
     height: 50px;
     background-color: var(--main-button-color);
     color: white;
-    font-size: larger;
+    font-size: 30px;
     font-weight: light;
     border-radius: 30px;
     bottom: 20%;
@@ -356,7 +376,7 @@ const StMeetingContainer = styled.div`
 const StMeetingWrap = styled.div`
     width: 27%;
     aspect-ratio: 1/0.78;
-    margin: 0px 52px 60px 0px;
+    margin: 0px 26px 60px 26px;
     display: inline-block;
     border-radius: 10px;
     border: 1px solid var(--button-border-color);
@@ -379,6 +399,32 @@ const StTitle = styled.div`
     font-size: 18px;
 `;
 
+const StPositionDateUserContainer = styled.div`
+    margin-bottom: 10px;
+`;
+const StContentsImgWrap = styled.span`
+    width: 60px;
+`;
+
+const StContentsPositionImg = styled.img`
+    width: 13px;
+`;
+
+const StContentsDateImg = styled.img`
+    width: 13px;
+`;
+
+const StContentsUserImg = styled.img`
+    width: 13px;
+`;
+
+const StContentsUsersImg = styled.img`
+    width: 13px;
+`;
+
+const StContentsAgeImg = styled.img`
+    width: 13px;
+`;
 const StContents = styled.span`
     margin-right: 5%;
     font-size: 14px;
