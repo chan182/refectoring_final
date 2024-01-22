@@ -50,15 +50,15 @@ const MbtiMatching = () => {
             {matchingResult ? (
                 <T.StScreenBox2>
                     <T.StTestContainer>
-                        <StMatchingComment>두 분의 MBTI 궁합 결과는</StMatchingComment>
+                        <StMatchingComment></StMatchingComment>
                         <StMatchingResultMent color={matchingResultColor}>"{matchingResult}"</StMatchingResultMent>
                         <StMatchingResultInput>
                             <StMatchingResultText>{mbti1Type}</StMatchingResultText>
-                            <StMatchingInputspan>+</StMatchingInputspan>{' '}
+                            <StMatchingInputspan>+</StMatchingInputspan>
                             <StMatchingResultText>{mbti2Type}</StMatchingResultText>
                         </StMatchingResultInput>
                         <T.StButtonContainer>
-                            <T.StTestStartButton onClick={() => navigate('/')}>홈으로 돌아가기</T.StTestStartButton>
+                            {/* <T.StTestStartButton onClick={() => navigate('/')}>홈으로 돌아가기</T.StTestStartButton> */}
                             <T.StTestStartButton onClick={() => window.location.reload()}>다시하기</T.StTestStartButton>
                         </T.StButtonContainer>
                         <T.StLogoImageBox>
@@ -78,7 +78,7 @@ const MbtiMatching = () => {
                                 value={mbti1Type}
                                 onChange={handleMbti1TypeChange}
                                 maxLength={4}
-                                placeholder="내 MBTI"
+                                placeholder="MBTI를 입력하세요!"
                             />
                             <StMatchingInputspan>+</StMatchingInputspan>
                             <StMatchingInput
@@ -86,11 +86,11 @@ const MbtiMatching = () => {
                                 value={mbti2Type}
                                 onChange={handleMbti2TypeChange}
                                 maxLength={4}
-                                placeholder="상대 MBTI"
+                                placeholder="MBTI를 입력하세요!"
                             />
                         </StMatchingInputBox>
                         <T.StButtonContainer>
-                            <T.StTestStartButton onClick={() => navigate('/')}>홈으로 돌아가기</T.StTestStartButton>
+                            {/* <T.StTestStartButton onClick={() => navigate('/')}>홈으로 돌아가기</T.StTestStartButton> */}
                             <T.StTestStartButton onClick={handleGenerateMatch}>결과 보기</T.StTestStartButton>
                         </T.StButtonContainer>
 
@@ -129,17 +129,17 @@ const StMatchingInputBox = styled.div`
 const StMatchingInput = styled.input`
     width: 18%;
     height: 15%;
-    border-radius: 5px;
-    background: var(--light-gray);
+    border-radius: 0.3rem;
+    border: 1px solid var(--button-border-color);
     font-size: 22px;
     padding: 10px;
     display: flex;
     align-items: center;
-    border: none;
 `;
 
 const StMatchingInputspan = styled.span`
     font-size: 45px;
+    color: #4e4e4e;
 `;
 
 const StTestStartComment = styled.h1`
@@ -160,7 +160,8 @@ const StMatchingResultText = styled.p`
     height: 15%;
     border-radius: 5px;
     background: var(--light-gray);
-    font-size: 22px;
+    font-size: 46px;
+    font-weight: bold;
     padding: 10px;
     display: flex;
     align-items: center;
@@ -184,8 +185,7 @@ const StMatchingResultMent = styled.h1`
 const StMatchingComment = styled.h1`
     font-size: 54px;
     width: 914px;
-    height: 100px;
-    margin-top: 1.6%;
+    margin-top: 8.4%;
     margin-left: 130px;
     padding: 0px 10px;
     display: flex;

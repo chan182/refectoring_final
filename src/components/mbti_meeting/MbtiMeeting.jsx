@@ -6,6 +6,7 @@ import check from '../../assets/mbtiMeet/check.png';
 import produce from '../../assets/mbtiMeet/produce.png';
 import search from '../../assets/mbtiMeet/search.png';
 import { db } from '../../firebase/firebase.config';
+import { Link } from 'react-router-dom';
 
 const MbtiMeeting = () => {
     // const user = useRecoilState(userAtom);
@@ -170,8 +171,8 @@ const MbtiMeeting = () => {
                 )}
             </StCheckboxContainer>
             <StMeetingContainer>
-                {meet.map((meet) => {
-                    return (
+                {meet.map((meet) => (
+                    <StMeetingLink to={`/mbti/meeting/detail/${meet.id}`} key={meet.id}>
                         <StMeetingWrap>
                             <StImg src={meet.imageurl}></StImg>
                             <StContainer>
@@ -189,8 +190,8 @@ const MbtiMeeting = () => {
                                 </div>
                             </StContainer>
                         </StMeetingWrap>
-                    );
-                })}
+                    </StMeetingLink>
+                ))}
             </StMeetingContainer>
             <div>{isVisible && <StUpbutton onClick={upButtonHandler}>위</StUpbutton>}</div>
         </>
@@ -381,4 +382,9 @@ const StTitle = styled.div`
 const StContents = styled.span`
     margin-right: 5%;
     font-size: 14px;
+`;
+
+const StMeetingLink = styled(Link)`
+    text-decoration: none;
+    color: inherit;
 `;
