@@ -15,22 +15,20 @@ const PeedEditor = () => {
     }, []);
 
     return (
-        <>
-            <Editor
-                placeholder="내용을 입력하세요."
-                ref={editorRef} // useRef로 DOM 연결
-                previewStyle="vertical"
-                height="500px"
-                initialEditType="wysiwyg"
-                toolbarItems={[
-                    ['heading', 'bold', 'italic', 'strike'],
-                    ['hr', 'quote'],
-                    ['ul', 'ol', 'task', 'indent', 'outdent'],
-                    ['table', 'image', 'link'],
-                    ['code', 'codeblock']
-                ]}
-            ></Editor>
-        </>
+        <Editor
+            placeholder="내용을 입력하세요."
+            ref={editorRef} // useRef로 DOM 연결
+            previewStyle="vertical"
+            height="500px"
+            initialEditType="wysiwyg"
+            toolbarItems={[
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'image', 'link'],
+                ['code', 'codeblock']
+            ]}
+        ></Editor>
     );
 };
 

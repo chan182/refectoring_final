@@ -1,64 +1,79 @@
-import { doc, getDoc } from 'firebase/firestore';
-import { React, useEffect, useState } from 'react';
+import { React } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import heart from '../../assets/community/blackheart.svg';
 import eyeImoge from '../../assets/community/eyeImoge.svg';
 import redheart from '../../assets/community/heart.svg';
 import messageImoge from '../../assets/community/messageImoge.svg';
-import { db } from '../../firebase/firebase.config';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { communityDetailGetDate, deleteBoard } from '../../api/boardDetail';
+import { deleteComment } from '../../api/comment';
 
 const MbtiComunityDetail = () => {
-    const [post, setPost] = useState();
     const params = useParams();
-    // console.log(params?.id);
+    const queryClient = useQueryClient();
 
-    const getPost = async (id) => {
-        if (id) {
-            const docRef = doc(db, 'communities', id);
-            const docSnap = await getDoc(docRef);
+    const { isLoading, isError, data } = useQuery({
+        queryKey: ['communityDetail'],
+        queryFn: () => communityDetailGetDate(params.id)
+    });
 
-            setPost({ id: docSnap.id, ...docSnap.data() });
+    /// 삭제하기
+
+    const DeleteBoardMutation = useMutation((id) => deleteBoard(id), {
+        onSuccess: (data) => {
+            queryClient.invalidateQueries('communities');
         }
+    });
+
+    const handleDeleteCommunity = async () => {
+        console.log(params.id);
+        DeleteBoardMutation.mutate(params.id);
     };
 
-    useEffect(() => {
-        if (params?.id) getPost(params?.id);
-    }, [params?.id]);
-    // console.log(post);
+    // 데이터 로딩 !
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <div>Error loading data</div>;
+    }
+
     return (
         <StCardWrapper>
-            <StCardImage src={post?.communityImage} alt="컨텐츠의 사진" />
+            <StCardImage src={data?.communityImage} alt="컨텐츠의 사진" />
             <StTitleWrapper>
-                <StCardTitle>{post?.title}</StCardTitle>
+                <StCardTitle>{data?.title}</StCardTitle>
                 <img src={redheart} alt="" />
             </StTitleWrapper>
             <StuserInfoWrapper>
                 <StUserInformation>
-                    <StprofileImg src={post?.ImageUrl} alt="" />
+                    <StprofileImg src={data?.ImageUrl} alt="" />
                     <div>
-                        {post?.nickname} / {post?.mbti}
+                        {data?.nickname} / {data?.mbti}
                     </div>
                 </StUserInformation>
                 <StlikeInformation>
                     <img src={heart} alt="좋아요 이미지" />
-                    <div>999M</div>
+                    <div>0</div>
                 </StlikeInformation>
                 <StMessageInformation>
                     <img src={messageImoge} alt="" />
-                    <div>999K</div>
+                    <div>0</div>
                 </StMessageInformation>
                 <StViewInformation>
                     <img src={eyeImoge} alt="" />
-                    <div>999M</div>
+                    <div>0</div>
                 </StViewInformation>
             </StuserInfoWrapper>
             <StButtonWrapper>
                 <Stbutton>글 수정</Stbutton>
-                <Stbutton>글 삭제</Stbutton>
+                <Stbutton onClick={handleDeleteCommunity}>글 삭제</Stbutton>
             </StButtonWrapper>
             <StHr />
-            <StContent>{post?.content}</StContent>
+            <StContent>{data?.content}</StContent>
         </StCardWrapper>
     );
 };
