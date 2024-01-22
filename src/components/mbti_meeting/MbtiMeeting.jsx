@@ -192,7 +192,7 @@ const MbtiMeeting = () => {
                     );
                 })}
             </StMeetingContainer>
-            <div>{isVisible && <StUpbutton onClick={upButtonHandler}>위</StUpbutton>}</div>
+            <div>{isVisible && <StUpbutton onClick={upButtonHandler}>△</StUpbutton>}</div>
         </>
     );
 };
