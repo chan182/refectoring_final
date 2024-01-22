@@ -1,4 +1,4 @@
-import { collection, getDocs, query } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -41,6 +41,27 @@ const MbtiMeeting = () => {
         fetchData();
     }, []);
 
+    //데이터 검색
+    const searchData = async () => {
+        const q = query(
+            collection(db, 'meet'),
+            where('title', '>=', searchKeyWord),
+            where('title', '<=', searchKeyWord + '\uf8ff')
+        );
+        const querySnapshot = await getDocs(q);
+
+        const initialMeet = [];
+
+        querySnapshot.forEach((doc) => {
+            const data = {
+                id: doc.id,
+                ...doc.data()
+            };
+            initialMeet.push(data);
+        });
+        setMeet(initialMeet);
+    };
+
     // 위로 올라가기 버튼
     useEffect(() => {
         const scroll = () => {
@@ -73,6 +94,11 @@ const MbtiMeeting = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            searchData();
+        }
+    };
     return (
         <>
             <StSearchMeet>
@@ -84,6 +110,7 @@ const MbtiMeeting = () => {
                         name="searchKeyWord"
                         onChange={(e) => setSearchKeyWord(e.target.value)}
                         autoFocus
+                        onKeyUp={handleKeyDown}
                     ></StSearch>
                 </StSearchImgWrap>
                 <StText>자유롭게 모임을 만들고 가입해 활동해보세요!</StText>
@@ -147,50 +174,32 @@ const MbtiMeeting = () => {
                 {meet.map((meet) => (
                     <StMeetingLink to={`/mbti/meeting/detail/${meet.id}`} key={meet.id}>
                         <StMeetingWrap>
-                            <StImg></StImg>
+                            <StImg src={meet.imageurl}></StImg>
                             <StContainer>
                                 <StTitle>
                                     {meet.title}/{meet.mbti}
                                 </StTitle>
                                 <div>
                                     <StContents>{meet.position}</StContents>
-                                    <StContents>{meet.date}</StContents>
-                                    <StContents>{meet.person}</StContents>
+                                    <StContents>일정 : {meet.date}</StContents>
+                                    <StContents>인원 : {meet.person}</StContents>
                                 </div>
                                 <div>
-                                    <StContents>{meet.gender}</StContents>
-                                    <StContents>{meet.age}</StContents>
+                                    <StContents>성별 / {meet.gender}</StContents>
+                                    <StContents>나이 / {meet.age}</StContents>
                                 </div>
                             </StContainer>
                         </StMeetingWrap>
                     </StMeetingLink>
                 ))}
             </StMeetingContainer>
-            <div>{isVisible && <StUpbutton onClick={upButtonHandler}>맨위로 올라가기</StUpbutton>}</div>
+            <div>{isVisible && <StUpbutton onClick={upButtonHandler}>위</StUpbutton>}</div>
         </>
     );
 };
 
 export default MbtiMeeting;
 
-const StImg = styled.div`
-    width: 100%;
-    aspect-ratio: 1/0.5;
-    background-color: red;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-`;
-const StContainer = styled.div`
-    margin: 4%;
-`;
-const StTitle = styled.div`
-    margin: 0px 0px 5%;
-    font-size: 18px;
-`;
-const StContents = styled.span`
-    margin-right: 15%;
-    font-size: 14px;
-`;
 const StSearchMeet = styled.div`
     display: flex;
     align-items: center;
@@ -206,7 +215,9 @@ const StSearchImg = styled.img`
     height: 35px;
     position: relative;
     top: 60px;
+    user-select: none;
 `;
+
 const StSearch = styled.input`
     width: 100%;
     height: 40px;
@@ -221,14 +232,18 @@ const StSearch = styled.input`
 
 const StText = styled.h1`
     font-size: 25px;
-    margin-top: 40px;
+    margin: 40px 0px 88px;
 `;
 
 const StCreateWrap = styled.div`
     width: 110px;
     height: 45px;
     margin-bottom: 60px;
+    position: fixed;
+    right: 47%;
+    bottom: 15%;
 `;
+
 const StCreateImg = styled.img`
     position: relative;
     width: 17px;
@@ -236,6 +251,7 @@ const StCreateImg = styled.img`
     left: 5px;
     top: 35px;
 `;
+
 const StCreateMeet = styled.button`
     width: 110px;
     height: 45px;
@@ -244,6 +260,10 @@ const StCreateMeet = styled.button`
     color: white;
     font-size: 14px;
     padding-left: 25px;
+    &:hover {
+        background-color: var(--main-button-color);
+        color: white;
+    }
 `;
 
 const StSelectMeetSearchContainer = styled.div`
@@ -315,7 +335,7 @@ const StCheckbox = styled.input`
 
 const StUpbutton = styled.button`
     position: fixed;
-    width: 150px;
+    width: 50px;
     height: 50px;
     background-color: var(--main-button-color);
     color: white;
@@ -323,7 +343,7 @@ const StUpbutton = styled.button`
     font-weight: light;
     border-radius: 30px;
     bottom: 20%;
-    left: 45%;
+    right: 8%;
 `;
 
 const StMeetingContainer = styled.div`
@@ -337,9 +357,31 @@ const StMeetingWrap = styled.div`
     width: 27%;
     aspect-ratio: 1/0.78;
     margin: 0px 52px 60px 0px;
-    background-color: green;
     display: inline-block;
     border-radius: 10px;
+    border: 1px solid var(--button-border-color);
+`;
+
+const StImg = styled.img`
+    width: 100%;
+    aspect-ratio: 1/0.5;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: 1px solid var(--button-border-color);
+`;
+
+const StContainer = styled.div`
+    margin: 4%;
+`;
+
+const StTitle = styled.div`
+    margin: 0px 0px 5%;
+    font-size: 18px;
+`;
+
+const StContents = styled.span`
+    margin-right: 5%;
+    font-size: 14px;
 `;
 
 const StMeetingLink = styled(Link)`
