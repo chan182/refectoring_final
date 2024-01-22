@@ -14,15 +14,38 @@
 - 팀원: 최수인, 김희찬, 진영호, 박길훈, 차상현(디자이너)
 
 ### 👀 구현 기능
-
+- 사용자 및 게시글 관리 (firebase)
+- 슬라이드 기능 구현 (React-Slick)
+- 페이지 관리 (React-Router-Dom)
+- 전역 상태 관리 (Recoil)
+- 서버 상태 관리 (React-query)
+- 게시판 툴바 기능 구현 (React-editor (toastui-editor))
 
 
 ### 📝 역할 분담
-
-
+- 최수인
+  - 메인 페이지
+  - MBTI 모임 생성 페이지
+  - 커뮤니티 게시글 작성 페이지
+- 김희찬
+  - 마이 페이지
+  - 커뮤니티 메인 페이지
+  - 커뮤니티 상세 페이지
+- 진영호
+  - 로그인/회원가입 페이지
+  - MBTI 모임 메인 페이지
+- 박길훈
+  - MBTI 검사 페이지
+  - MBTI 궁합 페이지
+  - MBTI 모임 상세 페이지
+- 차상현 (디자이너)
+  - 전반적인 디자인
 
 ### 🚩 개발 내용
-
+IDE: Visual Studio Code
+OS: windows, Mac
+Package Manager: Yarn Classic (v1.22.19)
+React boilerplate: create-react-app
 
 
 #### 💻 개발 환경
@@ -33,9 +56,13 @@
 
 #### 📌 사용 기술
 
-- React
-- Redux Toolkit (전역 상태 관리 도구)
-- React Query (비동기 관련 로직과 상태를 관리)
-- Firebase (사용자 인증과 데이터베이스 등의 서버 기능 제공)
-- React-router-dom (클라이언트 사이드 라우팅. URL에 맞는 컴포넌트 렌더링)
-- Styled-components (동적 스타일링)
+- 빠르고 편리한 UI/UX 구현 (React)
+- 사용자 및 게시글 관리 (firebase)
+- 슬라이드 기능 구현 (React-Slick)
+- 페이지 관리 (React-Router-Dom)
+- 전역 상태 관리 (Recoil)
+- 서버 상태 관리 (React-query)
+- 게시판 툴바 기능 구현 (React-editor (toastui-editor))
+- 동적 스타일링 (styled-components)
+- alert 구현 (sweetalert2)
+- modal 구현 (React-modal)
