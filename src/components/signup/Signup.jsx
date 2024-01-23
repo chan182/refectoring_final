@@ -188,31 +188,33 @@ const StSignUpWrap = styled.div`
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    width: 450px;
-    height: 600px;
+    width: 468px;
+    height: 639px;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 16px;
     border: 1px solid var(--content-border-color);
 `;
 
 const StLogoImg = styled.img`
     width: 408px;
-    margin: 20px auto;
+    margin: 44px auto 42px;
 `;
 
 const StText = styled.div`
-    margin: 20px 0px 5px 25px;
+    margin: 14px 0px 2px 35px;
+    color: var(--bold-gray);
 `;
 
 const StSignUpId = styled.input`
     width: 402px;
     height: 47px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 0px;
     margin: 0px auto;
     background-color: var(--light-gray);
     font-size: large;
     color: black;
+    padding-left: 15px;
     &:focus {
         border: 2px solid var(--button-border-color);
         outline: none;
@@ -222,12 +224,13 @@ const StSignUpId = styled.input`
 const StSignUpPw = styled.input`
     width: 402px;
     height: 47px;
-    margin: 0px auto;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 0px;
+    margin: 0px auto;
     background-color: var(--light-gray);
     font-size: large;
     color: black;
+    padding-left: 15px;
     &:focus {
         border: 2px solid var(--button-border-color);
         outline: none;
@@ -237,12 +240,13 @@ const StSignUpPw = styled.input`
 const StSignUpPwCheck = styled.input`
     width: 402px;
     height: 47px;
-    margin: 0px auto;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 0px;
+    margin: 0px auto;
     background-color: var(--light-gray);
     font-size: large;
     color: black;
+    padding-left: 15px;
     &:focus {
         border: 2px solid var(--button-border-color);
         outline: none;
@@ -252,12 +256,13 @@ const StSignUpPwCheck = styled.input`
 const StSignUpNickName = styled.input`
     width: 402px;
     height: 47px;
-    margin: 0px auto;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 0px;
+    margin: 0px auto;
     background-color: var(--light-gray);
     font-size: large;
     color: black;
+    padding-left: 15px;
     &:focus {
         border: 2px solid var(--button-border-color);
         outline: none;
@@ -266,13 +271,13 @@ const StSignUpNickName = styled.input`
 
 const StSignUpWarp = styled.div`
     display: flex;
-    margin-top: 50px;
+    margin-top: 57px;
 `;
 
 const StSignUpButton = styled.button`
     width: 402px;
     height: 48px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 0px;
     margin: 0px auto;
     font-size: 20px;
