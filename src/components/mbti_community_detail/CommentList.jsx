@@ -310,7 +310,6 @@ const Stcomment = styled.div`
     color: #121212;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-family: Pretendard;
     font-size: 18px;
     font-style: normal;
     font-weight: 400;

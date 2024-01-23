@@ -1,5 +1,5 @@
-import { React } from 'react';
-import { useParams } from 'react-router-dom';
+import { React, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import heart from '../../assets/community/blackheart.svg';
 import eyeImoge from '../../assets/community/eyeImoge.svg';
@@ -8,10 +8,15 @@ import messageImoge from '../../assets/community/messageImoge.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { communityDetailGetDate, deleteBoard } from '../../api/boardDetail';
 import { deleteComment } from '../../api/comment';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from '../../recoil/Atom';
 
 const MbtiComunityDetail = () => {
+    const user = useRecoilValue(userAtom);
     const params = useParams();
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    const [editMode, setEditMode] = useState(false);
 
     const { isLoading, isError, data } = useQuery({
         queryKey: ['communityDetail'],
@@ -23,6 +28,8 @@ const MbtiComunityDetail = () => {
     const DeleteBoardMutation = useMutation((id) => deleteBoard(id), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('communities');
+            alert('삭제 성공하였습니다.');
+            navigate('/mbti/community');
         }
     });
 
@@ -30,6 +37,8 @@ const MbtiComunityDetail = () => {
         console.log(params.id);
         DeleteBoardMutation.mutate(params.id);
     };
+
+    const handleUpdateCommunity = () => {};
 
     // 데이터 로딩 !
 
@@ -40,12 +49,13 @@ const MbtiComunityDetail = () => {
     if (isError) {
         return <div>Error loading data</div>;
     }
-
+    console.log(data);
     return (
         <StCardWrapper>
             <StCardImage src={data?.communityImage} alt="컨텐츠의 사진" />
             <StTitleWrapper>
-                <StCardTitle>{data?.title}</StCardTitle>
+                {editMode ? <StInput /> : <StCardTitle>{data?.title}</StCardTitle>}
+
                 <img src={redheart} alt="" />
             </StTitleWrapper>
             <StuserInfoWrapper>
@@ -69,11 +79,38 @@ const MbtiComunityDetail = () => {
                 </StViewInformation>
             </StuserInfoWrapper>
             <StButtonWrapper>
-                <Stbutton>글 수정</Stbutton>
-                <Stbutton onClick={handleDeleteCommunity}>글 삭제</Stbutton>
+                {user.uid == data?.id ? (
+                    <>
+                        <Stbutton
+                            onClick={() => {
+                                setEditMode(!editMode);
+                                handleUpdateCommunity();
+                            }}
+                        >
+                            글 수정
+                        </Stbutton>
+                        <Stbutton onClick={handleDeleteCommunity}>글 삭제</Stbutton>
+                    </>
+                ) : (
+                    <></>
+                )}
             </StButtonWrapper>
             <StHr />
-            <StContent>{data?.content}</StContent>
+            <StContent>{editMode ? <StInput /> : <StCardTitle>{data?.content}</StCardTitle>}</StContent>
+            {editMode ? (
+                <>
+                    <button>등록하기</button>
+                    <button
+                        onClick={() => {
+                            setEditMode(!editMode);
+                        }}
+                    >
+                        취소하기
+                    </button>
+                </>
+            ) : (
+                <></>
+            )}
         </StCardWrapper>
     );
 };
@@ -190,4 +227,19 @@ const StContent = styled.div`
     line-height: 148%; /* 23.68px */
     letter-spacing: -0.08px;
     margin: 0px 32px 68px 32px;
+`;
+
+const StInput = styled.input`
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    align-items: flex-start;
+    border-width: 0 0 1px;
+    gap: 10px;
+    color: #4e4e4e;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 148%; /* 23.68px */
+    letter-spacing: -0.08px;
 `;
