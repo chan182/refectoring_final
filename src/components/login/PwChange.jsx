@@ -75,7 +75,7 @@ const StLoginWrap = styled.div`
     width: 450px;
     height: 400px;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 16px;
     border: 1px solid var(--content-border-color);
 `;
 
@@ -94,7 +94,7 @@ const StUserId = styled.input`
     height: 47px;
     margin: 10px auto 0px;
     outline: none;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 1px solid var(--main-button-color);
     background-color: var(--light-gray);
     font-size: large;
@@ -113,7 +113,7 @@ const StPwChange = styled.button`
     width: 402px;
     height: 48px;
     margin-top: 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 0px;
     font-size: 20px;
     ${(props) => {

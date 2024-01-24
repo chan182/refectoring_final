@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import google from '../../assets/login/Google.png';
 import { auth, db } from '../../firebase/firebase.config';
-import { addDoc, collection } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 
 const GoogleLogin = () => {
     const nav = useNavigate();
@@ -12,16 +12,17 @@ const GoogleLogin = () => {
     const googleLoginButton = () => {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
-            .then((result) => {
+            .then(async (result) => {
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
                 const user = result.user;
                 nav('/profile');
                 try {
-                    const userDocRef = addDoc(collection(db, 'users'), {
+                    const data = {
                         uid: user.uid,
                         email: user.email
-                    });
+                    };
+                    const result = await setDoc(doc(db, 'users', user.uid), data);
                 } catch (error) {
                     const errorCode = error.code;
                     const errorMessage = error.message;
