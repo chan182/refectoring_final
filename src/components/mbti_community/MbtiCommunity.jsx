@@ -10,53 +10,65 @@ import heart from '../../assets/community/heart.svg';
 import blackheart from '../../assets/community/blackheart.svg';
 import readingGlasses from '../../assets/community/search.svg';
 import { userAtom } from '../../recoil/Atom';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { getData } from '../../api/board';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { useInfiniteQuery } from 'react-query';
+import { doc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.config';
 
 const MbtiCommunity = () => {
     const user = useRecoilValue(userAtom);
-    const [community, setCommunity] = useState([]);
-    const itemsPerPage = 20;
     const navigate = useNavigate();
-    const { isdLoading, isError, data } = useQuery({ queryKey: ['communities'], queryFn: getData });
     const [searchKeyWord, setSearchKeyWord] = useState('');
-    const [meet, setMeet] = useState([]);
 
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            searchData();
+    ///////// 데이터 가져오기 및 filter 검색
+
+    const { data } = useQuery({
+        queryKey: ['communities', searchKeyWord],
+        queryFn: getData
+    });
+
+    const filteredData = data?.filter(({ data }) => data.title.includes(searchKeyWord));
+
+    ////////////// usePaginatedQuery를 사용하여 페이지별로 데이터 가져오기
+
+    const { resolvedData, latestData, status, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery(
+        ['communities', searchKeyWord],
+        getData,
+        {
+            getNextPageParam: (lastPage) => {
+                return lastPage.page + 1;
+            }
         }
+    );
+
+    const handlePageChange = (newPage) => {
+        // 페이지 변경 함수
+        navigate(`/mbti/community?page=${newPage}`);
     };
-    const searchData = async () => {
-        const q = query(
-            collection(db, 'communities'),
-            where('title', '>=', searchKeyWord),
-            where('title', '<=', searchKeyWord + '\uf8ff')
-        );
-        const querySnapshot = await getDocs(q);
-        const initialMeet = [];
-        querySnapshot.forEach((doc) => {
-            const data = {
-                id: doc.id,
-                ...doc.data()
-            };
-            initialMeet.push(data);
+
+    const mutation = useMutation();
+
+    const handleLike = async (postId) => {
+        // Optimistic update
+        mutation.mutate(postId, {
+            onSuccess: () => {}
         });
-        setMeet(initialMeet);
     };
+    const togglelike = async () => {
+        const postRef = doc(db, 'communities', data.id);
+    };
+    // console.log(data.uid);
     return (
         <StBackGround>
             <StsearchInputWrapper>
                 <img src={readingGlasses} alt="검색창" />
                 <StsearchInput
-                    placeholder="검색어를 입력하세요"
+                    placeholder="검색어를 입력하세요 (제목)"
                     value={searchKeyWord}
                     name="searchKeyWord"
                     onChange={(e) => setSearchKeyWord(e.target.value)}
                     autoFocus
-                    onKeyUp={handleKeyDown}
                 />
             </StsearchInputWrapper>
             <StBoardTitle>자유롭게 의견을 나누고 일상을 공유해보세요</StBoardTitle>
@@ -74,7 +86,7 @@ const MbtiCommunity = () => {
                 <button>좋아요 많은 순</button>
                 <button>댓글 많은 순 </button>
             </StfilteredButton>
-            {data?.map(({ id, data }) => {
+            {filteredData?.map(({ id, data }) => {
                 return (
                     <StCardList key={id}>
                         <StCommunityCardImg
@@ -86,9 +98,12 @@ const MbtiCommunity = () => {
                         />
                         <StTitleWrapper>
                             <StCommunityTitle>{data.title} </StCommunityTitle>
-                            <StButton>
-                                <img src={heart} alt="누르지 않았을 때" />
-                                <img src={fullheart} alt="눌렀을 때" />
+                            <StButton onClick={togglelike}>
+                                {user && data?.likes.includes(user.id) ? (
+                                    <img src={fullheart} alt="눌렀을 때" />
+                                ) : (
+                                    <img src={heart} alt="누르지 않았을 때" />
+                                )}
                             </StButton>
                         </StTitleWrapper>
                         <StCommunityContent>{data.content}</StCommunityContent>
@@ -105,11 +120,7 @@ const MbtiCommunity = () => {
                                 //     toggleLike(id);
                                 // }}
                                 >
-                                    {user && data?.likes.includes(user.id) ? (
-                                        <img src={fullheart} alt="좋아요 눌린 이미지" />
-                                    ) : (
-                                        <img src={heart} alt="좋아요 안눌린 이미지" />
-                                    )}
+                                    <img src={fullheart} alt="좋아요 눌린 이미지" />
                                     {data?.likeCount}
                                 </button>
                             </StlikeInformation>
@@ -125,15 +136,15 @@ const MbtiCommunity = () => {
                     </StCardList>
                 );
             })}
-            {/* <StPagination>
-                <img src={chevronLeft} alt="" onClick={() => handlePageChange(currentPage - 1)} />
-                {[...Array(currentPage)].map((_, index) => (
-                    <button key={index} onClick={() => handlePageChange(index + 1)}>
-                        {index + 1}
-                    </button>
-                ))}
-                <img src={chevronRight} alt="" onClick={() => handlePageChange(currentPage + 1)} />
-            </StPagination> */}
+            <StPagination>
+                <button onClick={() => handlePageChange(resolvedData?.page - 1)} disabled={resolvedData?.page === 1}>
+                    이전
+                </button>
+                <span>현재 페이지: {resolvedData?.page}</span>
+                <button onClick={() => handlePageChange(resolvedData?.page + 1)} disabled={!hasNextPage || isFetching}>
+                    다음
+                </button>
+            </StPagination>
         </StBackGround>
     );
 };
@@ -232,12 +243,13 @@ const StCardList = styled.div`
     border: 1px solid #ededed;
     background: #fff;
     margin: 0 auto;
+    margin-bottom: 30px;
 `;
 
 const StCommunityCardImg = styled.img`
     display: flex;
     width: 924px;
-    height: 330px;
+    height: 350px;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
