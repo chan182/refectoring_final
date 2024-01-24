@@ -23,6 +23,7 @@ const MbtiMeeting = () => {
     const [isVisible, setIsvisible] = useState(false);
     const [meet, setMeet] = useState([]);
     const [searchKeyWord, setSearchKeyWord] = useState('');
+
     //데이터 읽기
     useEffect(() => {
         const fetchData = async () => {
@@ -40,6 +41,7 @@ const MbtiMeeting = () => {
         };
         fetchData();
     }, []);
+
     //데이터 검색
     const searchData = async () => {
         const q = query(
@@ -58,6 +60,7 @@ const MbtiMeeting = () => {
         });
         setMeet(initialMeet);
     };
+
     // 위로 올라가기 버튼
     useEffect(() => {
         const scroll = () => {
@@ -74,17 +77,21 @@ const MbtiMeeting = () => {
             window.removeEventListener('scroll', scroll);
         };
     }, []);
+
     const handleToggle = () => {
         setChecked(!isChecked);
         setChecke(false);
     };
+
     const handleToggl = () => {
         setChecke(!isChecke);
         setChecked(false);
     };
+
     const upButtonHandler = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             searchData();
@@ -208,17 +215,21 @@ const MbtiMeeting = () => {
     );
 };
 export default MbtiMeeting;
+
 const StMeeting = styled.div`
     background-color: var(--background-color);
 `;
+
 const StSearchMeet = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
 `;
+
 const StSearchImgWrap = styled.div`
     width: 75%;
 `;
+
 const StSearchImg = styled.img`
     width: 48px;
     height: 48px;
@@ -226,6 +237,7 @@ const StSearchImg = styled.img`
     top: 88px;
     left: 20px;
 `;
+
 const StSearch = styled.input`
     width: 100%;
     height: 78px;
@@ -239,10 +251,12 @@ const StSearch = styled.input`
         outline-color: var(--button-border-color);
     }
 `;
+
 const StText = styled.h1`
     font-size: 42px;
     margin: 40px 0px 180px;
 `;
+
 const StCreateWrap = styled.div`
     width: 110px;
     height: 45px;
@@ -251,6 +265,7 @@ const StCreateWrap = styled.div`
     right: 47%;
     bottom: 15%;
 `;
+
 const StCreateImg = styled.img`
     position: relative;
     width: 17px;
@@ -258,6 +273,7 @@ const StCreateImg = styled.img`
     left: 5px;
     top: 35px;
 `;
+
 const StCreateMeet = styled.button`
     width: 110px;
     height: 45px;
@@ -271,18 +287,22 @@ const StCreateMeet = styled.button`
         color: white;
     }
 `;
+
 const StSelectMeetSearchContainer = styled.div`
     width: 65%;
     margin: 0px auto;
 `;
+
 const StSelectMeetSearchText = styled.div`
     font-size: 20px;
     margin-bottom: 30px;
 `;
+
 const StSelectContainer = styled.ul`
     display: flex;
     gap: 28px;
 `;
+
 const StSelectImgWrap = styled.div`
     width: 70px;
     height: 30px;
@@ -292,15 +312,18 @@ const StSelectImgWrap = styled.div`
     border: 1px solid var(--button-border-color);
     cursor: pointer;
 `;
+
 const StSelectImg = styled.img`
     position: relative;
     bottom: 27px;
     left: 30px;
 `;
+
 const StSelect = styled.li`
     width: 60px;
     height: 20px;
 `;
+
 const StSelectMbtiImgWrap = styled.div`
     min-width: 80px;
     height: 30px;
@@ -310,23 +333,28 @@ const StSelectMbtiImgWrap = styled.div`
     border: 1px solid var(--button-border-color);
     cursor: pointer;
 `;
+
 const StSelectMbtiImg = styled.img`
     position: relative;
     bottom: 27px;
     left: 40px;
 `;
+
 const StCheckboxContainer = styled.div`
     margin: 30px auto;
     width: 65%;
 `;
+
 const StCheckboxWrap = styled.div`
     width: 97px;
     height: 30px;
     display: inline-block;
 `;
+
 const StCheckbox = styled.input`
     accent-color: var(--main-button-color);
 `;
+
 const StUpbutton = styled.button`
     position: fixed;
     width: 50px;
@@ -339,12 +367,14 @@ const StUpbutton = styled.button`
     bottom: 20%;
     right: 8%;
 `;
+
 const StMeetingContainer = styled.div`
     min-width: 822px;
     width: 70%;
     height: 5000px;
     margin: 40px auto;
 `;
+
 const StMeetingWrap = styled.div`
     width: 27%;
     aspect-ratio: 1/0.78;
@@ -353,6 +383,7 @@ const StMeetingWrap = styled.div`
     border-radius: 16px;
     border: 1px solid var(--button-border-color);
 `;
+
 const StImg = styled.img`
     width: 100%;
     aspect-ratio: 1/0.5;
@@ -360,39 +391,50 @@ const StImg = styled.img`
     border-top-right-radius: 16px;
     border-bottom: 1px solid var(--button-border-color);
 `;
+
 const StContainer = styled.div`
     margin: 4%;
 `;
+
 const StTitle = styled.div`
     margin: 0px 0px 5%;
     font-size: 18px;
 `;
+
 const StPositionDateUserContainer = styled.div`
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
 `;
+
 const StContentsImgWrap = styled.span`
     width: 40%;
 `;
+
 const StContentsPositionImg = styled.img`
     width: 13px;
 `;
+
 const StContentsDateImg = styled.img`
     width: 13px;
 `;
+
 const StContentsUserImg = styled.img`
     width: 13px;
 `;
+
 const StContentsUsersImg = styled.img`
     width: 13px;
 `;
+
 const StContentsAgeImg = styled.img`
     width: 13px;
 `;
+
 const StContents = styled.span`
     font-size: 14px;
 `;
+
 const StMeetingLink = styled(Link)`
     text-decoration: none;
     color: inherit;
