@@ -62,7 +62,7 @@ const Signup = () => {
                 };
                 const result = await setDoc(doc(db, 'users', user.uid), data);
 
-                console.log(result);
+                console.log('result', result);
                 Swal.fire({
                     title: '회원가입 성공!',
                     text: '나의 프로필 정보를 입력한 후에 커뮤니티 활동을 시작해보세요 !',
