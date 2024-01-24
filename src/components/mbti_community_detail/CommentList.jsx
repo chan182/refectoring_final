@@ -9,9 +9,10 @@ import upVector from '../../assets/community/Vector-up.svg';
 import filteredImoge from '../../assets/community/align-left.svg';
 import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+
 import { addComment, deleteComment, getComments, switchComment } from '../../api/comment';
 import fullheart from '../../assets/community/fullheart.svg';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
     const [showButtons, setShowButtons] = useState(false);

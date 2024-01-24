@@ -5,11 +5,12 @@ import heart from '../../assets/community/blackheart.svg';
 import eyeImoge from '../../assets/community/eyeImoge.svg';
 import redheart from '../../assets/community/heart.svg';
 import messageImoge from '../../assets/community/messageImoge.svg';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { communityDetailGetDate, deleteBoard } from '../../api/boardDetail';
+
+import { communityDetailGetDate, deleteBoard, updateBoard } from '../../api/boardDetail';
 import { deleteComment } from '../../api/comment';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../recoil/Atom';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 const MbtiComunityDetail = () => {
     const user = useRecoilValue(userAtom);
@@ -17,9 +18,11 @@ const MbtiComunityDetail = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
+    const [content, setContent] = useState('');
+    const [title, setTitle] = useState('');
 
     const { isLoading, isError, data } = useQuery({
-        queryKey: ['communityDetail'],
+        queryKey: ['communities'],
         queryFn: () => communityDetailGetDate(params.id)
     });
 
@@ -38,7 +41,18 @@ const MbtiComunityDetail = () => {
         DeleteBoardMutation.mutate(params.id);
     };
 
-    const handleUpdateCommunity = () => {};
+    // 수정하기
+
+    const UpdateMutation = useMutation((paramsId, title) => updateBoard(paramsId, title), {
+        onSuccess: (data) => {
+            queryClient.invalidateQueries('communities');
+        }
+    });
+
+    const handleUpdateCommunity = async (paramsId) => {
+        console.log(title);
+        UpdateMutation.mutate(paramsId, title);
+    };
 
     // 데이터 로딩 !
 
@@ -49,12 +63,21 @@ const MbtiComunityDetail = () => {
     if (isError) {
         return <div>Error loading data</div>;
     }
-    console.log(data);
+
     return (
         <StCardWrapper>
             <StCardImage src={data?.communityImage} alt="컨텐츠의 사진" />
             <StTitleWrapper>
-                {editMode ? <StInput /> : <StCardTitle>{data?.title}</StCardTitle>}
+                {editMode ? (
+                    <StInput
+                        value={title}
+                        onChange={(e) => {
+                            setTitle(e.target.value);
+                        }}
+                    />
+                ) : (
+                    <StCardTitle>{data?.title}</StCardTitle>
+                )}
 
                 <img src={redheart} alt="" />
             </StTitleWrapper>
@@ -84,7 +107,9 @@ const MbtiComunityDetail = () => {
                         <Stbutton
                             onClick={() => {
                                 setEditMode(!editMode);
-                                handleUpdateCommunity();
+                                setContent(data?.content);
+                                setTitle(data?.title);
+                                console.log();
                             }}
                         >
                             글 수정
@@ -96,10 +121,27 @@ const MbtiComunityDetail = () => {
                 )}
             </StButtonWrapper>
             <StHr />
-            <StContent>{editMode ? <StInput /> : <StCardTitle>{data?.content}</StCardTitle>}</StContent>
+            <StContent>
+                {editMode ? (
+                    <StInput
+                        value={content}
+                        onChange={(e) => {
+                            setContent(e.target.value);
+                        }}
+                    />
+                ) : (
+                    <StCardTitle>{data?.content}</StCardTitle>
+                )}
+            </StContent>
             {editMode ? (
                 <>
-                    <button>등록하기</button>
+                    <button
+                        onClick={() => {
+                            handleUpdateCommunity(params.id);
+                        }}
+                    >
+                        등록하기
+                    </button>
                     <button
                         onClick={() => {
                             setEditMode(!editMode);

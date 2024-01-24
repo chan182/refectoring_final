@@ -93,7 +93,10 @@ export default function UpdateTest() {
                         }}
                     ></StcontentInput>
                     <label htmlFor="inputFile">
-                        <StImageInput type="file" id="inputFile" accept="image/*" onChange={handleFileUpload} />
+                        {!imageFile && (
+                            <StImageInput type="file" id="inputFile" accept="image/*" onChange={handleFileUpload} />
+                        )}
+                        <img src="backImage" alt="" />
                         {imageFile && (
                             <div>
                                 <StImage src={imageFile} />
@@ -155,7 +158,14 @@ const StTitleInput = styled.input`
     background-color: var(--light-gray);
 `;
 
-const StcontentInput = styled.input``;
+const StcontentInput = styled.textarea`
+    padding: 10px;
+    height: 500px;
+    border: none;
+    height: px;
+    border-radius: 16px;
+    background: #f8f8f8;
+`;
 
 const StImage = styled.img`
     width: 100px;
