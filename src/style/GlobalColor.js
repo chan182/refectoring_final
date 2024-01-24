@@ -14,6 +14,7 @@ const GlobalColor = createGlobalStyle`
         --bold-gray: #73777B;
         --light-gray: #F8F8F8;
         --placeholder-color: #969696;
+        --search-background-color: #f5f5f5
     }
 `;
 

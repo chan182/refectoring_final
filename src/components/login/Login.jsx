@@ -90,18 +90,14 @@ const Login = () => {
                     onChange={(e) => setUserPw(e.target.value)}
                     required
                 ></StUserPw>
-
-                <StPwChange
-                    onClick={() => {
-                        navigate('/pwchange');
-                    }}
-                >
-                    비밀번호 변경
-                </StPwChange>
-                <StLoginSignUpWarp>
-                    <StLoginButton disabled={!userId || !userPw} onClick={handleClickLoginButton}>
-                        로그인
-                    </StLoginButton>
+                <StPwChangeSignUpButtonWrap>
+                    <StPwChange
+                        onClick={() => {
+                            navigate('/pwchange');
+                        }}
+                    >
+                        비밀번호 변경
+                    </StPwChange>
                     <StSignUpButton
                         onClick={() => {
                             navigate('/signup');
@@ -109,6 +105,12 @@ const Login = () => {
                     >
                         회원가입
                     </StSignUpButton>
+                </StPwChangeSignUpButtonWrap>
+
+                <StLoginSignUpWarp>
+                    <StLoginButton disabled={!userId || !userPw} onClick={handleClickLoginButton}>
+                        로그인
+                    </StLoginButton>
                 </StLoginSignUpWarp>
                 <StStartText>SNS로 간편하게 시작하기</StStartText>
                 <StExternalLoginWrap>
@@ -136,24 +138,24 @@ const StLoginWrap = styled.div`
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    width: 450px;
-    height: 600px;
+    width: 468px;
+    height: 622px;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 16px;
     border: 1px solid var(--content-border-color);
 `;
 
 const StLogo = styled.img`
     width: 408px;
-    margin: 20px auto;
+    margin: 58px auto 76px;
 `;
 
 const StUserId = styled.input`
     width: 402px;
     height: 47px;
-    margin: 10px auto 0px;
+    margin: 0px auto;
     outline: none;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 1px solid var(--main-button-color);
     background-color: var(--light-gray);
     font-size: large;
@@ -163,17 +165,32 @@ const StUserId = styled.input`
 const StUserPw = styled.input`
     width: 402px;
     height: 47px;
-    margin: 20px auto 0px;
+    margin: 12px auto 0px;
     outline: none;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 0px;
     font-size: large;
     background-color: var(--light-gray);
 `;
 
+const StPwChangeSignUpButtonWrap = styled.div`
+    width: 440px;
+    margin: 0px auto;
+    display: flex;
+    justify-content: space-between;
+`;
 const StPwChange = styled.button`
     text-decoration: underline;
-    margin: 10px 0px 40px 20px;
+    margin: 14px 0px 48px 20px;
+    color: var(--bold-gray);
+    cursor: pointer;
+    width: 90px;
+    height: 20px;
+`;
+
+const StSignUpButton = styled.button`
+    text-decoration: underline;
+    margin: 14px 0px 48px 20px;
     color: var(--bold-gray);
     cursor: pointer;
     width: 90px;
@@ -188,9 +205,9 @@ const StLoginSignUpWarp = styled.div`
 `;
 
 const StLoginButton = styled.button`
-    width: 196px;
+    width: 402px;
     height: 48px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 0px;
     font-size: 20px;
     cursor: pointer;
@@ -207,32 +224,16 @@ const StLoginButton = styled.button`
     }}
 `;
 
-const StSignUpButton = styled.button`
-    width: 196px;
-    height: 48px;
-    border-radius: 5px;
-    border: 0px;
-    font-size: 20px;
-    cursor: pointer;
-    background-color: var(--light-gray);
-    color: var(--bold-gray);
-
-    &:hover {
-        background-color: var(--main-button-color);
-        color: white;
-    }
-`;
-
 const StStartText = styled.div`
     text-align: center;
-    margin-top: 60px;
+    margin-top: 43px;
     user-select: none;
 `;
 
 const StExternalLoginWrap = styled.div`
     width: 106px;
     height: 42px;
-    margin: 20px auto;
+    margin: 18px auto;
     display: flex;
     gap: 30px;
 `;
