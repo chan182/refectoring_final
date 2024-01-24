@@ -2,11 +2,6 @@
 // Recoil 상태 정의
 import { atom } from 'recoil';
 
-export const dropState = atom({
-    key: 'dropState',
-    default: false
-});
-
 export const tagCategoryState = atom({
     key: 'tagCategoryState',
     default: ''

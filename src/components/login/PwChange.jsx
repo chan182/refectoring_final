@@ -1,7 +1,7 @@
 import { sendPasswordResetEmail } from 'firebase/auth';
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
-import logo from '../../assets/home/logo.png';
+import logo from '../../assets/home/footerLogo.png';
 import { auth } from '../../firebase/firebase.config';
 
 const PwChange = () => {

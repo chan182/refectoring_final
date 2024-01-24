@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import dropArrow from '../../assets/home/dropArrow.png';
 import foldArrow from '../../assets/home/foldArrow.png';
 
-const ZoneCheckedDropTag = ({
+const MbtiCheckedDropTag = ({
     tagCategory,
     setTagCategory,
     setSelectedTags,
@@ -40,46 +40,28 @@ const ZoneCheckedDropTag = ({
                     <input type="checkbox"></input>
                     <StP>전체</StP>
                     <input type="checkbox"></input>
-                    <StP>서울</StP>
+                    <StP>E</StP>
                     <input type="checkbox"></input>
-                    <StP>인천</StP>
+                    <StP>I</StP>
                     <input type="checkbox"></input>
-                    <StP>대전</StP>
+                    <StP>N</StP>
                     <input type="checkbox"></input>
-                    <StP>광주</StP>
+                    <StP>S</StP>
                     <input type="checkbox"></input>
-                    <StP>대구</StP>
+                    <StP>F</StP>
                     <input type="checkbox"></input>
-                    <StP>부산</StP>
+                    <StP>T</StP>
                     <input type="checkbox"></input>
-                    <StP>울산</StP>
-                </StCheckbox>
-                <StCheckbox>
+                    <StP>P</StP>
                     <input type="checkbox"></input>
-                    <StP>경기</StP>
-                    <input type="checkbox"></input>
-                    <StP>강원</StP>
-                    <input type="checkbox"></input>
-                    <StP>충북</StP>
-                    <input type="checkbox"></input>
-                    <StP>충남</StP>
-                    <input type="checkbox"></input>
-                    <StP>전북</StP>
-                    <input type="checkbox"></input>
-                    <StP>전남</StP>
-                    <input type="checkbox"></input>
-                    <StP>경북</StP>
-                    <input type="checkbox"></input>
-                    <StP>경남</StP>
-                    <input type="checkbox"></input>
-                    <StP>제주</StP>
+                    <StP>J</StP>
                 </StCheckbox>
             </StContainer>
         </>
     );
 };
 
-export default ZoneCheckedDropTag;
+export default MbtiCheckedDropTag;
 
 const StContainer = styled.div`
     //height: 333px;

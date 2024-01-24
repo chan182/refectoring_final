@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import dropArrow from '../../assets/home/dropArrow.png';
 import foldArrow from '../../assets/home/foldArrow.png';
 
-const ZoneCheckedDropTag = ({
+const AgeCheckedDropTag = ({
     tagCategory,
     setTagCategory,
     setSelectedTags,
@@ -40,46 +40,22 @@ const ZoneCheckedDropTag = ({
                     <input type="checkbox"></input>
                     <StP>전체</StP>
                     <input type="checkbox"></input>
-                    <StP>서울</StP>
+                    <StP>10대</StP>
                     <input type="checkbox"></input>
-                    <StP>인천</StP>
+                    <StP>20대</StP>
                     <input type="checkbox"></input>
-                    <StP>대전</StP>
+                    <StP>30대</StP>
                     <input type="checkbox"></input>
-                    <StP>광주</StP>
+                    <StP>40대</StP>
                     <input type="checkbox"></input>
-                    <StP>대구</StP>
-                    <input type="checkbox"></input>
-                    <StP>부산</StP>
-                    <input type="checkbox"></input>
-                    <StP>울산</StP>
-                </StCheckbox>
-                <StCheckbox>
-                    <input type="checkbox"></input>
-                    <StP>경기</StP>
-                    <input type="checkbox"></input>
-                    <StP>강원</StP>
-                    <input type="checkbox"></input>
-                    <StP>충북</StP>
-                    <input type="checkbox"></input>
-                    <StP>충남</StP>
-                    <input type="checkbox"></input>
-                    <StP>전북</StP>
-                    <input type="checkbox"></input>
-                    <StP>전남</StP>
-                    <input type="checkbox"></input>
-                    <StP>경북</StP>
-                    <input type="checkbox"></input>
-                    <StP>경남</StP>
-                    <input type="checkbox"></input>
-                    <StP>제주</StP>
+                    <StP>50대 이상</StP>
                 </StCheckbox>
             </StContainer>
         </>
     );
 };
 
-export default ZoneCheckedDropTag;
+export default AgeCheckedDropTag;
 
 const StContainer = styled.div`
     //height: 333px;
