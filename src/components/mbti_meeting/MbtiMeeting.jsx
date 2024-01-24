@@ -7,6 +7,11 @@ import produce from '../../assets/mbtiMeet/produce.png';
 import search from '../../assets/mbtiMeet/search.png';
 import { db } from '../../firebase/firebase.config';
 import { Link } from 'react-router-dom';
+import positionImg from '../../assets/mbtiMeet/positionimg.png';
+import dateImg from '../../assets/mbtiMeet/dateimg.png';
+import userImg from '../../assets/mbtiMeet/userimg.png';
+import usersImg from '../../assets/mbtiMeet/usersimg.png';
+import ageImg from '../../assets/mbtiMeet/ageimg.png';
 
 const MbtiMeeting = () => {
     // const user = useRecoilState(userAtom);
@@ -100,7 +105,7 @@ const MbtiMeeting = () => {
         }
     };
     return (
-        <>
+        <StMeeting>
             <StSearchMeet>
                 <StSearchImgWrap>
                     <StSearchImg src={search} alt="search image" />
@@ -114,14 +119,6 @@ const MbtiMeeting = () => {
                     ></StSearch>
                 </StSearchImgWrap>
                 <StText>자유롭게 모임을 만들고 가입해 활동해보세요!</StText>
-                <StCreateWrap
-                    onClick={() => {
-                        nav('/mbti/meeting/create');
-                    }}
-                >
-                    <StCreateImg src={produce} alt="" />
-                    <StCreateMeet>모임 생성하기</StCreateMeet>
-                </StCreateWrap>
             </StSearchMeet>
             <StSelectMeetSearchContainer>
                 <StSelectMeetSearchText>원하는 조건으로 모임 찾기</StSelectMeetSearchText>
@@ -170,6 +167,14 @@ const MbtiMeeting = () => {
                     </>
                 )}
             </StCheckboxContainer>
+            <StCreateWrap
+                onClick={() => {
+                    nav('/mbti/meeting/create');
+                }}
+            >
+                <StCreateImg src={produce} alt="" />
+                <StCreateMeet>모임 생성하기</StCreateMeet>
+            </StCreateWrap>
             <StMeetingContainer>
                 {meet.map((meet) => (
                     <StMeetingLink to={`/mbti/meeting/detail/${meet.id}`} key={meet.id}>
@@ -179,27 +184,49 @@ const MbtiMeeting = () => {
                                 <StTitle>
                                     {meet.title}/{meet.mbti}
                                 </StTitle>
-                                <div>
-                                    <StContents>{meet.position}</StContents>
-                                    <StContents>일정 : {meet.date}</StContents>
-                                    <StContents>인원 : {meet.person}</StContents>
-                                </div>
-                                <div>
-                                    <StContents>성별 / {meet.gender}</StContents>
-                                    <StContents>나이 / {meet.age}</StContents>
-                                </div>
+                                <StPositionDateUserContainer>
+                                    <StContentsImgWrap>
+                                        <StContentsPositionImg src={positionImg}></StContentsPositionImg>
+                                        <StContents>{meet.position}</StContents>
+                                    </StContentsImgWrap>
+                                    <StContentsImgWrap>
+                                        <StContentsDateImg src={dateImg}></StContentsDateImg>
+                                        <StContents>일정 : {meet.date}</StContents>
+                                    </StContentsImgWrap>
+                                    <StContentsImgWrap>
+                                        <StContentsUserImg src={userImg} alt="" />
+                                        <StContents>인원 :0 / {meet.person}</StContents>
+                                    </StContentsImgWrap>
+                                </StPositionDateUserContainer>
+                                <StPositionDateUserContainer>
+                                    <StContentsImgWrap>
+                                        <StContentsUsersImg src={usersImg} alt="" />
+                                        <StContents>성별 / {meet.gender}</StContents>
+                                    </StContentsImgWrap>
+                                    <StContentsImgWrap>
+                                        <StContentsAgeImg src={ageImg} alt="" />
+                                        <StContents>나이 / {meet.age}</StContents>
+                                    </StContentsImgWrap>
+                                    <StContentsImgWrap>
+                                        <StContentsAgeImg></StContentsAgeImg>
+                                        <StContents></StContents>
+                                    </StContentsImgWrap>
+                                </StPositionDateUserContainer>
                             </StContainer>
                         </StMeetingWrap>
                     </StMeetingLink>
                 ))}
+                <div>{isVisible && <StUpbutton onClick={upButtonHandler}>↑</StUpbutton>}</div>
             </StMeetingContainer>
-            <div>{isVisible && <StUpbutton onClick={upButtonHandler}>위</StUpbutton>}</div>
-        </>
+        </StMeeting>
     );
 };
 
 export default MbtiMeeting;
 
+const StMeeting = styled.div`
+    background-color: var(--background-color);
+`;
 const StSearchMeet = styled.div`
     display: flex;
     align-items: center;
@@ -211,28 +238,30 @@ const StSearchImgWrap = styled.div`
 `;
 
 const StSearchImg = styled.img`
-    width: 35px;
-    height: 35px;
+    width: 48px;
+    height: 48px;
     position: relative;
-    top: 60px;
-    user-select: none;
+    top: 88px;
+    left: 20px;
 `;
 
 const StSearch = styled.input`
     width: 100%;
-    height: 40px;
+    height: 78px;
     margin: 20px auto;
-    padding-left: 40px;
+    padding-left: 70px;
     border: 0px;
-    font-size: 20px;
+    border-radius: 50px;
+    font-size: 22px;
+    background-color: var(--search-background-color);
     &:focus {
         outline-color: var(--button-border-color);
     }
 `;
 
 const StText = styled.h1`
-    font-size: 25px;
-    margin: 40px 0px 88px;
+    font-size: 42px;
+    margin: 40px 0px 180px;
 `;
 
 const StCreateWrap = styled.div`
@@ -286,7 +315,7 @@ const StSelectImgWrap = styled.div`
     height: 30px;
     padding-top: 8px;
     padding-left: 8px;
-    border-radius: 5px;
+    border-radius: 6px;
     border: 1px solid var(--button-border-color);
     cursor: pointer;
 `;
@@ -307,7 +336,7 @@ const StSelectMbtiImgWrap = styled.div`
     height: 30px;
     padding-top: 8px;
     padding-left: 8px;
-    border-radius: 5px;
+    border-radius: 6px;
     border: 1px solid var(--button-border-color);
     cursor: pointer;
 `;
@@ -339,7 +368,7 @@ const StUpbutton = styled.button`
     height: 50px;
     background-color: var(--main-button-color);
     color: white;
-    font-size: larger;
+    font-size: 30px;
     font-weight: light;
     border-radius: 30px;
     bottom: 20%;
@@ -356,17 +385,17 @@ const StMeetingContainer = styled.div`
 const StMeetingWrap = styled.div`
     width: 27%;
     aspect-ratio: 1/0.78;
-    margin: 0px 52px 60px 0px;
+    margin: 0px 3% 60px 3%;
     display: inline-block;
-    border-radius: 10px;
+    border-radius: 16px;
     border: 1px solid var(--button-border-color);
 `;
 
 const StImg = styled.img`
     width: 100%;
     aspect-ratio: 1/0.5;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
     border-bottom: 1px solid var(--button-border-color);
 `;
 
@@ -379,8 +408,35 @@ const StTitle = styled.div`
     font-size: 18px;
 `;
 
+const StPositionDateUserContainer = styled.div`
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+`;
+const StContentsImgWrap = styled.span`
+    width: 40%;
+`;
+
+const StContentsPositionImg = styled.img`
+    width: 13px;
+`;
+
+const StContentsDateImg = styled.img`
+    width: 13px;
+`;
+
+const StContentsUserImg = styled.img`
+    width: 13px;
+`;
+
+const StContentsUsersImg = styled.img`
+    width: 13px;
+`;
+
+const StContentsAgeImg = styled.img`
+    width: 13px;
+`;
 const StContents = styled.span`
-    margin-right: 5%;
     font-size: 14px;
 `;
 
