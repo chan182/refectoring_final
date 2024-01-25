@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import chevronLeft from '../../assets/community/chevron-left.svg';
 import chevronRight from '../../assets/community/chevron-right.svg';
@@ -10,53 +10,85 @@ import heart from '../../assets/community/heart.svg';
 import blackheart from '../../assets/community/blackheart.svg';
 import readingGlasses from '../../assets/community/search.svg';
 import { userAtom } from '../../recoil/Atom';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { getData } from '../../api/board';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { useInfiniteQuery } from 'react-query';
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.config';
 
 const MbtiCommunity = () => {
-    const user = useRecoilValue(userAtom);
-    const [community, setCommunity] = useState([]);
-    const itemsPerPage = 20;
-    const navigate = useNavigate();
-    const { isdLoading, isError, data } = useQuery({ queryKey: ['communities'], queryFn: getData });
-    const [searchKeyWord, setSearchKeyWord] = useState('');
-    const [meet, setMeet] = useState([]);
+    const user = useRecoilState(userAtom);
 
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            searchData();
+    const navigate = useNavigate();
+    const [searchKeyWord, setSearchKeyWord] = useState('');
+
+    ///////// 데이터 가져오기 및 filter 검색
+
+    const { data } = useQuery({
+        queryKey: ['communities', searchKeyWord],
+        queryFn: getData
+    });
+
+    const filteredData = data?.filter(({ data }) => data.title.includes(searchKeyWord));
+
+    ////////////// usePaginatedQuery를 사용하여 페이지별로 데이터 가져오기
+
+    const { resolvedData, latestData, status, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery(
+        ['communities', searchKeyWord],
+        getData,
+        {
+            getNextPageParam: (lastPage) => {
+                return lastPage.page + 1;
+            }
+        }
+    );
+
+    // const handlePageChange = (newPage) => {
+    //     // 페이지 변경 함수
+    //     navigate(`/mbti/community?page=${newPage}`);
+    // };
+
+    // 좋아요 기능
+    const mutation = useMutation();
+
+    const handleLike = async (postId) => {
+        // Optimistic update
+        mutation.mutate(postId, {
+            onSuccess: () => {}
+        });
+    };
+
+    const togglelike = async (id, data) => {
+        console.log(id);
+        console.log(data);
+        console.log(user[0].uid);
+        const postRef = doc(db, 'communities', id);
+
+        if (user[0].uid && data.likes.includes(user[0].uid)) {
+            // 사용자가 좋아요를 미리 한 경우 => 좋아요를 취소한다.
+            await updateDoc(postRef, {
+                likes: arrayRemove(user[0].uid),
+                likecount: data.likecount ? data.likecount - 1 : 0
+            });
+        } else {
+            // 사용자가 좋아요를 하지 않은 경우 => 좋아요를 추가한다.
+            await updateDoc(postRef, {
+                likes: arrayUnion(user[0].uid),
+                likecount: data.likecount ? data.likecount + 1 : 1
+            });
         }
     };
-    const searchData = async () => {
-        const q = query(
-            collection(db, 'communities'),
-            where('title', '>=', searchKeyWord),
-            where('title', '<=', searchKeyWord + '\uf8ff')
-        );
-        const querySnapshot = await getDocs(q);
-        const initialMeet = [];
-        querySnapshot.forEach((doc) => {
-            const data = {
-                id: doc.id,
-                ...doc.data()
-            };
-            initialMeet.push(data);
-        });
-        setMeet(initialMeet);
-    };
+
     return (
         <StBackGround>
             <StsearchInputWrapper>
                 <img src={readingGlasses} alt="검색창" />
                 <StsearchInput
-                    placeholder="검색어를 입력하세요"
+                    placeholder="검색어를 입력하세요 (제목)"
                     value={searchKeyWord}
                     name="searchKeyWord"
                     onChange={(e) => setSearchKeyWord(e.target.value)}
                     autoFocus
-                    onKeyUp={handleKeyDown}
                 />
             </StsearchInputWrapper>
             <StBoardTitle>자유롭게 의견을 나누고 일상을 공유해보세요</StBoardTitle>
@@ -74,7 +106,7 @@ const MbtiCommunity = () => {
                 <button>좋아요 많은 순</button>
                 <button>댓글 많은 순 </button>
             </StfilteredButton>
-            {data?.map(({ id, data }) => {
+            {filteredData?.map(({ id, data }) => {
                 return (
                     <StCardList key={id}>
                         <StCommunityCardImg
@@ -86,32 +118,29 @@ const MbtiCommunity = () => {
                         />
                         <StTitleWrapper>
                             <StCommunityTitle>{data.title} </StCommunityTitle>
-                            <StButton>
-                                <img src={heart} alt="누르지 않았을 때" />
-                                <img src={fullheart} alt="눌렀을 때" />
+                            <StButton
+                                onClick={() => {
+                                    togglelike(id, data);
+                                }}
+                            >
+                                {user && data?.likes?.includes(user[0].uid) ? (
+                                    <img src={fullheart} alt="눌렀을 때" />
+                                ) : (
+                                    <img src={heart} alt="누르지 않았을 때" />
+                                )}
                             </StButton>
                         </StTitleWrapper>
                         <StCommunityContent>{data.content}</StCommunityContent>
                         <StuserInfoWrapper>
                             <StUserInformation>
                                 <StprofileImg src={data.ImageUrl} alt="" />
-                                <div>
+                                <StlikeNumber>
                                     {data.nickname} / {data.mbti}
-                                </div>
+                                </StlikeNumber>
                             </StUserInformation>
                             <StlikeInformation>
-                                <button
-                                // onClick={() => {
-                                //     toggleLike(id);
-                                // }}
-                                >
-                                    {user && data?.likes.includes(user.id) ? (
-                                        <img src={fullheart} alt="좋아요 눌린 이미지" />
-                                    ) : (
-                                        <img src={heart} alt="좋아요 안눌린 이미지" />
-                                    )}
-                                    {data?.likeCount}
-                                </button>
+                                <img src={blackheart} alt="좋아요 눌린 이미지" />
+                                {data?.likecount || 0}
                             </StlikeInformation>
                             {/* <StMessageInformation>
                                 <img src={messageImoge} alt="" />
@@ -126,13 +155,13 @@ const MbtiCommunity = () => {
                 );
             })}
             {/* <StPagination>
-                <img src={chevronLeft} alt="" onClick={() => handlePageChange(currentPage - 1)} />
-                {[...Array(currentPage)].map((_, index) => (
-                    <button key={index} onClick={() => handlePageChange(index + 1)}>
-                        {index + 1}
-                    </button>
-                ))}
-                <img src={chevronRight} alt="" onClick={() => handlePageChange(currentPage + 1)} />
+                <button onClick={() => handlePageChange(resolvedData?.page - 1)} disabled={resolvedData?.page === 1}>
+                    이전
+                </button>
+                <span>현재 페이지: {resolvedData?.page}</span>
+                <button onClick={() => handlePageChange(resolvedData?.page + 1)} disabled={!hasNextPage || isFetching}>
+                    다음
+                </button>
             </StPagination> */}
         </StBackGround>
     );
@@ -232,12 +261,13 @@ const StCardList = styled.div`
     border: 1px solid #ededed;
     background: #fff;
     margin: 0 auto;
+    margin-bottom: 30px;
 `;
 
 const StCommunityCardImg = styled.img`
     display: flex;
     width: 924px;
-    height: 330px;
+    height: 350px;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -257,8 +287,7 @@ const StTitleWrapper = styled.div`
 
 const StCommunityTitle = styled.div`
     color: #000;
-
-    font-size: 20px;
+    font-size: 25px;
     font-style: normal;
     font-weight: 500;
     line-height: 120%;
@@ -305,6 +334,14 @@ const StprofileImg = styled.img`
     stroke-width: 1px;
     stroke: #8d8d8d;
     border-radius: 50%;
+`;
+
+const StlikeNumber = styled.div`
+    color: #4e4e4e;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%;
 `;
 
 const StlikeInformation = styled.div`

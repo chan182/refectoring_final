@@ -34,8 +34,6 @@ const MbtiMeetingCreate = () => {
                                 <StDetailText2 placeholder="모임에 대해 간단하게 소개해주세요."></StDetailText2>
                             </StDetailTextBox2>
                         </StTextContainer>
-                        <StCreateButton>모임 생성하기</StCreateButton>
-                        <StCancelButton>모임 생성취소</StCancelButton>
                     </StContentBox>
                 </StTopContainer>
             </StTopContainerBox>
@@ -171,38 +169,6 @@ const StDetailText2 = styled.input`
     color: #4e4e4e;
     border: none;
     border-radius: 0.5rem;
-`;
-
-const StCreateButton = styled.button`
-    font-size: 20px;
-    width: 196px;
-    height: 48px;
-    margin-left: 53px;
-    margin-top: -50px;
-    background-color: var(--main-button-color);
-    color: white;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-`;
-
-const StCancelButton = styled.button`
-    font-size: 20px;
-    width: 196px;
-    height: 48px;
-    margin-left: 10px;
-    margin-top: -50px;
-    background-color: #f8f8f8;
-    color: #888888;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-
-    &:hover {
-        transition: ease-in-out 0.2s;
-        background-color: var(--main-button-color);
-        color: #fff;
-    }
 `;
 
 const StTitle = styled.p`
