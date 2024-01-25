@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { createMeetingState } from '../../recoil/recoilAtoms';
 
-const MbtiMeetingCreate = () => {
+const MbtiMeetingCreateInfo = () => {
     const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
 
     console.log('newMeeting', newMeeting);
@@ -139,7 +139,7 @@ const MbtiMeetingCreate = () => {
     );
 };
 
-export default MbtiMeetingCreate;
+export default MbtiMeetingCreateInfo;
 
 const StTopContainerBox = styled.div`
     margin-top: 68px;
