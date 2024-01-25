@@ -1,36 +1,34 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import {
-    meetingRepreImgState,
-    meetingNameState,
-    meetingManagerNameState,
-    meetingLimitPeopleState,
-    meetingScheduleState,
-    meetingKakaoUrlState,
-    meetingOneLineIntroState
-} from '../../recoil/recoilAtoms';
+import { createMeetingState } from '../../recoil/recoilAtoms';
 
 const MbtiMeetingCreate = () => {
-    const [meetingRepreImg, setMeetingRepreImg] = useRecoilState(meetingRepreImgState);
-    const [meetingName, setMeetingName] = useRecoilState(meetingNameState);
-    const [meetingManagerName, setMeetingManagerName] = useRecoilState(meetingManagerNameState);
-    const [meetingLimitPeople, setMeetingLimitPeople] = useRecoilState(meetingLimitPeopleState);
-    const [meetingSchedule, setMeetingSchedule] = useRecoilState(meetingScheduleState);
-    const [meetingKakaoUrl, setmeetingKakaoUrl] = useRecoilState(meetingKakaoUrlState);
-    const [meetingOneLineIntro, setmeetingOneLineIntro] = useRecoilState(meetingOneLineIntroState);
+    const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
+
+    console.log('newMeeting', newMeeting);
 
     const imageInputRef = useRef(null);
-    const handleImageChange = (event) => {
+    const handleImageChange = async (event) => {
         const selectedImage = event.target.files[0];
-        if (selectedImage) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const imageDataURL = e.target.result;
-                setMeetingRepreImg(imageDataURL);
+        console.log('selectedImage : ', selectedImage);
+
+        const fileReader = new FileReader();
+
+        const readDataURL = new Promise((resolve, reject) => {
+            fileReader.onloadend = (e) => {
+                resolve(e.currentTarget.result);
             };
-            reader.readAsDataURL(selectedImage);
-        }
+            fileReader.onerror = reject;
+        });
+
+        fileReader.readAsDataURL(selectedImage);
+        const dataURL = await readDataURL;
+
+        setNewMeeting((prevNewMeeting) => ({
+            ...prevNewMeeting,
+            repreImg: dataURL
+        }));
     };
 
     return (
@@ -39,7 +37,11 @@ const MbtiMeetingCreate = () => {
             <StTopContainer>
                 <StImgBox>
                     <StImg>
-                        {meetingRepreImg ? <img src={meetingRepreImg} alt="선택된 이미지" /> : <StUnselectedImg />}
+                        {newMeeting.repreImg ? (
+                            <img src={newMeeting.repreImg} alt="선택된 이미지" />
+                        ) : (
+                            <StUnselectedImg />
+                        )}
                         <StImageContainer
                             type="file"
                             ref={imageInputRef}
@@ -55,14 +57,26 @@ const MbtiMeetingCreate = () => {
                                 모임 이름
                                 <StDetailText
                                     placeholder="모임의 이름을 입력해주세요."
-                                    onChange={(e) => setMeetingName(e.target.value)}
+                                    value={newMeeting.name || ''}
+                                    onChange={(e) =>
+                                        setNewMeeting((prevNewMeeting) => ({
+                                            ...prevNewMeeting,
+                                            name: e.target.value
+                                        }))
+                                    }
                                 ></StDetailText>
                             </StDetailTextBox>
                             <StDetailTextBox>
                                 모집 관리자
                                 <StDetailText
                                     placeholder="모임의 관리자 이름을 입력해주세요."
-                                    onChange={(e) => setMeetingManagerName(e.target.value)}
+                                    value={newMeeting.managerName || ''}
+                                    onChange={(e) =>
+                                        setNewMeeting((prevNewMeeting) => ({
+                                            ...prevNewMeeting,
+                                            managerName: e.target.value
+                                        }))
+                                    }
                                 ></StDetailText>
                             </StDetailTextBox>
                         </StTextContainerBox>
@@ -71,27 +85,51 @@ const MbtiMeetingCreate = () => {
                                 모임 정원
                                 <StDetailText
                                     placeholder="모임의 정원을 입력해주세요. (ex. 10명)"
-                                    onChange={(e) => setMeetingLimitPeople(e.target.value)}
+                                    value={newMeeting.limitPeople || ''}
+                                    onChange={(e) =>
+                                        setNewMeeting((prevNewMeeting) => ({
+                                            ...prevNewMeeting,
+                                            limitPeople: e.target.value
+                                        }))
+                                    }
                                 ></StDetailText>
                             </StDetailTextBox>
                             <StDetailTextBox>
                                 모임 일정
                                 <StDetailText
                                     placeholder="모임의 일정을 입력해주세요. (ex. 주 5회)"
-                                    onChange={(e) => setMeetingSchedule(e.target.value)}
+                                    value={newMeeting.schedule || ''}
+                                    onChange={(e) =>
+                                        setNewMeeting((prevNewMeeting) => ({
+                                            ...prevNewMeeting,
+                                            schedule: e.target.value
+                                        }))
+                                    }
                                 ></StDetailText>
                             </StDetailTextBox>
                         </StTextContainerBox>
                         <StDetailTextBox3>1:1 오픈 채팅방 만드는 방법</StDetailTextBox3>
                         <StDetailText3
                             placeholder="카카오톡 오픈채팅방의 URL을 입력해주세요."
-                            onChange={(e) => setmeetingKakaoUrl(e.target.value)}
+                            value={newMeeting.kakaoUrl || ''}
+                            onChange={(e) =>
+                                setNewMeeting((prevNewMeeting) => ({
+                                    ...prevNewMeeting,
+                                    kakaoUrl: e.target.value
+                                }))
+                            }
                         ></StDetailText3>
                         <StDetailTextBox2>
                             모임 한줄 소개
                             <StDetailText2
                                 placeholder="모임에 대해 간단하게 소개해주세요."
-                                onChange={(e) => setmeetingOneLineIntro(e.target.value)}
+                                value={newMeeting.oneLineIntro || ''}
+                                onChange={(e) =>
+                                    setNewMeeting((prevNewMeeting) => ({
+                                        ...prevNewMeeting,
+                                        oneLineIntro: e.target.value
+                                    }))
+                                }
                             ></StDetailText2>
                         </StDetailTextBox2>
                     </StTextContainer>

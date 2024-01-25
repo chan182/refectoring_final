@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import x from '../../assets/mbtiMeeting/x-square.png';
 import img from '../../assets/mbtiMeeting/image.png';
 import { useRecoilState } from 'recoil';
-import { meetingIntroTitleState, meetingIntroContentState } from '../../recoil/recoilAtoms';
+import { createMeetingState } from '../../recoil/recoilAtoms';
 
 const ExplainMeeting = () => {
-    const [meetingIntroTitle, setMeetingIntroTitle] = useRecoilState(meetingIntroTitleState);
-    const [meetingIntroContent, setMeetingIntroContent] = useRecoilState(meetingIntroContentState);
+    const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
 
     return (
         <>
@@ -15,11 +14,23 @@ const ExplainMeeting = () => {
             <StBox>
                 <StPeedTitle
                     placeholder="제목을 입력해주세요."
-                    onChange={(e) => setMeetingIntroTitle(e.target.value)}
+                    value={newMeeting.title || ''}
+                    onChange={(e) =>
+                        setNewMeeting((prevNewMeeting) => ({
+                            ...prevNewMeeting,
+                            title: e.target.value
+                        }))
+                    }
                 ></StPeedTitle>
                 <StPeedContent
                     placeholder="내용을 입력해주세요."
-                    onChange={(e) => setMeetingIntroContent(e.target.value)}
+                    value={newMeeting.content || ''}
+                    onChange={(e) =>
+                        setNewMeeting((prevNewMeeting) => ({
+                            ...prevNewMeeting,
+                            content: e.target.value
+                        }))
+                    }
                 ></StPeedContent>
                 <StPeedImgBox>
                     <StImg>
