@@ -58,3 +58,8 @@ export const meetingIntroContentState = atom({
     key: 'meetingIntroContentState',
     default: ''
 });
+
+export const createMeetingState = atom({
+    key: 'newMeeting',
+    default: {}
+});

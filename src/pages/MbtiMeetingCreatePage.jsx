@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import Tags from '../components/mbti_meeting/Tags';
 import DropTag from '../components/mbti_meeting/DropTag';
 import ExplainMeeting from '../components/mbti_meeting/ExplainMeeting';
 import MbtiMeetingCreate from '../components/mbti_meeting/MbtiMeetingCreate';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 import {
     meetingRepreImgState,
     meetingNameState,
@@ -14,7 +15,8 @@ import {
     meetingOneLineIntroState,
     meetingIntroTitleState,
     meetingIntroContentState,
-    selectedTagsState
+    selectedTagsState,
+    createMeetingState
 } from '../recoil/recoilAtoms';
 
 import { db } from '../firebase/firebase.config';
@@ -33,6 +35,8 @@ const MbtiMeetingCreatePage = () => {
     const meetingIntroTitle = useRecoilValueLoadable(meetingIntroTitleState);
     const meetingIntroContent = useRecoilValueLoadable(meetingIntroContentState);
     const selectedTags = useRecoilValueLoadable(selectedTagsState);
+
+    const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
 
     const nav = useNavigate();
 
@@ -61,6 +65,7 @@ const MbtiMeetingCreatePage = () => {
         <StWholeContainer>
             <MbtiMeetingCreate />
             <StHr />
+            <Tags />
             <DropTag />
             <StHr />
             <ExplainMeeting />
