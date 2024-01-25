@@ -1,15 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
-import x from '../../assets/mbtiMeet/x-square.png';
-import img from '../../assets/mbtiMeet/image.png';
+import x from '../../assets/mbtiMeeting/x-square.png';
+import img from '../../assets/mbtiMeeting/image.png';
+import { useRecoilState } from 'recoil';
+import { meetingIntroTitleState, meetingIntroContentState } from '../../recoil/recoilAtoms';
 
 const ExplainMeeting = () => {
+    const [meetingIntroTitle, setMeetingIntroTitle] = useRecoilState(meetingIntroTitleState);
+    const [meetingIntroContent, setMeetingIntroContent] = useRecoilState(meetingIntroContentState);
+
     return (
         <>
             <StTitle>모임 설명</StTitle>
             <StBox>
-                <StPeedTitle placeholder="제목을 입력해주세요."></StPeedTitle>
-                <StPeedContent placeholder="내용을 입력해주세요."></StPeedContent>
+                <StPeedTitle
+                    placeholder="제목을 입력해주세요."
+                    onChange={(e) => setMeetingIntroTitle(e.target.value)}
+                ></StPeedTitle>
+                <StPeedContent
+                    placeholder="내용을 입력해주세요."
+                    onChange={(e) => setMeetingIntroContent(e.target.value)}
+                ></StPeedContent>
                 <StPeedImgBox>
                     <StImg>
                         <img src={x} />

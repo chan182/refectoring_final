@@ -1,43 +1,103 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import {
+    meetingRepreImgState,
+    meetingNameState,
+    meetingManagerNameState,
+    meetingLimitPeopleState,
+    meetingScheduleState,
+    meetingKakaoUrlState,
+    meetingOneLineIntroState
+} from '../../recoil/recoilAtoms';
 
 const MbtiMeetingCreate = () => {
+    const [meetingRepreImg, setMeetingRepreImg] = useRecoilState(meetingRepreImgState);
+    const [meetingName, setMeetingName] = useRecoilState(meetingNameState);
+    const [meetingManagerName, setMeetingManagerName] = useRecoilState(meetingManagerNameState);
+    const [meetingLimitPeople, setMeetingLimitPeople] = useRecoilState(meetingLimitPeopleState);
+    const [meetingSchedule, setMeetingSchedule] = useRecoilState(meetingScheduleState);
+    const [meetingKakaoUrl, setmeetingKakaoUrl] = useRecoilState(meetingKakaoUrlState);
+    const [meetingOneLineIntro, setmeetingOneLineIntro] = useRecoilState(meetingOneLineIntroState);
+
+    const imageInputRef = useRef(null);
+    const handleImageChange = (event) => {
+        const selectedImage = event.target.files[0];
+        if (selectedImage) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageDataURL = e.target.result;
+                setMeetingRepreImg(imageDataURL);
+            };
+            reader.readAsDataURL(selectedImage);
+        }
+    };
+
     return (
-        <>
-            <StTopContainerBox>
-                <StTitle>모임 생성 </StTitle>
-                <StTopContainer>
-                    <StImagBox>
-                        <StImageContainer></StImageContainer>
-                        <StUploadImgBtn>모임 대표사진 업로드</StUploadImgBtn>
-                    </StImagBox>
-                    <StContentBox>
-                        <StTextContainer>
-                            <StTextContainerBox>
-                                <StDetailTextBox>
-                                    모임 이름
-                                    <StDetailText placeholder="모임 이름을 입력해주세요."></StDetailText>
-                                </StDetailTextBox>
-                                <StDetailTextBox>
-                                    모집 인원
-                                    <StDetailText placeholder="모집 인원을 입력해주세요."></StDetailText>
-                                </StDetailTextBox>
-                            </StTextContainerBox>
-                            <StTextContainerBox>
-                                <StDetailTextBox3>
-                                    1:1 오픈 채팅방 만드는 방법
-                                    <StDetailText3 placeholder="카카오톡 오픈채팅 URL을 입력해주세요."></StDetailText3>
-                                </StDetailTextBox3>
-                            </StTextContainerBox>
-                            <StDetailTextBox2>
-                                모임 소개
-                                <StDetailText2 placeholder="모임에 대해 간단하게 소개해주세요."></StDetailText2>
-                            </StDetailTextBox2>
-                        </StTextContainer>
-                    </StContentBox>
-                </StTopContainer>
-            </StTopContainerBox>
-        </>
+        <StTopContainerBox>
+            <StTitle>모임 생성 </StTitle>
+            <StTopContainer>
+                <StImgBox>
+                    <StImg>
+                        {meetingRepreImg ? <img src={meetingRepreImg} alt="선택된 이미지" /> : <StUnselectedImg />}
+                        <StImageContainer
+                            type="file"
+                            ref={imageInputRef}
+                            onChange={handleImageChange}
+                        ></StImageContainer>
+                    </StImg>
+                    <StUploadImgBtn onClick={() => imageInputRef.current.click()}>모임 대표사진 업로드</StUploadImgBtn>
+                </StImgBox>
+                <StContentBox>
+                    <StTextContainer>
+                        <StTextContainerBox>
+                            <StDetailTextBox>
+                                모임 이름
+                                <StDetailText
+                                    placeholder="모임의 이름을 입력해주세요."
+                                    onChange={(e) => setMeetingName(e.target.value)}
+                                ></StDetailText>
+                            </StDetailTextBox>
+                            <StDetailTextBox>
+                                모집 관리자
+                                <StDetailText
+                                    placeholder="모임의 관리자 이름을 입력해주세요."
+                                    onChange={(e) => setMeetingManagerName(e.target.value)}
+                                ></StDetailText>
+                            </StDetailTextBox>
+                        </StTextContainerBox>
+                        <StTextContainerBox>
+                            <StDetailTextBox>
+                                모임 정원
+                                <StDetailText
+                                    placeholder="모임의 정원을 입력해주세요. (ex. 10명)"
+                                    onChange={(e) => setMeetingLimitPeople(e.target.value)}
+                                ></StDetailText>
+                            </StDetailTextBox>
+                            <StDetailTextBox>
+                                모임 일정
+                                <StDetailText
+                                    placeholder="모임의 일정을 입력해주세요. (ex. 주 5회)"
+                                    onChange={(e) => setMeetingSchedule(e.target.value)}
+                                ></StDetailText>
+                            </StDetailTextBox>
+                        </StTextContainerBox>
+                        <StDetailTextBox3>1:1 오픈 채팅방 만드는 방법</StDetailTextBox3>
+                        <StDetailText3
+                            placeholder="카카오톡 오픈채팅방의 URL을 입력해주세요."
+                            onChange={(e) => setmeetingKakaoUrl(e.target.value)}
+                        ></StDetailText3>
+                        <StDetailTextBox2>
+                            모임 한줄 소개
+                            <StDetailText2
+                                placeholder="모임에 대해 간단하게 소개해주세요."
+                                onChange={(e) => setmeetingOneLineIntro(e.target.value)}
+                            ></StDetailText2>
+                        </StDetailTextBox2>
+                    </StTextContainer>
+                </StContentBox>
+            </StTopContainer>
+        </StTopContainerBox>
     );
 };
 
@@ -60,21 +120,40 @@ const StTopContainer = styled.div`
     border-radius: 1rem;
 `;
 
-const StImagBox = styled.div`
-    height: 500px;
-    width: 360px;
+const StImgBox = styled.div`
+    height: 540px;
+    width: 489px;
     display: flex;
     align-items: center;
     flex-direction: column;
 `;
 
-const StImageContainer = styled.div`
+const StImg = styled.div`
     height: 346px;
     width: 346px;
     border-radius: 50%;
-    margin-top: 54px;
-    margin-left: 30px;
+    margin: 54px 0px 0px 64px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+`;
+
+const StUnselectedImg = styled.div`
+    height: 346px;
+    width: 346px;
+    border-radius: 50%;
     background-color: var(--light-gray);
+`;
+
+const StImageContainer = styled.input`
+    display: none;
 `;
 
 const StUploadImgBtn = styled.button`
@@ -84,9 +163,9 @@ const StUploadImgBtn = styled.button`
     height: 48px;
     background-color: white;
     color: #6a6a6a;
-    border-radius: 0.5rem;
+    border-radius: 6px;
     cursor: pointer;
-    margin: 37px 0px 0px 30px;
+    margin: 37px 0px 0px 74px;
 
     &:hover {
         transition: ease-in-out 0.2s;
@@ -131,9 +210,28 @@ const StDetailText = styled.input`
     border-radius: 0.5rem;
 `;
 
+const StDetailTextBox2 = styled.div`
+    font-size: 14px;
+    color: #888888;
+    height: 51%;
+`;
+
+const StDetailText2 = styled.input`
+    height: 47px;
+    width: 97.3%;
+    border-radius: 5px;
+    background: var(--light-gray);
+    font-size: 16px;
+    margin-top: 5px;
+    padding: 10px;
+    display: flex;
+    color: #4e4e4e;
+    border: none;
+    border-radius: 0.5rem;
+`;
+
 const StDetailTextBox3 = styled.div`
     font-size: 14px;
-    margin-bottom: 24px;
     color: #888888;
     text-decoration: underline;
 `;
@@ -144,27 +242,8 @@ const StDetailText3 = styled.input`
     background: var(--light-gray);
     font-size: 16px;
     margin-top: 5px;
+    margin-bottom: 24px;
     padding: 15px;
-    display: flex;
-    color: #4e4e4e;
-    border: none;
-    border-radius: 0.5rem;
-`;
-
-const StDetailTextBox2 = styled.div`
-    font-size: 14px;
-    color: #888888;
-    height: 51%;
-`;
-
-const StDetailText2 = styled.input`
-    height: 91%;
-    width: 97.3%;
-    border-radius: 5px;
-    background: var(--light-gray);
-    font-size: 16px;
-    margin-top: 5px;
-    padding: 10px;
     display: flex;
     color: #4e4e4e;
     border: none;

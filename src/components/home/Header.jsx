@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import dorpArrow from '../../assets/home/dropArrow.png';
-import logo from '../../assets/home/logo.png';
+import logo from '../../assets/home/headerLogo.png';
 import { userAtom } from '../../recoil/Atom';
 import MainProfile from './MainProfile';
 import profileImage from '../../assets/profile/profileImg.png';
@@ -96,11 +96,11 @@ const StLeftDiv = styled.div`
 `;
 
 const StLogo = styled.div`
-    width: 250px;
-    height: 100%;
+    width: 156px;
+    height: 80px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     cursor: pointer;
 
     &:hover {
@@ -108,13 +108,13 @@ const StLogo = styled.div`
     }
 
     & img {
-        width: 100%;
-        height: 60%;
+        width: 77px;
+        height: 42px;
     }
 `;
 
 const StP = styled.p`
-    font-size: 15px;
+    font-size: 18px;
     padding-left: 30px;
     display: flex;
     align-items: center;
