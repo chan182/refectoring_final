@@ -179,10 +179,10 @@ const MbtiMeeting = () => {
                 {meet.map((meet) => (
                     <StMeetingLink to={`/mbti/meeting/detail/${meet.id}`} key={meet.id}>
                         <StMeetingWrap>
-                            <StImg src={meet.imageurl}></StImg>
+                            <StImg src={meet.meetingRepreImg}></StImg>
                             <StContainer>
                                 <StTitle>
-                                    {meet.title}/{meet.mbti}
+                                    {meet.meetingName}/{meet.mbti}
                                 </StTitle>
                                 <StPositionDateUserContainer>
                                     <StContentsImgWrap>
@@ -191,11 +191,11 @@ const MbtiMeeting = () => {
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsDateImg src={dateImg}></StContentsDateImg>
-                                        <StContents>일정 : {meet.date}</StContents>
+                                        <StContents>일정 : {meet.meetingSchedule}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsUserImg src={userImg} alt="" />
-                                        <StContents>인원 :0 / {meet.person}</StContents>
+                                        <StContents>인원 :0 / {meet.meetingLimitPeople}</StContents>
                                     </StContentsImgWrap>
                                 </StPositionDateUserContainer>
                                 <StPositionDateUserContainer>
@@ -376,7 +376,7 @@ const StUpbutton = styled.button`
 `;
 
 const StMeetingContainer = styled.div`
-    min-width: 822px;
+    min-width: 1250px;
     width: 70%;
     height: 5000px;
     margin: 40px auto;
