@@ -12,6 +12,7 @@ import dateImg from '../../assets/mbtiMeeting/dateimg.png';
 import userImg from '../../assets/mbtiMeeting/userimg.png';
 import usersImg from '../../assets/mbtiMeeting/usersimg.png';
 import ageImg from '../../assets/mbtiMeeting/ageimg.png';
+import DropTag from './DropTag';
 const MbtiMeeting = () => {
     // const user = useRecoilState(userAtom);
     // const userinformation = user[0];
@@ -97,7 +98,7 @@ const MbtiMeeting = () => {
             searchData();
         }
     };
-    console.log('진재석');
+
     return (
         <StMeeting>
             <StSearchMeet>
@@ -115,25 +116,7 @@ const MbtiMeeting = () => {
                 <StText>자유롭게 모임을 만들고 가입해 활동해보세요!</StText>
             </StSearchMeet>
             <StSelectMeetSearchContainer>
-                <StSelectMeetSearchText>원하는 조건으로 모임 찾기</StSelectMeetSearchText>
-                <StSelectContainer>
-                    <StSelectImgWrap>
-                        <StSelect>지역</StSelect>
-                        <StSelectImg src={check} />
-                    </StSelectImgWrap>
-                    <StSelectImgWrap onClick={handleToggle}>
-                        <StSelect>성별</StSelect>
-                        <StSelectImg src={check} />
-                    </StSelectImgWrap>
-                    <StSelectImgWrap onClick={handleToggl}>
-                        <StSelect>나이</StSelect>
-                        <StSelectImg src={check} />
-                    </StSelectImgWrap>
-                    <StSelectMbtiImgWrap>
-                        <StSelect>MBTI</StSelect>
-                        <StSelectMbtiImg src={check} />
-                    </StSelectMbtiImgWrap>
-                </StSelectContainer>
+                <DropTag />
             </StSelectMeetSearchContainer>
             <StCheckboxContainer>
                 {isChecked && (
@@ -255,7 +238,7 @@ const StSearch = styled.input`
 
 const StText = styled.h1`
     font-size: 42px;
-    margin: 40px 0px 180px;
+    margin: 60px 0px 90px;
 `;
 
 const StCreateWrap = styled.div`
