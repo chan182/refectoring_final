@@ -5,12 +5,10 @@ import foldArrow from '../../assets/home/foldArrow.png';
 
 const NoCheckedDropTag = ({
     tagCategory,
-    setTagCategory,
-    setSelectedTags,
     zoneSelectHandler,
     genderSelectHandler,
     ageSelectHandler,
-    MbtiSelectHandler
+    mbtiSelectHandler
 }) => {
     return (
         <StContainer>
@@ -28,7 +26,7 @@ const NoCheckedDropTag = ({
                     나이
                     {tagCategory === '나이' ? <img src={foldArrow} /> : <img src={dropArrow} />}
                 </StButton>
-                <StButton onClick={() => MbtiSelectHandler()}>
+                <StButton onClick={() => mbtiSelectHandler()}>
                     MBTI
                     {tagCategory === 'MBTI' ? <img src={foldArrow} /> : <img src={dropArrow} />}
                 </StButton>

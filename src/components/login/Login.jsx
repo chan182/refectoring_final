@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Swal from 'sweetalert2';
 import logo from '../../assets/home/footerLogo.png';
-import modal_logo from '../../assets/home/mbti_community.png';
+import modal_logo from '../../assets/home/headerLogo.png';
 import kakao from '../../assets/login/kakao.png';
 import { auth } from '../../firebase/firebase.config';
 import GoogleLogin from './GoogleLogin';

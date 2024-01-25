@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import dropArrow from '../../assets/home/dropArrow.png';
-import foldArrow from '../../assets/home/foldArrow.png';
 import ZoneCheckedDropTag from './ZoneCheckedDropTag';
 import { useRecoilState } from 'recoil';
 import { tagCategoryState, selectedTagsState } from '../../recoil/recoilAtoms';
@@ -11,8 +9,10 @@ import AgeCheckedDropTag from './AgeCheckedDropTag';
 import MbtiCheckedDropTag from './MbtiCheckedDropTag';
 
 const DropTag = () => {
-    // Recoil 상태 사용
+    // 현재 선택된 카테고리를 담는 변수
     const [tagCategory, setTagCategory] = useRecoilState(tagCategoryState);
+
+    // 선택한 태그들을 담는 배열
     const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsState);
 
     const zoneSelectHandler = () => {
@@ -30,67 +30,90 @@ const DropTag = () => {
         else setTagCategory('나이');
     };
 
-    const MbtiSelectHandler = () => {
+    const mbtiSelectHandler = () => {
         if (tagCategory === 'MBTI') setTagCategory('');
         else setTagCategory('MBTI');
+    };
+
+    const addSelectedTagsHandler = (tag) => {
+        setSelectedTags((prevSelectedTags) => {
+            const newSelectedTags = [...prevSelectedTags, tag];
+            console.log(newSelectedTags);
+            return newSelectedTags;
+        });
+    };
+
+    const removeSelectedTagsHandler = (tag) => {
+        setSelectedTags((prevSelectedTags) => {
+            const newSelectedTags = prevSelectedTags.filter((selectedTag) => selectedTag !== tag);
+            console.log(newSelectedTags);
+            return newSelectedTags;
+        });
     };
 
     return (
         <>
             <StTitle>모임 태그 </StTitle>
+
             {tagCategory === '' && (
                 <NoCheckedDropTag
                     tagCategory={tagCategory}
-                    selectedTags={selectedTags}
-                    setSelectedTags={setSelectedTags}
                     zoneSelectHandler={zoneSelectHandler}
                     genderSelectHandler={genderSelectHandler}
                     ageSelectHandler={ageSelectHandler}
-                    MbtiSelectHandler={MbtiSelectHandler}
+                    mbtiSelectHandler={mbtiSelectHandler}
                 />
             )}
+
             {tagCategory === '지역' && (
                 <ZoneCheckedDropTag
                     tagCategory={tagCategory}
-                    selectedTags={selectedTags}
-                    setSelectedTags={setSelectedTags}
                     zoneSelectHandler={zoneSelectHandler}
                     genderSelectHandler={genderSelectHandler}
                     ageSelectHandler={ageSelectHandler}
-                    MbtiSelectHandler={MbtiSelectHandler}
+                    mbtiSelectHandler={mbtiSelectHandler}
+                    selectedTags={selectedTags}
+                    addSelectedTagsHandler={addSelectedTagsHandler}
+                    removeSelectedTagsHandler={removeSelectedTagsHandler}
                 />
             )}
+
             {tagCategory === '성별' && (
                 <GenderCheckedDropTag
                     tagCategory={tagCategory}
-                    selectedTags={selectedTags}
-                    setSelectedTags={setSelectedTags}
                     zoneSelectHandler={zoneSelectHandler}
                     genderSelectHandler={genderSelectHandler}
                     ageSelectHandler={ageSelectHandler}
-                    MbtiSelectHandler={MbtiSelectHandler}
+                    mbtiSelectHandler={mbtiSelectHandler}
+                    selectedTags={selectedTags}
+                    addSelectedTagsHandler={addSelectedTagsHandler}
+                    removeSelectedTagsHandler={removeSelectedTagsHandler}
                 />
             )}
+
             {tagCategory === '나이' && (
                 <AgeCheckedDropTag
                     tagCategory={tagCategory}
-                    selectedTags={selectedTags}
-                    setSelectedTags={setSelectedTags}
                     zoneSelectHandler={zoneSelectHandler}
                     genderSelectHandler={genderSelectHandler}
                     ageSelectHandler={ageSelectHandler}
-                    MbtiSelectHandler={MbtiSelectHandler}
+                    mbtiSelectHandler={mbtiSelectHandler}
+                    selectedTags={selectedTags}
+                    addSelectedTagsHandler={addSelectedTagsHandler}
+                    removeSelectedTagsHandler={removeSelectedTagsHandler}
                 />
             )}
+
             {tagCategory === 'MBTI' && (
                 <MbtiCheckedDropTag
                     tagCategory={tagCategory}
-                    selectedTags={selectedTags}
-                    setSelectedTags={setSelectedTags}
                     zoneSelectHandler={zoneSelectHandler}
                     genderSelectHandler={genderSelectHandler}
                     ageSelectHandler={ageSelectHandler}
-                    MbtiSelectHandler={MbtiSelectHandler}
+                    mbtiSelectHandler={mbtiSelectHandler}
+                    selectedTags={selectedTags}
+                    addSelectedTagsHandler={addSelectedTagsHandler}
+                    removeSelectedTagsHandler={removeSelectedTagsHandler}
                 />
             )}
         </>

@@ -3,8 +3,61 @@ import styled from 'styled-components';
 import DropTag from '../components/mbti_meeting/DropTag';
 import ExplainMeeting from '../components/mbti_meeting/ExplainMeeting';
 import MbtiMeetingCreate from '../components/mbti_meeting/MbtiMeetingCreate';
+import { useRecoilValueLoadable } from 'recoil';
+import {
+    meetingRepreImgState,
+    meetingNameState,
+    meetingManagerNameState,
+    meetingLimitPeopleState,
+    meetingScheduleState,
+    meetingKakaoUrlState,
+    meetingOneLineIntroState,
+    meetingIntroTitleState,
+    meetingIntroContentState,
+    selectedTagsState
+} from '../recoil/recoilAtoms';
+import firebaseConfig from '../firebase/firebase.config';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 const MbtiMeetingCreatePage = () => {
+    const meetingRepreImg = useRecoilValueLoadable(meetingRepreImgState);
+    const meetingName = useRecoilValueLoadable(meetingNameState);
+    const meetingManagerName = useRecoilValueLoadable(meetingManagerNameState);
+    const meetingLimitPeople = useRecoilValueLoadable(meetingLimitPeopleState);
+    const meetingSchedule = useRecoilValueLoadable(meetingScheduleState);
+    const meetingKakaoUrl = useRecoilValueLoadable(meetingKakaoUrlState);
+    const meetingOneLineIntro = useRecoilValueLoadable(meetingOneLineIntroState);
+    const meetingIntroTitle = useRecoilValueLoadable(meetingIntroTitleState);
+    const meetingIntroContent = useRecoilValueLoadable(meetingIntroContentState);
+    const selectedTags = useRecoilValueLoadable(selectedTagsState);
+
+    const createMeetingButtonHandler = async () => {
+        try {
+            const meetCollectionRef = db.collection('meet');
+
+            const meetingData = {
+                meetingRepreImg: meetingRepreImg.contents,
+                meetingName: meetingName.contents,
+                meetingManagerName: meetingManagerName.contents,
+                meetingLimitPeople: meetingLimitPeople.contents,
+                meetingSchedule: meetingSchedule.contents,
+                meetingKakaoUrl: meetingKakaoUrl.contents,
+                meetingOneLineIntro: meetingOneLineIntro.contents,
+                meetingIntroTitle: meetingIntroTitle.contents,
+                meetingIntroContent: meetingIntroContent.contents,
+                selectedTags: selectedTags.contents
+            };
+
+            await meetCollectionRef.add(meetingData);
+            console.log('meetingData가 성공적으로 meet 컬렉션에 추가되었습니다.');
+        } catch (error) {
+            console.error('meet 컬렉션에 meetingData를 추가하는 과정에서 오류가 발생했습니다:', error);
+        }
+    };
+
     return (
         <StWholeContainer>
             <MbtiMeetingCreate />
@@ -13,7 +66,7 @@ const MbtiMeetingCreatePage = () => {
             <StHr />
             <ExplainMeeting />
             <StBtnBox>
-                <StCreateButton>생성하기</StCreateButton>
+                <StCreateButton onClick={() => createMeetingButtonHandler()}>생성하기</StCreateButton>
                 <StCancelButton>취소하기</StCancelButton>
             </StBtnBox>
         </StWholeContainer>
