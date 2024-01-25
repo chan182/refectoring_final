@@ -2,7 +2,7 @@ import React from 'react';
 import { createMeetingState } from '../../recoil/recoilAtoms';
 import { useRecoilState } from 'recoil';
 
-function Tags() {
+function MbtiMeetingCreateTags() {
     const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
     const location = [
         '전지역',
@@ -118,4 +118,4 @@ function Tags() {
     );
 }
 
-export default Tags;
+export default MbtiMeetingCreateTags;

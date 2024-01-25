@@ -5,7 +5,7 @@ import img from '../../assets/mbtiMeeting/image.png';
 import { useRecoilState } from 'recoil';
 import { createMeetingState } from '../../recoil/recoilAtoms';
 
-const ExplainMeeting = () => {
+const MbtiMeetingExplainMeeting = () => {
     const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
 
     return (
@@ -57,7 +57,7 @@ const ExplainMeeting = () => {
     );
 };
 
-export default ExplainMeeting;
+export default MbtiMeetingExplainMeeting;
 
 const StBox = styled.div`
     height: 860px;
