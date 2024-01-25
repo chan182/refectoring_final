@@ -84,13 +84,13 @@ const MbtiComunityDetail = () => {
             <StuserInfoWrapper>
                 <StUserInformation>
                     <StprofileImg src={data?.ImageUrl} alt="" />
-                    <div>
+                    <StLike>
                         {data?.nickname} / {data?.mbti}
-                    </div>
+                    </StLike>
                 </StUserInformation>
                 <StlikeInformation>
                     <img src={heart} alt="좋아요 이미지" />
-                    <div>0</div>
+                    {data?.likecount}
                 </StlikeInformation>
                 <StMessageInformation>
                     <img src={messageImoge} alt="" />
@@ -211,6 +211,15 @@ const StprofileImg = styled.img`
     stroke: #8d8d8d;
     border-radius: 50%;
 `;
+
+const StLike = styled.div`
+    color: #4e4e4e;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%;
+`;
+
 const StlikeInformation = styled.div`
     display: flex;
     align-items: flex-start;
