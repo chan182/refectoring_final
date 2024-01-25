@@ -7,6 +7,7 @@ import profileImage from '../../assets/profile/profileImg.png';
 import { db, storage } from '../../firebase/firebase.config';
 import { isEditingAtom, userAtom } from '../../recoil/Atom';
 import Avatar from '../common/avatar';
+
 const UserInfo = () => {
     const [user, setUser] = useRecoilState(userAtom);
     const [isEditing, setIsEditing] = useRecoilState(isEditingAtom);
@@ -19,6 +20,7 @@ const UserInfo = () => {
     const [blood, setBlood] = useState('');
     const [location, setLocation] = useState('');
     const [introduce, setIntroduce] = useState('');
+
     useEffect(() => {
         if (user) {
             setName(user.name);

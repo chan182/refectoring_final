@@ -60,7 +60,7 @@ const MbtiMeeting = () => {
         });
         setMeet(initialMeet);
     };
-
+    console.log('진재석');
     // 위로 올라가기 버튼
     useEffect(() => {
         const scroll = () => {
@@ -97,6 +97,7 @@ const MbtiMeeting = () => {
             searchData();
         }
     };
+    console.log('진재석');
     return (
         <StMeeting>
             <StSearchMeet>

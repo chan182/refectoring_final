@@ -1,20 +1,28 @@
-import { React } from 'react';
-import { useParams } from 'react-router-dom';
+import { React, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import heart from '../../assets/community/blackheart.svg';
 import eyeImoge from '../../assets/community/eyeImoge.svg';
 import redheart from '../../assets/community/heart.svg';
 import messageImoge from '../../assets/community/messageImoge.svg';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { communityDetailGetDate, deleteBoard } from '../../api/boardDetail';
+
+import { communityDetailGetDate, deleteBoard, updateBoard } from '../../api/boardDetail';
 import { deleteComment } from '../../api/comment';
+import { useRecoilValue } from 'recoil';
+import { userAtom } from '../../recoil/Atom';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 const MbtiComunityDetail = () => {
+    const user = useRecoilValue(userAtom);
     const params = useParams();
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
+    const [editMode, setEditMode] = useState(false);
+    const [content, setContent] = useState('');
+    const [title, setTitle] = useState('');
 
     const { isLoading, isError, data } = useQuery({
-        queryKey: ['communityDetail'],
+        queryKey: ['communities'],
         queryFn: () => communityDetailGetDate(params.id)
     });
 
@@ -23,12 +31,27 @@ const MbtiComunityDetail = () => {
     const DeleteBoardMutation = useMutation((id) => deleteBoard(id), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('communities');
+            alert('삭제 성공하였습니다.');
+            navigate('/mbti/community');
         }
     });
 
     const handleDeleteCommunity = async () => {
         console.log(params.id);
         DeleteBoardMutation.mutate(params.id);
+    };
+
+    // 수정하기
+
+    const UpdateMutation = useMutation((paramsId, title) => updateBoard(paramsId, title), {
+        onSuccess: (data) => {
+            queryClient.invalidateQueries('communities');
+        }
+    });
+
+    const handleUpdateCommunity = async (paramsId) => {
+        console.log(title);
+        UpdateMutation.mutate(paramsId, title);
     };
 
     // 데이터 로딩 !
@@ -45,19 +68,29 @@ const MbtiComunityDetail = () => {
         <StCardWrapper>
             <StCardImage src={data?.communityImage} alt="컨텐츠의 사진" />
             <StTitleWrapper>
-                <StCardTitle>{data?.title}</StCardTitle>
+                {editMode ? (
+                    <StInput
+                        value={title}
+                        onChange={(e) => {
+                            setTitle(e.target.value);
+                        }}
+                    />
+                ) : (
+                    <StCardTitle>{data?.title}</StCardTitle>
+                )}
+
                 <img src={redheart} alt="" />
             </StTitleWrapper>
             <StuserInfoWrapper>
                 <StUserInformation>
                     <StprofileImg src={data?.ImageUrl} alt="" />
-                    <div>
+                    <StLike>
                         {data?.nickname} / {data?.mbti}
-                    </div>
+                    </StLike>
                 </StUserInformation>
                 <StlikeInformation>
                     <img src={heart} alt="좋아요 이미지" />
-                    <div>0</div>
+                    {data?.likecount}
                 </StlikeInformation>
                 <StMessageInformation>
                     <img src={messageImoge} alt="" />
@@ -69,11 +102,57 @@ const MbtiComunityDetail = () => {
                 </StViewInformation>
             </StuserInfoWrapper>
             <StButtonWrapper>
-                <Stbutton>글 수정</Stbutton>
-                <Stbutton onClick={handleDeleteCommunity}>글 삭제</Stbutton>
+                {user.uid == data?.id ? (
+                    <>
+                        <Stbutton
+                            onClick={() => {
+                                setEditMode(!editMode);
+                                setContent(data?.content);
+                                setTitle(data?.title);
+                                console.log();
+                            }}
+                        >
+                            글 수정
+                        </Stbutton>
+                        <Stbutton onClick={handleDeleteCommunity}>글 삭제</Stbutton>
+                    </>
+                ) : (
+                    <></>
+                )}
             </StButtonWrapper>
             <StHr />
-            <StContent>{data?.content}</StContent>
+            <StContent>
+                {editMode ? (
+                    <StInput
+                        value={content}
+                        onChange={(e) => {
+                            setContent(e.target.value);
+                        }}
+                    />
+                ) : (
+                    <StCardTitle>{data?.content}</StCardTitle>
+                )}
+            </StContent>
+            {editMode ? (
+                <>
+                    <button
+                        onClick={() => {
+                            handleUpdateCommunity(params.id);
+                        }}
+                    >
+                        등록하기
+                    </button>
+                    <button
+                        onClick={() => {
+                            setEditMode(!editMode);
+                        }}
+                    >
+                        취소하기
+                    </button>
+                </>
+            ) : (
+                <></>
+            )}
         </StCardWrapper>
     );
 };
@@ -132,6 +211,15 @@ const StprofileImg = styled.img`
     stroke: #8d8d8d;
     border-radius: 50%;
 `;
+
+const StLike = styled.div`
+    color: #4e4e4e;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%;
+`;
+
 const StlikeInformation = styled.div`
     display: flex;
     align-items: flex-start;
@@ -190,4 +278,19 @@ const StContent = styled.div`
     line-height: 148%; /* 23.68px */
     letter-spacing: -0.08px;
     margin: 0px 32px 68px 32px;
+`;
+
+const StInput = styled.input`
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    align-items: flex-start;
+    border-width: 0 0 1px;
+    gap: 10px;
+    color: #4e4e4e;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 148%; /* 23.68px */
+    letter-spacing: -0.08px;
 `;
