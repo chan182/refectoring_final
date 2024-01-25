@@ -3,8 +3,21 @@ import styled from 'styled-components';
 import eyeImoge from '../../assets/profile/eye.svg';
 import heartImoge from '../../assets/profile/heart.svg';
 import messageSquare from '../../assets/profile/message-square.svg';
+import { useQuery } from 'react-query';
+import { getData } from '../../api/board';
+import { useRecoilState } from 'recoil';
+import { userAtom } from '../../recoil/Atom';
 
 const UserWritelist = () => {
+    const [user, setUser] = useRecoilState(userAtom);
+
+    const { data } = useQuery({
+        queryKey: ['communities', user],
+        queryFn: getData
+    });
+
+    const filteredData = data ? data.filter((item) => item.data.id === user?.uid) : [];
+
     return (
         <>
             <StTitle>활동내역</StTitle>
@@ -15,17 +28,22 @@ const UserWritelist = () => {
                         <StMyBookmarkListFilterBtn>내가 북마크한 게시글</StMyBookmarkListFilterBtn>
                     </StFilterLIst>
                     <Stcontents>
-                        <div>
-                            <StfilteredTitle>내가 작성한 글 제목</StfilteredTitle>
-                            <StImoges>
-                                <img src={heartImoge} alt="" />
-                                <StLikeCount>999m</StLikeCount>
-                                <img src={messageSquare} alt="" />
-                                <StCommentCount>999K</StCommentCount>
-                                <img src={eyeImoge} alt="" />
-                                <StViewCount>999m</StViewCount>
-                            </StImoges>
-                        </div>
+                        {filteredData.map((item) => {
+                            console.log(item.data.title);
+                            return (
+                                <div>
+                                    <StfilteredTitle>{item.data.title}</StfilteredTitle>
+                                    <StImoges>
+                                        <img src={heartImoge} alt="" />
+                                        <StLikeCount>{item.data.likecount || 0}</StLikeCount>
+                                        <img src={messageSquare} alt="" />
+                                        <StCommentCount>0</StCommentCount>
+                                        <img src={eyeImoge} alt="" />
+                                        <StViewCount>0</StViewCount>
+                                    </StImoges>
+                                </div>
+                            );
+                        })}
                     </Stcontents>
                 </Stbolder>
             </StmainWrapper>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import chevronLeft from '../../assets/community/chevron-left.svg';
 import chevronRight from '../../assets/community/chevron-right.svg';
@@ -13,11 +13,12 @@ import { userAtom } from '../../recoil/Atom';
 import { useMutation, useQuery } from 'react-query';
 import { getData } from '../../api/board';
 import { useInfiniteQuery } from 'react-query';
-import { doc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.config';
 
 const MbtiCommunity = () => {
-    const user = useRecoilValue(userAtom);
+    const user = useRecoilState(userAtom);
+
     const navigate = useNavigate();
     const [searchKeyWord, setSearchKeyWord] = useState('');
 
@@ -42,11 +43,12 @@ const MbtiCommunity = () => {
         }
     );
 
-    const handlePageChange = (newPage) => {
-        // 페이지 변경 함수
-        navigate(`/mbti/community?page=${newPage}`);
-    };
+    // const handlePageChange = (newPage) => {
+    //     // 페이지 변경 함수
+    //     navigate(`/mbti/community?page=${newPage}`);
+    // };
 
+    // 좋아요 기능
     const mutation = useMutation();
 
     const handleLike = async (postId) => {
@@ -55,10 +57,28 @@ const MbtiCommunity = () => {
             onSuccess: () => {}
         });
     };
-    const togglelike = async () => {
-        const postRef = doc(db, 'communities', data.id);
+
+    const togglelike = async (id, data) => {
+        console.log(id);
+        console.log(data);
+        console.log(user[0].uid);
+        const postRef = doc(db, 'communities', id);
+
+        if (user[0].uid && data.likes.includes(user[0].uid)) {
+            // 사용자가 좋아요를 미리 한 경우 => 좋아요를 취소한다.
+            await updateDoc(postRef, {
+                likes: arrayRemove(user[0].uid),
+                likecount: data.likecount ? data.likecount - 1 : 0
+            });
+        } else {
+            // 사용자가 좋아요를 하지 않은 경우 => 좋아요를 추가한다.
+            await updateDoc(postRef, {
+                likes: arrayUnion(user[0].uid),
+                likecount: data.likecount ? data.likecount + 1 : 1
+            });
+        }
     };
-    // console.log(data.uid);
+
     return (
         <StBackGround>
             <StsearchInputWrapper>
@@ -98,8 +118,12 @@ const MbtiCommunity = () => {
                         />
                         <StTitleWrapper>
                             <StCommunityTitle>{data.title} </StCommunityTitle>
-                            <StButton onClick={togglelike}>
-                                {user && data?.likes.includes(user.id) ? (
+                            <StButton
+                                onClick={() => {
+                                    togglelike(id, data);
+                                }}
+                            >
+                                {user && data?.likes?.includes(user[0].uid) ? (
                                     <img src={fullheart} alt="눌렀을 때" />
                                 ) : (
                                     <img src={heart} alt="누르지 않았을 때" />
@@ -110,19 +134,13 @@ const MbtiCommunity = () => {
                         <StuserInfoWrapper>
                             <StUserInformation>
                                 <StprofileImg src={data.ImageUrl} alt="" />
-                                <div>
+                                <StlikeNumber>
                                     {data.nickname} / {data.mbti}
-                                </div>
+                                </StlikeNumber>
                             </StUserInformation>
                             <StlikeInformation>
-                                <button
-                                // onClick={() => {
-                                //     toggleLike(id);
-                                // }}
-                                >
-                                    <img src={fullheart} alt="좋아요 눌린 이미지" />
-                                    {data?.likeCount}
-                                </button>
+                                <img src={blackheart} alt="좋아요 눌린 이미지" />
+                                {data?.likecount || 0}
                             </StlikeInformation>
                             {/* <StMessageInformation>
                                 <img src={messageImoge} alt="" />
@@ -136,7 +154,7 @@ const MbtiCommunity = () => {
                     </StCardList>
                 );
             })}
-            <StPagination>
+            {/* <StPagination>
                 <button onClick={() => handlePageChange(resolvedData?.page - 1)} disabled={resolvedData?.page === 1}>
                     이전
                 </button>
@@ -144,7 +162,7 @@ const MbtiCommunity = () => {
                 <button onClick={() => handlePageChange(resolvedData?.page + 1)} disabled={!hasNextPage || isFetching}>
                     다음
                 </button>
-            </StPagination>
+            </StPagination> */}
         </StBackGround>
     );
 };
@@ -269,8 +287,7 @@ const StTitleWrapper = styled.div`
 
 const StCommunityTitle = styled.div`
     color: #000;
-
-    font-size: 20px;
+    font-size: 25px;
     font-style: normal;
     font-weight: 500;
     line-height: 120%;
@@ -317,6 +334,14 @@ const StprofileImg = styled.img`
     stroke-width: 1px;
     stroke: #8d8d8d;
     border-radius: 50%;
+`;
+
+const StlikeNumber = styled.div`
+    color: #4e4e4e;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%;
 `;
 
 const StlikeInformation = styled.div`
