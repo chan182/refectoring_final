@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import MbtiMeeting from '../components/mbti_meeting/MbtiMeeting';
+import MbtiMeeting from '../components/mbti_meet/MbtiMeeting';
 import { userAtom } from '../recoil/Atom';
 
 const MbtiMeetingPage = () => {

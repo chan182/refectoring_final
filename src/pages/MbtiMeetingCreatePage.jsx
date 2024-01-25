@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import DropTag from '../components/mbti_meeting/DropTag';
-import ExplainMeeting from '../components/mbti_meeting/ExplainMeeting';
-import MbtiMeetingCreate from '../components/mbti_meeting/MbtiMeetingCreate';
+import DropTag from '../components/mbti_meet/DropTag';
+import ExplainMeeting from '../components/mbti_meet/ExplainMeeting';
+import MbtiMeetingCreate from '../components/mbti_meet/MbtiMeetingCreate';
 import { useRecoilValueLoadable } from 'recoil';
 import {
     meetingRepreImgState,
@@ -16,11 +16,8 @@ import {
     meetingIntroContentState,
     selectedTagsState
 } from '../recoil/recoilAtoms';
-import firebaseConfig from '../firebase/firebase.config';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+import { db } from '../firebase/firebase.config';
+import { useNavigate } from 'react-router';
 
 const MbtiMeetingCreatePage = () => {
     const meetingRepreImg = useRecoilValueLoadable(meetingRepreImgState);
@@ -33,6 +30,8 @@ const MbtiMeetingCreatePage = () => {
     const meetingIntroTitle = useRecoilValueLoadable(meetingIntroTitleState);
     const meetingIntroContent = useRecoilValueLoadable(meetingIntroContentState);
     const selectedTags = useRecoilValueLoadable(selectedTagsState);
+
+    const nav = useNavigate();
 
     const createMeetingButtonHandler = async () => {
         try {
@@ -53,6 +52,7 @@ const MbtiMeetingCreatePage = () => {
 
             await meetCollectionRef.add(meetingData);
             console.log('meetingData가 성공적으로 meet 컬렉션에 추가되었습니다.');
+            nav('/mbti/meeting');
         } catch (error) {
             console.error('meet 컬렉션에 meetingData를 추가하는 과정에서 오류가 발생했습니다:', error);
         }
