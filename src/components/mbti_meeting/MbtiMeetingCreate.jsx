@@ -70,7 +70,7 @@ const MbtiMeetingCreate = () => {
                             <StDetailTextBox>
                                 모임 정원
                                 <StDetailText
-                                    placeholder="모임의 정원을 입력해주세요."
+                                    placeholder="모임의 정원을 입력해주세요. (ex. 10명)"
                                     onChange={(e) => setMeetingLimitPeople(e.target.value)}
                                 ></StDetailText>
                             </StDetailTextBox>

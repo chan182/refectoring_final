@@ -38,7 +38,7 @@ const DropTag = () => {
     const addSelectedTagsHandler = (tag) => {
         setSelectedTags((prevSelectedTags) => {
             const newSelectedTags = [...prevSelectedTags, tag];
-            console.log(newSelectedTags);
+
             return newSelectedTags;
         });
     };
@@ -46,7 +46,7 @@ const DropTag = () => {
     const removeSelectedTagsHandler = (tag) => {
         setSelectedTags((prevSelectedTags) => {
             const newSelectedTags = prevSelectedTags.filter((selectedTag) => selectedTag !== tag);
-            console.log(newSelectedTags);
+
             return newSelectedTags;
         });
     };

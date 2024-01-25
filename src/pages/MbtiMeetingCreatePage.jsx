@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import DropTag from '../components/mbti_meet/DropTag';
-import ExplainMeeting from '../components/mbti_meet/ExplainMeeting';
-import MbtiMeetingCreate from '../components/mbti_meet/MbtiMeetingCreate';
+import DropTag from '../components/mbti_meeting/DropTag';
+import ExplainMeeting from '../components/mbti_meeting/ExplainMeeting';
+import MbtiMeetingCreate from '../components/mbti_meeting/MbtiMeetingCreate';
 import { useRecoilValueLoadable } from 'recoil';
 import {
     meetingRepreImgState,
@@ -16,7 +16,10 @@ import {
     meetingIntroContentState,
     selectedTagsState
 } from '../recoil/recoilAtoms';
+
 import { db } from '../firebase/firebase.config';
+import { addDoc, collection } from 'firebase/firestore';
+
 import { useNavigate } from 'react-router';
 
 const MbtiMeetingCreatePage = () => {
@@ -35,9 +38,7 @@ const MbtiMeetingCreatePage = () => {
 
     const createMeetingButtonHandler = async () => {
         try {
-            const meetCollectionRef = db.collection('meet');
-
-            const meetingData = {
+            const meetCollectionRef = await addDoc(collection(db, 'meet'), {
                 meetingRepreImg: meetingRepreImg.contents,
                 meetingName: meetingName.contents,
                 meetingManagerName: meetingManagerName.contents,
@@ -48,10 +49,8 @@ const MbtiMeetingCreatePage = () => {
                 meetingIntroTitle: meetingIntroTitle.contents,
                 meetingIntroContent: meetingIntroContent.contents,
                 selectedTags: selectedTags.contents
-            };
-
-            await meetCollectionRef.add(meetingData);
-            console.log('meetingData가 성공적으로 meet 컬렉션에 추가되었습니다.');
+            });
+            console.log('모임이 성공적으로 meet 컬렉션에 추가되었습니다.');
             nav('/mbti/meeting');
         } catch (error) {
             console.error('meet 컬렉션에 meetingData를 추가하는 과정에서 오류가 발생했습니다:', error);

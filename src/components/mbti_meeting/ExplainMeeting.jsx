@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import x from '../../assets/mbtiMeet/x-square.png';
-import img from '../../assets/mbtiMeet/image.png';
+import x from '../../assets/mbtiMeeting/x-square.png';
+import img from '../../assets/mbtiMeeting/image.png';
 import { useRecoilState } from 'recoil';
 import { meetingIntroTitleState, meetingIntroContentState } from '../../recoil/recoilAtoms';
 
