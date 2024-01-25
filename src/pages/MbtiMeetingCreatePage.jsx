@@ -1,23 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import Tags from '../components/mbti_meeting/Tags';
-import DropTag from '../components/mbti_meeting/DropTag';
-import ExplainMeeting from '../components/mbti_meeting/ExplainMeeting';
-import MbtiMeetingCreate from '../components/mbti_meeting/MbtiMeetingCreate';
-import { useRecoilState, useRecoilValueLoadable } from 'recoil';
-import {
-    meetingRepreImgState,
-    meetingNameState,
-    meetingManagerNameState,
-    meetingLimitPeopleState,
-    meetingScheduleState,
-    meetingKakaoUrlState,
-    meetingOneLineIntroState,
-    meetingIntroTitleState,
-    meetingIntroContentState,
-    selectedTagsState,
-    createMeetingState
-} from '../recoil/recoilAtoms';
+import MbtiMeetingCreateTags from '../components/mbti_meeting/MbtiMeetingCreateTags';
+import MbtiMeetingExplainMeeting from '../components/mbti_meeting/MbtiMeetingExplainMeeting';
+import MbtiMeetingCreateInfo from '../components/mbti_meeting/MbtiMeetingCreateInfo';
+import { useRecoilState } from 'recoil';
+import { createMeetingState } from '../recoil/recoilAtoms';
 
 import { db } from '../firebase/firebase.config';
 import { addDoc, collection } from 'firebase/firestore';
@@ -25,35 +12,13 @@ import { addDoc, collection } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
 
 const MbtiMeetingCreatePage = () => {
-    const meetingRepreImg = useRecoilValueLoadable(meetingRepreImgState);
-    const meetingName = useRecoilValueLoadable(meetingNameState);
-    const meetingManagerName = useRecoilValueLoadable(meetingManagerNameState);
-    const meetingLimitPeople = useRecoilValueLoadable(meetingLimitPeopleState);
-    const meetingSchedule = useRecoilValueLoadable(meetingScheduleState);
-    const meetingKakaoUrl = useRecoilValueLoadable(meetingKakaoUrlState);
-    const meetingOneLineIntro = useRecoilValueLoadable(meetingOneLineIntroState);
-    const meetingIntroTitle = useRecoilValueLoadable(meetingIntroTitleState);
-    const meetingIntroContent = useRecoilValueLoadable(meetingIntroContentState);
-    const selectedTags = useRecoilValueLoadable(selectedTagsState);
-
     const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
 
     const nav = useNavigate();
 
     const createMeetingButtonHandler = async () => {
         try {
-            const meetCollectionRef = await addDoc(collection(db, 'meet'), {
-                meetingRepreImg: meetingRepreImg.contents,
-                meetingName: meetingName.contents,
-                meetingManagerName: meetingManagerName.contents,
-                meetingLimitPeople: meetingLimitPeople.contents,
-                meetingSchedule: meetingSchedule.contents,
-                meetingKakaoUrl: meetingKakaoUrl.contents,
-                meetingOneLineIntro: meetingOneLineIntro.contents,
-                meetingIntroTitle: meetingIntroTitle.contents,
-                meetingIntroContent: meetingIntroContent.contents,
-                selectedTags: selectedTags.contents
-            });
+            const meetCollectionRef = await addDoc(collection(db, 'meet'), newMeeting);
             console.log('모임이 성공적으로 meet 컬렉션에 추가되었습니다.');
             nav('/mbti/meeting');
         } catch (error) {
@@ -63,12 +28,11 @@ const MbtiMeetingCreatePage = () => {
 
     return (
         <StWholeContainer>
-            <MbtiMeetingCreate />
+            <MbtiMeetingCreateInfo />
             <StHr />
-            <Tags />
-            <DropTag />
+            <MbtiMeetingCreateTags />
             <StHr />
-            <ExplainMeeting />
+            <MbtiMeetingExplainMeeting />
             <StBtnBox>
                 <StCreateButton onClick={() => createMeetingButtonHandler()}>생성하기</StCreateButton>
                 <StCancelButton>취소하기</StCancelButton>
