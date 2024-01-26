@@ -100,7 +100,7 @@ const MbtiComunityDetail = () => {
                 </StViewInformation> */}
             </StuserInfoWrapper>
             <StButtonWrapper>
-                {user.uid == data?.id ? (
+                {user?.uid == data?.id ? (
                     <>
                         {/* <Stbutton
                             onClick={() => {
