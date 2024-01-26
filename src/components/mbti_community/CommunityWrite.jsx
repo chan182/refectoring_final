@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
-
 import dayjs from 'dayjs';
 import { useRecoilValue } from 'recoil';
 import { useMutation, useQueryClient } from 'react-query';
 import { userAtom } from '../../recoil/Atom';
 import { addCommunity } from '../../api/board';
-
+import modal_logo from '../../assets/home/mbti_community.png';
 import { v4 as uuidv4 } from 'uuid';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { storage } from '../../firebase/firebase.config';
-
+import Swal from 'sweetalert2';
 export default function UpdateTest() {
     const [imageFile, setImageFile] = useState();
     const user = useRecoilValue(userAtom);
@@ -41,7 +40,16 @@ export default function UpdateTest() {
         setImageFile(null);
     };
 
+    // 글쓰기
+
     const handleAddCommunity = async () => {
+        if (!title || !content || !imageFile) {
+            Swal.fire({
+                text: '모든 공간을 채워주세요 ^^ 유저활동에 많은 도움이 됩니다.',
+                imageUrl: modal_logo
+            });
+            return;
+        }
         const key = `${user?.uid}/${uuidv4()}`;
         const storageRef = ref(storage, key);
 
