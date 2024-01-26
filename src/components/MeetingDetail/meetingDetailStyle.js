@@ -109,6 +109,18 @@ export const StTagContent = styled.div`
     margin-top: 15px;
     margin-left: 40px;
     height: 70px;
+    display: flex;
+    .tagBox {
+        font-size: 24px;
+        margin-right: 10px;
+        padding: 10px;
+        height: 45px;
+        background-color: var(--main-button-color);
+        color: #ffffff;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+    }
 `;
 
 export const StContentContainerBox = styled.div`
@@ -191,6 +203,7 @@ export const StCommentImage = styled.image`
     margin-right: 5px;
     border-radius: 50%;
     border: 1px solid #8d8d8d;
+    overflow: hidden;
 `;
 
 export const StComments = styled.div`
