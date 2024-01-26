@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Swal from 'sweetalert2';
-import logo from '../../assets/home/logo.png';
+import logo from '../../assets/home/footerLogo.png';
 import modal_logo from '../../assets/home/mbti_community.png';
 import { auth, db } from '../../firebase/firebase.config';
 

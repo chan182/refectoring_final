@@ -12,11 +12,11 @@ const UserWritelist = () => {
     const [user, setUser] = useRecoilState(userAtom);
 
     const { data } = useQuery({
-        queryKey: ['communities', user],
+        queryKey: ['communities'],
         queryFn: getData
     });
 
-    const filteredData = data ? data.filter((item) => item.data.id === user?.uid) : [];
+    const filteredData = Array.isArray(data) ? data.filter((item) => item.data.id === user?.uid) : [];
 
     return (
         <>
@@ -32,10 +32,10 @@ const UserWritelist = () => {
                             console.log(item.data.title);
                             return (
                                 <div>
-                                    <StfilteredTitle>{item.data.title}</StfilteredTitle>
+                                    <StfilteredTitle>{item?.data.title}</StfilteredTitle>
                                     <StImoges>
                                         <img src={heartImoge} alt="" />
-                                        <StLikeCount>{item.data.likecount || 0}</StLikeCount>
+                                        <StLikeCount>{item?.data.likecount || 0}</StLikeCount>
                                         <img src={messageSquare} alt="" />
                                         <StCommentCount>0</StCommentCount>
                                         <img src={eyeImoge} alt="" />

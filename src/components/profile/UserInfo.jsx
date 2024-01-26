@@ -7,6 +7,8 @@ import profileImage from '../../assets/profile/profileImg.png';
 import { db, storage } from '../../firebase/firebase.config';
 import { isEditingAtom, userAtom } from '../../recoil/Atom';
 import Avatar from '../common/avatar';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_community.png';
 
 const UserInfo = () => {
     const [user, setUser] = useRecoilState(userAtom);
@@ -64,6 +66,15 @@ const UserInfo = () => {
                 location,
                 introduce
             };
+            const isEmptyField = Object.values(data).some((value) => value === '');
+
+            if (isEmptyField) {
+                Swal.fire({
+                    text: '모든 공간을 채워주세요 모임 활동에 많은 도움이 됩니다 ^^',
+                    imageUrl: modal_logo
+                });
+                return;
+            }
             if (imageFile) {
                 // 이미지 파일이 선택되었을 때만 업로드
                 await uploadBytes(storageRef, imageFile);
@@ -80,6 +91,7 @@ const UserInfo = () => {
             console.error('업로드 실패', error);
         }
     };
+
     return (
         <>
             <StProfileTitle>마이페이지</StProfileTitle>
@@ -88,14 +100,28 @@ const UserInfo = () => {
                     <>
                         <StProfileImage>
                             {isEditing === true ? (
-                                <label htmlFor="inputFile">
-                                    <ProfilePointerAvatar
-                                        src={previewURL || (user && user.imageUrl) || profileImage}
-                                        for="inputFile"
-                                        size="large"
-                                    />
-                                    <Stinput type="file" id="inputFile" accept="image/*" onChange={fileSelectHandler} />
-                                </label>
+                                <>
+                                    <label htmlFor="inputFile">
+                                        <ProfilePointerAvatar
+                                            src={previewURL || (user && user.imageUrl) || profileImage}
+                                            for="inputFile"
+                                            size="large"
+                                        />
+                                        <Stinput
+                                            type="file"
+                                            id="inputFile"
+                                            accept="image/*"
+                                            onChange={fileSelectHandler}
+                                        />
+                                    </label>
+                                    {/* <StClearImageButton
+                                        onClick={() => {
+                                            clearSelectedImage();
+                                        }}
+                                    >
+                                        이미지 선택 취소
+                                    </StClearImageButton> */}
+                                </>
                             ) : (
                                 <Avatar src={(user && user.imageUrl) || profileImage} size="large" />
                             )}
@@ -314,6 +340,17 @@ const StProfileImage = styled.div`
         }
     }
 `;
+
+const StClearImageButton = styled.button`
+    width: 180px;
+    height: 40px;
+    font-size: 18px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+`;
+
 const StUserInfo = styled.div`
     display: flex;
     flex-direction: column;

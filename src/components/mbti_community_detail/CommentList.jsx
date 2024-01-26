@@ -9,10 +9,11 @@ import upVector from '../../assets/community/Vector-up.svg';
 import filteredImoge from '../../assets/community/align-left.svg';
 import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
-
 import { addComment, deleteComment, getComments, switchComment } from '../../api/comment';
 import fullheart from '../../assets/community/fullheart.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import dropdown from '../../assets/community/dropdown.png';
+
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
     const [showButtons, setShowButtons] = useState(false);
@@ -21,9 +22,13 @@ const CommentList = () => {
     const [editMode, setEditMode] = useState(false);
     const [userCommentId, setUserCommentId] = useState('');
     const [updateComment, setUpdateComment] = useState('');
+    const [sortOption, setSortOption] = useState('latest');
+    const [showSortOptions, setShowSortOptions] = useState(false);
+    const [CommentCount, setCommentCount] = useState(0);
     const params = useParams();
     const queryClient = useQueryClient();
-
+    const [selectedCommentId, setSelectedCommentId] = useState(null);
+    const [showDropdown, setShowDropdown] = useState(false);
     // 댓글 추가하기
 
     const mutationAdd = useMutation((newComment) => addComment(newComment, params.id), {
@@ -78,14 +83,57 @@ const CommentList = () => {
 
     const { data } = useQuery({ queryKey: ['comments'], queryFn: () => getComments(params.id) });
 
+    useEffect(() => {
+        const fetchCommentCount = async () => {
+            try {
+                const communityRef = doc(db, 'communities', params.id);
+                const commentsQuery = query(collection(communityRef, 'comments'));
+                const commentsSnapshot = await getDocs(commentsQuery);
+                const totalComments = commentsSnapshot.size;
+                setCommentCount(totalComments);
+                console.log('댓글 갯수:', totalComments);
+                // 여기에서 totalComments를 원하는 대로 활용할 수 있습니다.
+            } catch (error) {
+                console.error('댓글 갯수를 가져오는 중 에러 발생:', error);
+            }
+        };
+        fetchCommentCount();
+    }, [params.id]);
+
+    const toggledown = (id) => {
+        setSelectedCommentId(selectedCommentId === id ? null : id);
+    };
+
     return (
         <Stwrapper>
             <StCommentTitleWrapper>
-                <StTitle>댓글 0000개 </StTitle>
-                <StFilteredbutton>
+                <StTitle>{CommentCount} 개 </StTitle>
+                {/* <StFilteredbutton>
                     <img src={filteredImoge} alt="" />
-                    <div>정렬기준</div>
-                </StFilteredbutton>
+                    <div onClick={() => setShowSortOptions(!showSortOptions)}>
+                        정렬기준
+                        {showSortOptions && (
+                            <StSortOptions>
+                                <button
+                                    onClick={() => {
+                                        setSortOption('latest');
+                                        setShowSortOptions(false);
+                                    }}
+                                >
+                                    최신순
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSortOption('popular');
+                                        setShowSortOptions(false);
+                                    }}
+                                >
+                                    인기순
+                                </button>
+                            </StSortOptions>
+                        )}
+                    </div>
+                </StFilteredbutton> */}
             </StCommentTitleWrapper>
             <StInputWrapper>
                 <StImageIntutWrapper>
@@ -125,9 +173,39 @@ const CommentList = () => {
                         <StProfileImoge src={data?.ImageUrl} alt="" />
                         <StCommentWrapper>
                             <StCommentUserInfo>
-                                <div>{data?.nickname}</div>
-
-                                <div>{data?.createdAt}</div>
+                                <StFlex>
+                                    <div>{data?.nickname}</div>
+                                    <div>{data?.createdAt}</div>
+                                </StFlex>
+                                <StFlex>
+                                    <button onClick={() => toggledown(id)}>
+                                        <StDropDownImage src={dropdown} alt="" />
+                                    </button>
+                                    {user?.uid === data?.id && selectedCommentId === id ? (
+                                        <StButtons>
+                                            <button
+                                                onClick={() => {
+                                                    console.log(id);
+                                                    setEditMode(!editMode);
+                                                    setUserCommentId(id);
+                                                    setUpdateComment(data?.content);
+                                                    handlerUpdateComment(id);
+                                                }}
+                                            >
+                                                댓글 수정
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    handleDeleteComment(id);
+                                                }}
+                                            >
+                                                댓글 삭제
+                                            </button>
+                                        </StButtons>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </StFlex>
                             </StCommentUserInfo>
 
                             <Stcomment>
@@ -142,8 +220,9 @@ const CommentList = () => {
                                     <Stcomment>{data?.content}</Stcomment>
                                 )}
                             </Stcomment>
+
                             <StUpDown>
-                                <StUp>
+                                {/* <StUp>
                                     <button>
                                         {user?.uid && data?.likes?.includes(user?.uid) ? (
                                             <img src={fullheart} alt="좋아요버튼" />
@@ -155,32 +234,8 @@ const CommentList = () => {
                                 </StUp>
                                 <StDown>
                                     <img src={downVector} alt="" />
-                                </StDown>
+                                </StDown> */}
                             </StUpDown>
-                            {user?.uid === data?.id ? (
-                                <div>
-                                    <button
-                                        onClick={() => {
-                                            console.log(id);
-                                            setEditMode(!editMode);
-                                            setUserCommentId(id);
-                                            setUpdateComment(data?.content);
-                                            handlerUpdateComment(id);
-                                        }}
-                                    >
-                                        수정
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            handleDeleteComment(id);
-                                        }}
-                                    >
-                                        삭제
-                                    </button>
-                                </div>
-                            ) : (
-                                <></>
-                            )}
                         </StCommentWrapper>
                     </StCommentCardList>
                 );
@@ -220,6 +275,31 @@ const StFilteredbutton = styled.div`
     gap: 4px;
 `;
 
+const StSortOptions = styled.div`
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 35%; /* Adjusted to be relative to the parent's width */
+    transform: translateX(-50%); /* Center horizontally */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    z-index: 1;
+    margin-top: 4px;
+
+    button {
+        padding: 8px;
+        text-align: left;
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 14px;
+
+        &:hover {
+            background-color: #f2f2f2;
+        }
+    }
+`;
 const StProfileImoge = styled.img`
     width: 38px;
     height: 38px;
@@ -300,8 +380,29 @@ const StCommentWrapper = styled.div`
 
 const StCommentUserInfo = styled.div`
     display: flex;
-    align-items: flex-start;
+    justify-content: space-between;
     gap: 13px;
+    width: 100%;
+`;
+
+const StFlex = styled.div`
+    display: flex;
+    gap: 10px;
+`;
+
+const StButtons = styled.button`
+    display: flex;
+    flex-direction: column;
+    right: 10%;
+    gap: 10px;
+    color: #fff;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%;
+    width: 84px;
+    padding: 4px;
+    border: 1px;
 `;
 
 const Stcomment = styled.div`
@@ -316,6 +417,11 @@ const Stcomment = styled.div`
     font-weight: 400;
     line-height: 148%; /* 26.64px */
     letter-spacing: -0.09px;
+`;
+
+const StDropDownImage = styled.img`
+    width: 24px;
+    height: 30px;
 `;
 
 const StUpDown = styled.div`

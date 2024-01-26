@@ -10,15 +10,15 @@ import heart from '../../assets/community/heart.svg';
 import blackheart from '../../assets/community/blackheart.svg';
 import readingGlasses from '../../assets/community/search.svg';
 import { userAtom } from '../../recoil/Atom';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getData } from '../../api/board';
 import { useInfiniteQuery } from 'react-query';
-import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.config';
 
 const MbtiCommunity = () => {
     const user = useRecoilState(userAtom);
-
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [searchKeyWord, setSearchKeyWord] = useState('');
 
@@ -31,52 +31,69 @@ const MbtiCommunity = () => {
 
     const filteredData = data?.filter(({ data }) => data.title.includes(searchKeyWord));
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+    const handleSearch = () => {
+        queryClient.invalidateQueries(['communities', searchKeyWord]);
+    };
     ////////////// usePaginatedQuery를 사용하여 페이지별로 데이터 가져오기
 
-    const { resolvedData, latestData, status, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery(
-        ['communities', searchKeyWord],
-        getData,
-        {
-            getNextPageParam: (lastPage) => {
-                return lastPage.page + 1;
-            }
-        }
-    );
+    // const { resolvedData, latestData, status, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery(
+    //     ['communities', searchKeyWord],
+    //     getData,
+    //     {
+    //         getNextPageParam: (lastPage) => {
+    //             return lastPage.page + 1;
+    //         }
+    //     }
+    // );
 
     // const handlePageChange = (newPage) => {
     //     // 페이지 변경 함수
     //     navigate(`/mbti/community?page=${newPage}`);
     // };
 
-    // 좋아요 기능
-    const mutation = useMutation();
+    //////////////// 좋아요 기능
+
+    const mutation = useMutation(
+        async (id) => {
+            // 해당 문서 값 가져오기
+
+            const postRef = doc(db, 'communities', id);
+            const postDoc = await getDoc(postRef);
+            const postData = postDoc.data();
+            console.log(postDoc.data());
+            console.log(user[0].uid);
+
+            // 좋아요 기능 구현
+
+            if (user[0].uid && postData.likes.includes(user[0].uid)) {
+                return updateDoc(postRef, {
+                    likes: arrayRemove(user[0].uid),
+                    likecount: postData.likecount ? postData.likecount - 1 : 0
+                });
+            } else {
+                return updateDoc(postRef, {
+                    likes: arrayUnion(user[0].uid),
+                    likecount: postData.likecount ? postData.likecount + 1 : 1
+                });
+            }
+        },
+        {
+            onSuccess: () => {
+                // 무효화 시키기
+                queryClient.invalidateQueries(['communities', searchKeyWord]);
+            }
+        }
+    );
 
     const handleLike = async (postId) => {
-        // Optimistic update
-        mutation.mutate(postId, {
-            onSuccess: () => {}
-        });
-    };
-
-    const togglelike = async (id, data) => {
-        console.log(id);
-        console.log(data);
-        console.log(user[0].uid);
-        const postRef = doc(db, 'communities', id);
-
-        if (user[0].uid && data.likes.includes(user[0].uid)) {
-            // 사용자가 좋아요를 미리 한 경우 => 좋아요를 취소한다.
-            await updateDoc(postRef, {
-                likes: arrayRemove(user[0].uid),
-                likecount: data.likecount ? data.likecount - 1 : 0
-            });
-        } else {
-            // 사용자가 좋아요를 하지 않은 경우 => 좋아요를 추가한다.
-            await updateDoc(postRef, {
-                likes: arrayUnion(user[0].uid),
-                likecount: data.likecount ? data.likecount + 1 : 1
-            });
-        }
+        console.log(postId);
+        // postId를 인자로 받기
+        mutation.mutate(postId);
     };
 
     return (
@@ -88,6 +105,7 @@ const MbtiCommunity = () => {
                     value={searchKeyWord}
                     name="searchKeyWord"
                     onChange={(e) => setSearchKeyWord(e.target.value)}
+                    onKeyPress={handleKeyPress} // Add event listener for Enter key
                     autoFocus
                 />
             </StsearchInputWrapper>
@@ -120,7 +138,7 @@ const MbtiCommunity = () => {
                             <StCommunityTitle>{data.title} </StCommunityTitle>
                             <StButton
                                 onClick={() => {
-                                    togglelike(id, data);
+                                    handleLike(id);
                                 }}
                             >
                                 {user && data?.likes?.includes(user[0].uid) ? (
@@ -256,7 +274,7 @@ const StfilteredButton = styled.div`
 
 const StCardList = styled.div`
     max-width: 956px;
-    height: 520px;
+
     border-radius: 26px;
     border: 1px solid #ededed;
     background: #fff;
@@ -300,7 +318,6 @@ const StButton = styled.button`
 
 const StCommunityContent = styled.div`
     max-width: 956px;
-    height: 49px;
     overflow: hidden;
     color: #121212;
     text-overflow: ellipsis;

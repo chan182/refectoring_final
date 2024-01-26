@@ -4,7 +4,7 @@ import dropArrow from '../../assets/home/dropArrow.png';
 import foldArrow from '../../assets/home/foldArrow.png';
 import x from '../../assets/mbtiMeeting/x.png';
 
-const ZoneCheckedDropTag = ({
+const MbtiCheckedDropTag = ({
     tagCategory,
     zoneSelectHandler,
     genderSelectHandler,
@@ -14,27 +14,7 @@ const ZoneCheckedDropTag = ({
     addSelectedTagsHandler,
     removeSelectedTagsHandler
 }) => {
-    const [checkboxTags01, setCheckboxTags01] = useState([
-        '지역 전체',
-        '서울',
-        '인천',
-        '대전',
-        '광주',
-        '대구',
-        '부산',
-        '울산'
-    ]);
-    const [checkboxTags02, setCheckboxTags02] = useState([
-        '경기',
-        '강원',
-        '충북',
-        '충남',
-        '전북',
-        '전남',
-        '경북',
-        '경남',
-        '제주'
-    ]);
+    const [checkboxTags, setCheckboxTags] = useState(['전체 유형', 'E', 'I', 'N', 'S', 'F', 'T', 'P', 'J']);
 
     return (
         <>
@@ -73,24 +53,7 @@ const ZoneCheckedDropTag = ({
                 <StHr />
 
                 <StCheckbox>
-                    {checkboxTags01.map((tag, index) => (
-                        <React.Fragment key={index}>
-                            <input
-                                type="checkbox"
-                                checked={selectedTags.includes(tag)}
-                                onClick={() => {
-                                    if (!selectedTags.includes(tag)) {
-                                        addSelectedTagsHandler(tag);
-                                    } else removeSelectedTagsHandler(tag);
-                                }}
-                            />
-                            <StP>{tag}</StP>
-                        </React.Fragment>
-                    ))}
-                </StCheckbox>
-
-                <StCheckbox>
-                    {checkboxTags02.map((tag, index) => (
+                    {checkboxTags.map((tag, index) => (
                         <React.Fragment key={index}>
                             <input
                                 type="checkbox"
@@ -110,7 +73,7 @@ const ZoneCheckedDropTag = ({
     );
 };
 
-export default ZoneCheckedDropTag;
+export default MbtiCheckedDropTag;
 
 const StContainer = styled.div`
     width: 1200px;
