@@ -50,8 +50,8 @@ const MbtiMeeting = () => {
     const searchData = async () => {
         const q = query(
             collection(db, 'meet'),
-            where('title', '>=', searchKeyWord),
-            where('title', '<=', searchKeyWord + '\uf8ff')
+            where('meetingName', '>=', searchKeyWord),
+            where('meetingName', '<=', searchKeyWord + '\uf8ff')
         );
         const querySnapshot = await getDocs(q);
 
@@ -66,7 +66,7 @@ const MbtiMeeting = () => {
         });
         setMeet(initialMeet);
     };
-    console.log('진재석');
+
     // 위로 올라가기 버튼
     useEffect(() => {
         const scroll = () => {
@@ -104,7 +104,7 @@ const MbtiMeeting = () => {
             searchData();
         }
     };
-    console.log('진재석');
+
     return (
         <StMeeting>
             <StSearchMeet>
