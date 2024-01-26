@@ -1,19 +1,40 @@
 import React from 'react';
 import styled from 'styled-components';
-import DropTag from '../components/mbti_meeting/DropTag';
-import ExplainMeeting from '../components/mbti_meeting/ExplainMeeting';
-import MbtiMeetingCreate from '../components/mbti_meeting/MbtiMeetingCreate';
+import MbtiMeetingCreateTags from '../components/mbti_meeting/MbtiMeetingCreateTags';
+import MbtiMeetingExplainMeeting from '../components/mbti_meeting/MbtiMeetingExplainMeeting';
+import MbtiMeetingCreateInfo from '../components/mbti_meeting/MbtiMeetingCreateInfo';
+import { useRecoilState } from 'recoil';
+import { createMeetingState } from '../recoil/recoilAtoms';
+
+import { db } from '../firebase/firebase.config';
+import { addDoc, collection } from 'firebase/firestore';
+
+import { useNavigate } from 'react-router';
 
 const MbtiMeetingCreatePage = () => {
+    const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
+
+    const nav = useNavigate();
+
+    const createMeetingButtonHandler = async () => {
+        try {
+            const meetCollectionRef = await addDoc(collection(db, 'meet'), newMeeting);
+            console.log('모임이 성공적으로 meet 컬렉션에 추가되었습니다.');
+            nav('/mbti/meeting');
+        } catch (error) {
+            console.error('meet 컬렉션에 meetingData를 추가하는 과정에서 오류가 발생했습니다:', error);
+        }
+    };
+
     return (
         <StWholeContainer>
-            <MbtiMeetingCreate />
+            <MbtiMeetingCreateInfo />
             <StHr />
-            <DropTag />
+            <MbtiMeetingCreateTags />
             <StHr />
-            <ExplainMeeting />
+            <MbtiMeetingExplainMeeting />
             <StBtnBox>
-                <StCreateButton>생성하기</StCreateButton>
+                <StCreateButton onClick={() => createMeetingButtonHandler()}>생성하기</StCreateButton>
                 <StCancelButton>취소하기</StCancelButton>
             </StBtnBox>
         </StWholeContainer>

@@ -2,24 +2,23 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import check from '../../assets/mbtiMeet/check.png';
-import produce from '../../assets/mbtiMeet/produce.png';
-import search from '../../assets/mbtiMeet/search.png';
+import check from '../../assets/mbtiMeeting/check.png';
+import produce from '../../assets/mbtiMeeting/produce.png';
+import search from '../../assets/mbtiMeeting/search.png';
 import { db } from '../../firebase/firebase.config';
 import { Link } from 'react-router-dom';
-import positionImg from '../../assets/mbtiMeet/positionimg.png';
-import dateImg from '../../assets/mbtiMeet/dateimg.png';
-import userImg from '../../assets/mbtiMeet/userimg.png';
-import usersImg from '../../assets/mbtiMeet/usersimg.png';
-import ageImg from '../../assets/mbtiMeet/ageimg.png';
-
+import positionImg from '../../assets/mbtiMeeting/positionimg.png';
+import dateImg from '../../assets/mbtiMeeting/dateimg.png';
+import userImg from '../../assets/mbtiMeeting/userimg.png';
+import usersImg from '../../assets/mbtiMeeting/usersimg.png';
+import ageImg from '../../assets/mbtiMeeting/ageimg.png';
+import DropTag from './DropTag';
 const MbtiMeeting = () => {
     // const user = useRecoilState(userAtom);
     // const userinformation = user[0];
     // console.log(userinformation);
     // console.log(userinformation.email);
     const nav = useNavigate();
-
     const [isChecked, setChecked] = useState(false);
     const [isChecke, setChecke] = useState(false);
     const [isVisible, setIsvisible] = useState(false);
@@ -31,9 +30,7 @@ const MbtiMeeting = () => {
         const fetchData = async () => {
             const q = query(collection(db, 'meet'));
             const querySnapshot = await getDocs(q);
-
             const initialMeet = [];
-
             querySnapshot.forEach((doc) => {
                 const data = {
                     id: doc.id,
@@ -54,9 +51,7 @@ const MbtiMeeting = () => {
             where('title', '<=', searchKeyWord + '\uf8ff')
         );
         const querySnapshot = await getDocs(q);
-
         const initialMeet = [];
-
         querySnapshot.forEach((doc) => {
             const data = {
                 id: doc.id,
@@ -66,13 +61,12 @@ const MbtiMeeting = () => {
         });
         setMeet(initialMeet);
     };
-    console.log('진재석');
+
     // 위로 올라가기 버튼
     useEffect(() => {
         const scroll = () => {
             const scrollY = window.scrollY || document.documentElement.scrollTop;
             const threshold = 800; //800px
-
             if (scrollY > threshold) {
                 setIsvisible(true);
             } else {
@@ -104,7 +98,7 @@ const MbtiMeeting = () => {
             searchData();
         }
     };
-    console.log('진재석');
+
     return (
         <StMeeting>
             <StSearchMeet>
@@ -122,25 +116,7 @@ const MbtiMeeting = () => {
                 <StText>자유롭게 모임을 만들고 가입해 활동해보세요!</StText>
             </StSearchMeet>
             <StSelectMeetSearchContainer>
-                <StSelectMeetSearchText>원하는 조건으로 모임 찾기</StSelectMeetSearchText>
-                <StSelectContainer>
-                    <StSelectImgWrap>
-                        <StSelect>지역</StSelect>
-                        <StSelectImg src={check} />
-                    </StSelectImgWrap>
-                    <StSelectImgWrap onClick={handleToggle}>
-                        <StSelect>성별</StSelect>
-                        <StSelectImg src={check} />
-                    </StSelectImgWrap>
-                    <StSelectImgWrap onClick={handleToggl}>
-                        <StSelect>나이</StSelect>
-                        <StSelectImg src={check} />
-                    </StSelectImgWrap>
-                    <StSelectMbtiImgWrap>
-                        <StSelect>MBTI</StSelect>
-                        <StSelectMbtiImg src={check} />
-                    </StSelectMbtiImgWrap>
-                </StSelectContainer>
+                <DropTag />
             </StSelectMeetSearchContainer>
             <StCheckboxContainer>
                 {isChecked && (
@@ -180,10 +156,10 @@ const MbtiMeeting = () => {
                 {meet.map((meet) => (
                     <StMeetingLink to={`/mbti/meeting/detail/${meet.id}`} key={meet.id}>
                         <StMeetingWrap>
-                            <StImg src={meet.imageurl}></StImg>
+                            <StImg src={meet.meetingRepreImg}></StImg>
                             <StContainer>
                                 <StTitle>
-                                    {meet.title}/{meet.mbti}
+                                    {meet.meetingName}/{meet.mbti}
                                 </StTitle>
                                 <StPositionDateUserContainer>
                                     <StContentsImgWrap>
@@ -192,11 +168,11 @@ const MbtiMeeting = () => {
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsDateImg src={dateImg}></StContentsDateImg>
-                                        <StContents>일정 : {meet.date}</StContents>
+                                        <StContents>일정 : {meet.meetingSchedule}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsUserImg src={userImg} alt="" />
-                                        <StContents>인원 :0 / {meet.person}</StContents>
+                                        <StContents>인원 :0 / {meet.meetingLimitPeople}</StContents>
                                     </StContentsImgWrap>
                                 </StPositionDateUserContainer>
                                 <StPositionDateUserContainer>
@@ -222,12 +198,12 @@ const MbtiMeeting = () => {
         </StMeeting>
     );
 };
-
 export default MbtiMeeting;
 
 const StMeeting = styled.div`
     background-color: var(--background-color);
 `;
+
 const StSearchMeet = styled.div`
     display: flex;
     align-items: center;
@@ -262,7 +238,7 @@ const StSearch = styled.input`
 
 const StText = styled.h1`
     font-size: 42px;
-    margin: 40px 0px 180px;
+    margin: 60px 0px 90px;
 `;
 
 const StCreateWrap = styled.div`
@@ -377,7 +353,7 @@ const StUpbutton = styled.button`
 `;
 
 const StMeetingContainer = styled.div`
-    min-width: 822px;
+    min-width: 1250px;
     width: 70%;
     height: 5000px;
     margin: 40px auto;
@@ -414,6 +390,7 @@ const StPositionDateUserContainer = styled.div`
     display: flex;
     justify-content: space-between;
 `;
+
 const StContentsImgWrap = styled.span`
     width: 40%;
 `;
@@ -437,6 +414,7 @@ const StContentsUsersImg = styled.img`
 const StContentsAgeImg = styled.img`
     width: 13px;
 `;
+
 const StContents = styled.span`
     font-size: 14px;
 `;
