@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import downVector from '../../assets/community/Vector-down.svg';
@@ -13,6 +13,8 @@ import { addComment, deleteComment, getComments, switchComment } from '../../api
 import fullheart from '../../assets/community/fullheart.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import dropdown from '../../assets/community/dropdown.png';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_community.png';
 
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
@@ -37,8 +39,16 @@ const CommentList = () => {
             console.log('성공 !!');
         }
     });
+    const navigate = useNavigate();
 
     const handleAddComment = async (paramsId) => {
+        if (!user) {
+            Swal.fire({
+                imageUrl: modal_logo,
+                title: '로그인한 유저만 댓글작성이 가능합니다.'
+            });
+            return navigate('/login');
+        }
         const now = dayjs();
 
         const newComment = {
