@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { storage } from '../../firebase/firebase.config';
 import Swal from 'sweetalert2';
+import backImage from '../../assets/community/backOImage.png';
 export default function UpdateTest() {
     const [imageFile, setImageFile] = useState();
     const user = useRecoilValue(userAtom);
@@ -96,22 +97,24 @@ export default function UpdateTest() {
                     ></StTitleInput>
                     <StcontentInput
                         value={content}
+                        placeholder="내용을 입력해주세요."
                         onChange={(e) => {
                             setContent(e.target.value);
                         }}
                     ></StcontentInput>
-                    <label htmlFor="inputFile">
-                        {!imageFile && (
-                            <StImageInput type="file" id="inputFile" accept="image/*" onChange={handleFileUpload} />
-                        )}
-                        <img src="backImage" alt="" />
-                        {imageFile && (
-                            <div>
-                                <StImage src={imageFile} />
+                    {imageFile ? (
+                        <div>
+                            <StBackImage>
+                                <StImage src={imageFile} alt="Selected Image" />
                                 <button onClick={handleDeleteImage}>clear</button>
-                            </div>
-                        )}
-                    </label>
+                            </StBackImage>
+                        </div>
+                    ) : (
+                        <StBackImage>
+                            <StImage src={backImage} alt="Empty Image" />
+                            <StImageInput type="file" accept="image/*" onChange={handleFileUpload} />
+                        </StBackImage>
+                    )}
                 </StPeed>
                 <StBtns>
                     <StEditBtn onClick={handleAddCommunity}>저장하기</StEditBtn>
@@ -167,22 +170,38 @@ const StTitleInput = styled.input`
 `;
 
 const StcontentInput = styled.textarea`
-    padding: 10px;
-    height: 500px;
+    padding: 20px;
+    height: 400px;
     border: none;
     height: px;
     border-radius: 16px;
     background: #f8f8f8;
 `;
 
+const StBackImage = styled.label`
+    position: relative;
+    display: inline-block;
+    margin-top: 28px;
+    width: 160px;
+    height: 160px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+`;
+
 const StImage = styled.img`
-    width: 100px;
-    height: 100px;
-    margin: 50px;
+    width: 160px;
+    height: 160px;
 `;
 
 const StImageInput = styled.input`
-    margin: 50px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
 `;
 
 const StBtns = styled.div`
