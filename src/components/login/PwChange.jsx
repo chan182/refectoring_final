@@ -3,10 +3,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import logo from '../../assets/home/footerLogo.png';
 import { auth } from '../../firebase/firebase.config';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/headerLogo.png';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const PwChange = () => {
     const [userId, setUserId] = useState('');
     const idRef = useRef('');
+    const nav = useNavigate;
 
     useEffect(() => {
         idRef.current.focus();
@@ -20,16 +24,33 @@ const PwChange = () => {
         }
     };
 
-    //   비밀번호 변경 버튼
+    //   이메일 전송버튼
     const pwChangeButton = (event) => {
         event.preventDefault();
-        try {
-            sendPasswordResetEmail(auth, userId);
-        } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log('err', errorCode, errorMessage);
-        }
+        sendPasswordResetEmail(auth, userId)
+            .then(() => {
+                Swal.fire({
+                    title: '메일함을 확인해주세요',
+                    text: '메일에 적힌 주소에서 변경할수있습니다',
+                    imageUrl: modal_logo,
+                    imageWidth: 300,
+                    imageAlt: 'Custom image',
+                    confirmButtonText: '네'
+                });
+                nav('/login');
+            })
+            .catch((error) => {
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        return Swal.fire({
+                            icon: 'error',
+                            position: 'center',
+                            title: '잘못된 이메일 형식입니다.',
+                            text: '유효한 이메일 형식으로 작성해주세요.',
+                            confirmButtonColor: '#756ab6'
+                        });
+                }
+            });
     };
 
     return (
@@ -51,9 +72,9 @@ const PwChange = () => {
                         이메일 전송
                     </StPwChange>
                 </StPwChangeWarp>
-                <StSearchId>
+                {/* <StSearchId>
                     아이디가 기억나지 않는다면? <span>아이디찾기 </span>
-                </StSearchId>
+                </StSearchId> */}
             </StLoginWrap>
         </StPage>
     );
