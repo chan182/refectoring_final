@@ -10,7 +10,7 @@ const MainSlider = () => {
         <StSlide>
             <Slider {...settings}>
                 <List>
-                    <img src={testSlider} />
+                    {/* <img src={testSlider} /> */}
                     <StH1>슬라이드 1</StH1>
                     <StH2>슬라이드 1 내용입니다.</StH2>
                 </List>
