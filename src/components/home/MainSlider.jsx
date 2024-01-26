@@ -3,12 +3,14 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import styled from 'styled-components';
+import testSlider from '../../assets/home/banner.png';
 
 const MainSlider = () => {
     return (
         <StSlide>
             <Slider {...settings}>
                 <List>
+                    {/* <img src={testSlider} /> */}
                     <StH1>슬라이드 1</StH1>
                     <StH2>슬라이드 1 내용입니다.</StH2>
                 </List>
@@ -78,6 +80,12 @@ const List = styled.div`
     height: 350px;
     padding: 100px 0px 0px 250px;
     background-color: var(--box-border-color);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 `;
 
 const StH1 = styled.h1`
