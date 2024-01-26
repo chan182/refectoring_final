@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -19,6 +19,29 @@ const Header = () => {
         setIsOpen(!isOpen);
     };
 
+    // 마이프로필 바깥영역 클릭시 마이프로필 닫기
+    const dropBtnRef = useRef(null);
+    const mainProfileRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropBtnRef.current &&
+                mainProfileRef.current &&
+                !dropBtnRef.current.contains(event.target) &&
+                !mainProfileRef.current.contains(event.target)
+            ) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <StBox>
             <StPositionBox>
@@ -36,11 +59,11 @@ const Header = () => {
                         {user ? (
                             <>
                                 {/* 로그인 성공 시, */}
-                                <StProfileBox>
+                                <StProfileBox ref={mainProfileRef}>
                                     <StProfileImg>
                                         <img src={user.imageUrl || profileImage} />
                                     </StProfileImg>
-                                    <StDropBtn onClick={toggleDropdown}>
+                                    <StDropBtn ref={dropBtnRef} onClick={toggleDropdown}>
                                         <img src={dorpArrow} />
                                     </StDropBtn>
                                     {isOpen && <MainProfile toggleDropdown={toggleDropdown} />}
@@ -76,7 +99,7 @@ const StPositionBox = styled.div`
     display: flex;
     justify-content: center;
     background-color: white;
-    border: 1px solid var(--box-border-color);
+    /* border: 1px solid var(--box-border-color); */
     border-width: 0 0 1px 0;
 `;
 
