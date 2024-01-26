@@ -156,33 +156,33 @@ const MbtiMeeting = () => {
                 {meet.map((meet) => (
                     <StMeetingLink to={`/mbti/meeting/detail/${meet.id}`} key={meet.id}>
                         <StMeetingWrap>
-                            <StImg src={meet.meetingRepreImg}></StImg>
+                            <StImg src={meet.repreImg}></StImg>
                             <StContainer>
                                 <StTitle>
-                                    {meet.meetingName}/{meet.mbti}
+                                    {meet.title}/{(meet.mbtis + '').split()}
                                 </StTitle>
                                 <StPositionDateUserContainer>
                                     <StContentsImgWrap>
                                         <StContentsPositionImg src={positionImg}></StContentsPositionImg>
-                                        <StContents>{meet.position}</StContents>
+                                        <StContents>{(meet.locations + '').split()}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsDateImg src={dateImg}></StContentsDateImg>
-                                        <StContents>일정 : {meet.meetingSchedule}</StContents>
+                                        <StContents>일정 : {meet.schedule}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsUserImg src={userImg} alt="" />
-                                        <StContents>인원 :0 / {meet.meetingLimitPeople}</StContents>
+                                        <StContents>인원 :0 / {meet.limitPeople}</StContents>
                                     </StContentsImgWrap>
                                 </StPositionDateUserContainer>
                                 <StPositionDateUserContainer>
                                     <StContentsImgWrap>
                                         <StContentsUsersImg src={usersImg} alt="" />
-                                        <StContents>성별 / {meet.gender}</StContents>
+                                        <StContents>성별 / {(meet.genders + '').split()}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsAgeImg src={ageImg} alt="" />
-                                        <StContents>나이 / {meet.age}</StContents>
+                                        <StContents>나이 / {(meet.ages + '').split()}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsAgeImg></StContentsAgeImg>
