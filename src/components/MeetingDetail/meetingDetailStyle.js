@@ -196,6 +196,7 @@ export const StCommentImage = styled.image`
 export const StComments = styled.div`
     margin-bottom: 16px;
     overflow-y: auto;
+    overflow-x: hidden;
 
     div {
         padding: 10px;
@@ -225,6 +226,15 @@ export const StComments = styled.div`
             margin-top: -10px;
             margin-left: -10px;
         }
+        div.contentBox {
+            min-height: 50px;
+        }
+        div.dropDown {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+        }
         p.nickname {
             color: #333;
             font-size: 16px;
@@ -243,12 +253,69 @@ export const StComments = styled.div`
     }
 `;
 
+export const StReplyCommentBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: -3.5%;
+    max-width: 97%;
+    max-height: 15em;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+`;
+
+export const StReplySection = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: -2.5%;
+    max-width: 95%;
+`;
+
+export const StReplyCommentStatus = styled.div``;
+
+export const StReplyNameTime = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+`;
+
+export const StReplyComment = styled.div`
+    width: 90%;
+    margin-left: 6%;
+    margin-top: -3%;
+`;
+
 export const StCommentInput = styled.input`
     width: 95%;
     padding: 10px;
     border: none;
     border-bottom: 1px solid #ccc;
     outline: none;
+`;
+
+export const StReplyInput = styled.input`
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+`;
+
+export const StCommentInputBox1 = styled.div`
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+`;
+
+export const StCommentInputBox2 = styled.div`
+    width: 100%;
+`;
+
+export const StReplyButtonBox = styled.div`
+    height: 3rem;
+    width: 16%;
+    margin-top: -2%;
+    margin-left: 85%;
 `;
 
 export const StCommentButtonBox = styled.div`
@@ -338,6 +405,41 @@ export const StBookmarkButton = styled.div`
 
 export const StReplyButton = styled.button``;
 
-export const StCancelReplyButton = styled.button``;
+export const StCancelReplyButton = styled.button`
+    font-size: 12px;
+    height: 34px;
+    width: 76px;
+    padding: 8px 16px;
+    margin-right: 4px;
+    margin-bottom: 40px;
+    background-color: #ecebf5;
+    color: #b2afcf;
+    border-radius: 0.5rem;
+    cursor: pointer;
+`;
 
 export const StViewRepliesButton = styled.button``;
+
+export const StEditButton = styled.button`
+    cursor: pointer;
+    margin-right: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+`;
+
+export const StDeleteButton = styled.button`
+    cursor: pointer;
+    margin-right: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+`;
