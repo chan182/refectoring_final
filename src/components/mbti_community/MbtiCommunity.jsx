@@ -70,7 +70,7 @@ const MbtiCommunity = () => {
 
             // 좋아요 기능 구현
 
-            if (user[0].uid && postData.likes.includes(user[0].uid)) {
+            if (user[0]?.uid && postData.likes?.includes(user[0]?.uid)) {
                 return updateDoc(postRef, {
                     likes: arrayRemove(user[0].uid),
                     likecount: postData.likecount ? postData.likecount - 1 : 0
@@ -110,19 +110,20 @@ const MbtiCommunity = () => {
                 />
             </StsearchInputWrapper>
             <StBoardTitle>자유롭게 의견을 나누고 일상을 공유해보세요</StBoardTitle>
-            <StWriteButton
-                onClick={() => {
-                    navigate('/mbti/community/write');
-                }}
-            >
-                <img src={editImoge} alt="글 작성 버튼" />
-                <StWriteButtonName>게시글 작성</StWriteButtonName>
-            </StWriteButton>
             <StfilteredButton>
-                <button>전체</button>
-                <button>조회 수 많은 순 </button>
-                <button>좋아요 많은 순</button>
-                <button>댓글 많은 순 </button>
+                <div>
+                    <button>전체</button>
+                    {/* <button>조회 수 많은 순 </button>
+                    <button>좋아요 많은 순</button>
+                    <button>댓글 많은 순 </button> */}
+                </div>
+                <SteditButton
+                    onClick={() => {
+                        navigate('/mbti/community/write');
+                    }}
+                >
+                    게시글 작성
+                </SteditButton>
             </StfilteredButton>
             {filteredData?.map(({ id, data }) => {
                 return (
@@ -141,7 +142,7 @@ const MbtiCommunity = () => {
                                     handleLike(id);
                                 }}
                             >
-                                {user && data?.likes?.includes(user[0].uid) ? (
+                                {user && data?.likes?.includes(user[0]?.uid) ? (
                                     <img src={fullheart} alt="눌렀을 때" />
                                 ) : (
                                     <img src={heart} alt="누르지 않았을 때" />
@@ -210,6 +211,9 @@ const StsearchInput = styled.input`
     font-weight: 300;
     line-height: normal;
     letter-spacing: 0.44px;
+    &:focus {
+        outline: none;
+    }
 `;
 
 const StBoardTitle = styled.div`
@@ -251,8 +255,10 @@ const StWriteButtonName = styled.div`
 `;
 
 const StfilteredButton = styled.div`
-    margin: 0 auto 40px auto;
-    width: 700px;
+    display: flex;
+    justify-content: space-between;
+    margin: 152px auto 40px auto;
+    width: 955px;
 
     button {
         color: black;
@@ -263,13 +269,27 @@ const StfilteredButton = styled.div`
         line-height: normal;
         letter-spacing: 0.44px;
         border-radius: 74px;
-
         padding: 12px 14px;
         justify-content: center;
         align-items: center;
         margin-right: 24px;
         padding: 15px 20px;
     }
+`;
+const SteditButton = styled.div`
+    background: #756ab6;
+    border-radius: 74px;
+    cursor: pointer;
+    width: 140px;
+    color: #fff;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    letter-spacing: 0.44px;
+    padding: 14px 14px;
+    justify-content: center;
+    align-items: center;
 `;
 
 const StCardList = styled.div`
@@ -311,7 +331,8 @@ const StCommunityTitle = styled.div`
     line-height: 120%;
 `;
 
-const StButton = styled.button`
+const StButton = styled.div`
+    cursor: pointer;
     display: flex;
     gap: 10px;
 `;
