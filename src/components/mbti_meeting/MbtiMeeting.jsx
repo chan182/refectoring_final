@@ -353,7 +353,7 @@ const StUpbutton = styled.button`
 `;
 
 const StMeetingContainer = styled.div`
-    min-width: 1250px;
+    min-width: 1400px;
     width: 70%;
     height: 5000px;
     margin: 40px auto;
