@@ -79,7 +79,7 @@ const MbtiComunityDetail = () => {
                     <StCardTitle>{data?.title}</StCardTitle>
                 )}
 
-                <img src={redheart} alt="" />
+                {/* <img src={redheart} alt="" /> */}
             </StTitleWrapper>
             <StuserInfoWrapper>
                 <StUserInformation>
