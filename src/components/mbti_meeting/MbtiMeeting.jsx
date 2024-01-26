@@ -115,35 +115,9 @@ const MbtiMeeting = () => {
                 </StSearchImgWrap>
                 <StText>자유롭게 모임을 만들고 가입해 활동해보세요!</StText>
             </StSearchMeet>
-            <StSelectMeetSearchContainer>
+            {/* <StSelectMeetSearchContainer>
                 <DropTag />
-            </StSelectMeetSearchContainer>
-            <StCheckboxContainer>
-                {isChecked && (
-                    <StCheckboxWrap>
-                        <StCheckbox type="checkbox" id="all" />
-                        <label for="all">모두</label>
-                    </StCheckboxWrap>
-                )}
-                {isChecked && (
-                    <StCheckboxWrap>
-                        <StCheckbox type="checkbox" id="male" />
-                        <label for="male">남성</label>
-                    </StCheckboxWrap>
-                )}
-                {isChecked && (
-                    <StCheckboxWrap>
-                        <StCheckbox type="checkbox" id="female" />
-                        <label for="female">여성</label>
-                    </StCheckboxWrap>
-                )}
-                {isChecke && (
-                    <>
-                        <input type="checkbox" />
-                        <span>10</span>
-                    </>
-                )}
-            </StCheckboxContainer>
+            </StSelectMeetSearchContainer> */}
             <StCreateWrap
                 onClick={() => {
                     nav('/mbti/meeting/create');
@@ -272,73 +246,6 @@ const StCreateMeet = styled.button`
     }
 `;
 
-const StSelectMeetSearchContainer = styled.div`
-    width: 65%;
-    margin: 0px auto;
-`;
-
-const StSelectMeetSearchText = styled.div`
-    font-size: 20px;
-    margin-bottom: 30px;
-`;
-
-const StSelectContainer = styled.ul`
-    display: flex;
-    gap: 28px;
-`;
-
-const StSelectImgWrap = styled.div`
-    width: 70px;
-    height: 30px;
-    padding-top: 8px;
-    padding-left: 8px;
-    border-radius: 6px;
-    border: 1px solid var(--button-border-color);
-    cursor: pointer;
-`;
-
-const StSelectImg = styled.img`
-    position: relative;
-    bottom: 27px;
-    left: 30px;
-`;
-
-const StSelect = styled.li`
-    width: 60px;
-    height: 20px;
-`;
-
-const StSelectMbtiImgWrap = styled.div`
-    min-width: 80px;
-    height: 30px;
-    padding-top: 8px;
-    padding-left: 8px;
-    border-radius: 6px;
-    border: 1px solid var(--button-border-color);
-    cursor: pointer;
-`;
-
-const StSelectMbtiImg = styled.img`
-    position: relative;
-    bottom: 27px;
-    left: 40px;
-`;
-
-const StCheckboxContainer = styled.div`
-    margin: 30px auto;
-    width: 65%;
-`;
-
-const StCheckboxWrap = styled.div`
-    width: 97px;
-    height: 30px;
-    display: inline-block;
-`;
-
-const StCheckbox = styled.input`
-    accent-color: var(--main-button-color);
-`;
-
 const StUpbutton = styled.button`
     position: fixed;
     width: 50px;
@@ -353,7 +260,7 @@ const StUpbutton = styled.button`
 `;
 
 const StMeetingContainer = styled.div`
-    min-width: 1250px;
+    min-width: 1400px;
     width: 70%;
     height: 5000px;
     margin: 40px auto;
