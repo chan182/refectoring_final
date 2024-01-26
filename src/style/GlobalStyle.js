@@ -3,9 +3,9 @@ import { createGlobalStyle } from 'styled-components';
 const GlobalStyle = createGlobalStyle`
 
 @font-face {
-    font-family: 'NPSfontBold';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/NPSfontBold.woff2') format('woff2');
-    font-weight: 700;
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
     font-style: normal;
 }
   html, body, div, span, applet, object, iframe,
@@ -51,7 +51,7 @@ const GlobalStyle = createGlobalStyle`
     border-spacing: 0;
   }
   * {
-  font-family: 'NPSfontBold', sans-serif;
+  font-family: 'Pretendard-Regular';
     box-sizing: border-box;
   }
   :root {
@@ -60,7 +60,7 @@ const GlobalStyle = createGlobalStyle`
     --twinkle-color: #565656;
     }
   html {
-    font-family: 'NPSfontBold';
+    font-family: 'Pretendard-Regular';
     scroll-behavior: smooth;
     height: 100vh;
   }
@@ -69,6 +69,11 @@ const GlobalStyle = createGlobalStyle`
   }
   a {
     text-decoration:none;
+  }
+  button {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
   }
 `;
 
