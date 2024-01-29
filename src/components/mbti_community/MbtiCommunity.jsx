@@ -220,7 +220,9 @@ const StsearchInput = styled.input`
     padding-left: 70px;
     border: 0px;
     font-size: 22px;
+    border-radius: 50px;
     background-color: var(--search-background-color);
+
     &:focus {
         outline-color: var(--button-border-color);
     }
