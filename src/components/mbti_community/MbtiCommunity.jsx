@@ -15,6 +15,8 @@ import { getData } from '../../api/board';
 import { useInfiniteQuery } from 'react-query';
 import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.config';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_community.png';
 
 const MbtiCommunity = () => {
     const user = useRecoilState(userAtom);
@@ -119,6 +121,15 @@ const MbtiCommunity = () => {
                 </div>
                 <SteditButton
                     onClick={() => {
+                        console.log(user);
+                        if (!user[0]) {
+                            Swal.fire({
+                                text: '로그인한 유저만 글 작성이 가능합니다.',
+                                imageUrl: modal_logo
+                            });
+
+                            return navigate('/login');
+                        }
                         navigate('/mbti/community/write');
                     }}
                 >
