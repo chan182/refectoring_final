@@ -74,7 +74,7 @@ export default MainProfile;
 
 const StProfileBox = styled.div`
     width: 350px;
-    height: 288px;
+    height: 308px;
     position: absolute;
     transform: translateY(100%);
     right: 0;
