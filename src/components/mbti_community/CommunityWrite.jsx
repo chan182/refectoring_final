@@ -46,7 +46,7 @@ export default function UpdateTest() {
     const handleAddCommunity = async () => {
         if (!title || !content || !imageFile) {
             Swal.fire({
-                text: '모든 공간을 채워주세요 ^^ 유저활동에 많은 도움이 됩니다.',
+                text: '모든 공간을 채워주세요 ^^ 활동에 많은 도움이 됩니다.',
                 imageUrl: modal_logo
             });
             return;
