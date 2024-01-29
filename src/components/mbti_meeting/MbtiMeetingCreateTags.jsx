@@ -15,27 +15,31 @@ function MbtiMeetingCreateTags() {
         <StTopContainerBox>
             <StTitle>모임 태그 </StTitle>
             <StTopContainer>
-                <StP1>모임에 맞는 태그 생성하기 (중복 선택 가능)</StP1>
+                <StP1>
+                    모임에 맞는 태그 생성하기 <span>* 필수 선택사항 / 중복 선택 가능</span>
+                </StP1>
 
                 <StP2>지역</StP2>
                 <StBox>
                     {location01.map((data) => {
                         return (
                             <StDiv key={data}>
-                                <Stinput
-                                    type="checkbox"
-                                    onChange={(e) =>
-                                        setNewMeeting((prevNewMeeting) => ({
-                                            ...prevNewMeeting,
-                                            locations: e.target.checked
-                                                ? [...(prevNewMeeting.locations || []), data]
-                                                : (prevNewMeeting.locations || []).filter(
-                                                      (location) => location !== data
-                                                  )
-                                        }))
-                                    }
-                                />
-                                <StLabel>{data}</StLabel>
+                                <StLabel>
+                                    <StInput
+                                        type="checkbox"
+                                        onChange={(e) =>
+                                            setNewMeeting((prevNewMeeting) => ({
+                                                ...prevNewMeeting,
+                                                locations: e.target.checked
+                                                    ? [...(prevNewMeeting.locations || []), data]
+                                                    : (prevNewMeeting.locations || []).filter(
+                                                          (location) => location !== data
+                                                      )
+                                            }))
+                                        }
+                                    />
+                                    {data}
+                                </StLabel>
                             </StDiv>
                         );
                     })}
@@ -44,20 +48,22 @@ function MbtiMeetingCreateTags() {
                     {location02.map((data) => {
                         return (
                             <StDiv key={data}>
-                                <Stinput
-                                    type="checkbox"
-                                    onChange={(e) =>
-                                        setNewMeeting((prevNewMeeting) => ({
-                                            ...prevNewMeeting,
-                                            locations: e.target.checked
-                                                ? [...(prevNewMeeting.locations || []), data]
-                                                : (prevNewMeeting.locations || []).filter(
-                                                      (location) => location !== data
-                                                  )
-                                        }))
-                                    }
-                                />
-                                <StLabel>{data}</StLabel>
+                                <StLabel>
+                                    <StInput
+                                        type="checkbox"
+                                        onChange={(e) =>
+                                            setNewMeeting((prevNewMeeting) => ({
+                                                ...prevNewMeeting,
+                                                locations: e.target.checked
+                                                    ? [...(prevNewMeeting.locations || []), data]
+                                                    : (prevNewMeeting.locations || []).filter(
+                                                          (location) => location !== data
+                                                      )
+                                            }))
+                                        }
+                                    />
+                                    {data}
+                                </StLabel>
                             </StDiv>
                         );
                     })}
@@ -70,18 +76,20 @@ function MbtiMeetingCreateTags() {
                     {gender.map((data) => {
                         return (
                             <StDiv key={data}>
-                                <Stinput
-                                    type="checkbox"
-                                    onChange={(e) =>
-                                        setNewMeeting((prevNewMeeting) => ({
-                                            ...prevNewMeeting,
-                                            genders: e.target.checked
-                                                ? [...(prevNewMeeting.genders || []), data]
-                                                : (prevNewMeeting.genders || []).filter((gender) => gender !== data)
-                                        }))
-                                    }
-                                />
-                                <StLabel>{data}</StLabel>
+                                <StLabel>
+                                    <StInput
+                                        type="checkbox"
+                                        onChange={(e) =>
+                                            setNewMeeting((prevNewMeeting) => ({
+                                                ...prevNewMeeting,
+                                                genders: e.target.checked
+                                                    ? [...(prevNewMeeting.genders || []), data]
+                                                    : (prevNewMeeting.genders || []).filter((gender) => gender !== data)
+                                            }))
+                                        }
+                                    />
+                                    {data}
+                                </StLabel>
                             </StDiv>
                         );
                     })}
@@ -94,18 +102,20 @@ function MbtiMeetingCreateTags() {
                     {age.map((data) => {
                         return (
                             <StDiv key={data}>
-                                <Stinput
-                                    type="checkbox"
-                                    onChange={(e) =>
-                                        setNewMeeting((prevNewMeeting) => ({
-                                            ...prevNewMeeting,
-                                            ages: e.target.checked
-                                                ? [...(prevNewMeeting.ages || []), data]
-                                                : (prevNewMeeting.ages || []).filter((age) => age !== data)
-                                        }))
-                                    }
-                                />
-                                <StLabel>{data}</StLabel>
+                                <StLabel>
+                                    <StInput
+                                        type="checkbox"
+                                        onChange={(e) =>
+                                            setNewMeeting((prevNewMeeting) => ({
+                                                ...prevNewMeeting,
+                                                ages: e.target.checked
+                                                    ? [...(prevNewMeeting.ages || []), data]
+                                                    : (prevNewMeeting.ages || []).filter((age) => age !== data)
+                                            }))
+                                        }
+                                    />
+                                    {data}
+                                </StLabel>
                             </StDiv>
                         );
                     })}
@@ -118,18 +128,20 @@ function MbtiMeetingCreateTags() {
                     {mbti.map((data) => {
                         return (
                             <StDiv key={data}>
-                                <Stinput
-                                    type="checkbox"
-                                    onChange={(e) =>
-                                        setNewMeeting((prevNewMeeting) => ({
-                                            ...prevNewMeeting,
-                                            mbtis: e.target.checked
-                                                ? [...(prevNewMeeting.mbtis || []), data]
-                                                : (prevNewMeeting.mbtis || []).filter((mbti) => mbti !== data)
-                                        }))
-                                    }
-                                />
-                                <StLabel>{data}</StLabel>
+                                <StLabel>
+                                    <StInput
+                                        type="checkbox"
+                                        onChange={(e) =>
+                                            setNewMeeting((prevNewMeeting) => ({
+                                                ...prevNewMeeting,
+                                                mbtis: e.target.checked
+                                                    ? [...(prevNewMeeting.mbtis || []), data]
+                                                    : (prevNewMeeting.mbtis || []).filter((mbti) => mbti !== data)
+                                            }))
+                                        }
+                                    />
+                                    {data}
+                                </StLabel>
                             </StDiv>
                         );
                     })}
@@ -170,6 +182,11 @@ const StP1 = styled.p`
     color: #121212;
     margin-top: 28px;
     margin-bottom: 64px;
+
+    span {
+        margin-left: 16px;
+        font-size: 15px;
+    }
 `;
 
 const StP2 = styled.p`
@@ -183,22 +200,23 @@ const StBox = styled.div`
 `;
 
 const StDiv = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-bottom: 24px;
-`;
-
-const Stinput = styled.input`
-    width: 26px;
-    height: 26px;
-    margin-right: 6px;
 `;
 
 const StLabel = styled.label`
     font-size: 22px;
     color: #121212;
     margin-right: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const StInput = styled.input`
+    width: 26px;
+    height: 26px;
+    margin-right: 6px;
+    accent-color: var(--main-button-color);
 `;
 
 const StHr = styled.hr`
