@@ -5,10 +5,8 @@ import MbtiMeetingExplainMeeting from '../components/mbti_meeting/MbtiMeetingExp
 import MbtiMeetingCreateInfo from '../components/mbti_meeting/MbtiMeetingCreateInfo';
 import { useRecoilState } from 'recoil';
 import { createMeetingState } from '../recoil/recoilAtoms';
-
 import { db } from '../firebase/firebase.config';
 import { addDoc, collection } from 'firebase/firestore';
-
 import { useNavigate } from 'react-router';
 
 const MbtiMeetingCreatePage = () => {
@@ -35,7 +33,7 @@ const MbtiMeetingCreatePage = () => {
             <MbtiMeetingExplainMeeting />
             <StBtnBox>
                 <StCreateButton onClick={() => createMeetingButtonHandler()}>생성하기</StCreateButton>
-                <StCancelButton>취소하기</StCancelButton>
+                <StCancelButton onClick={() => nav('/')}>취소하기</StCancelButton>
             </StBtnBox>
         </StWholeContainer>
     );

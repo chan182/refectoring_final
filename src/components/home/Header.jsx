@@ -7,6 +7,7 @@ import logo from '../../assets/home/headerLogo.png';
 import { userAtom } from '../../recoil/Atom';
 import MainProfile from './MainProfile';
 import profileImage from '../../assets/profile/profileImg.png';
+import notification from '../../assets/home/notification.png';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -60,6 +61,7 @@ const Header = () => {
                             <>
                                 {/* 로그인 성공 시, */}
                                 <StProfileBox ref={mainProfileRef}>
+                                    <img src={notification} />
                                     <StProfileImg>
                                         <img src={user.imageUrl || profileImage} />
                                     </StProfileImg>
@@ -149,7 +151,7 @@ const StP = styled.p`
 `;
 
 const StRightDiv = styled.div`
-    width: 200px;
+    width: 124                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   px;
     height: 80px;
     display: flex;
     justify-content: flex-end;
@@ -195,18 +197,24 @@ const StProfileBox = styled.div`
     position: relative;
     display: flex;
     justify-content: space-between;
-    width: 100px;
+    align-items: center;
+    width: 164px;
     height: 80px;
+
+    img {
+        margin-right: 0px;
+        width: 28px;
+        height: 28px;
+    }
 `;
 
 const StProfileImg = styled.div`
-    width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 
     & img {
+        margin: 0px;
         width: 50px;
         height: 50px;
         overflow: hidden;
@@ -215,12 +223,9 @@ const StProfileImg = styled.div`
 `;
 
 const StDropBtn = styled.div`
-    width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 10px;
     cursor: pointer;
 
     &:hover {

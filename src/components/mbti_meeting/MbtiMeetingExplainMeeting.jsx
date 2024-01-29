@@ -32,7 +32,7 @@ const MbtiMeetingExplainMeeting = () => {
                         }))
                     }
                 ></StPeedContent>
-                <StPeedImgBox>
+                {/* <StPeedImgBox>
                     <StImg>
                         <img src={x} />
                     </StImg>
@@ -51,7 +51,7 @@ const MbtiMeetingExplainMeeting = () => {
                     <StImg>
                         <img src={x} />
                     </StImg>
-                </StPeedImgBox>
+                </StPeedImgBox> */}
             </StBox>
         </>
     );
@@ -60,7 +60,7 @@ const MbtiMeetingExplainMeeting = () => {
 export default MbtiMeetingExplainMeeting;
 
 const StBox = styled.div`
-    height: 860px;
+    /* height: 860px; */
     width: 1200px;
     padding: 20px;
     background-color: #ffffff;
