@@ -1,121 +1,209 @@
 import React from 'react';
 import { createMeetingState } from '../../recoil/recoilAtoms';
 import { useRecoilState } from 'recoil';
+import styled from 'styled-components';
 
 function MbtiMeetingCreateTags() {
     const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
-    const location = [
-        '전지역',
-        '서울',
-        '인천',
-        '대전',
-        '광주',
-        '대구',
-        '부산',
-        '울산',
-        '경기',
-        '강원',
-        '충북',
-        '충남',
-        '전북',
-        '전남',
-        '경북',
-        '경남',
-        '제주'
-    ];
+    const location01 = ['전지역', '서울', '인천', '대전', '광주', '대구', '부산', '울산'];
+    const location02 = ['경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주'];
     const gender = ['남자', '여자', '남/여'];
     const age = ['10대', '20대', '30대', '40대', '50대 이상'];
     const mbti = ['E', 'I', 'N', 'S', 'F', 'T', 'P', 'J'];
 
     return (
-        <div>
-            <div style={{ display: 'flex', columnGap: '1rem' }}>
-                <h3>지역</h3>
-                {location.map((data) => {
-                    return (
-                        <div key={data}>
-                            <label>{data}</label>
-                            <input
-                                type="checkbox"
-                                onChange={(e) =>
-                                    setNewMeeting((prevNewMeeting) => ({
-                                        ...prevNewMeeting,
-                                        locations: e.target.checked
-                                            ? [...(prevNewMeeting.locations || []), data]
-                                            : (prevNewMeeting.locations || []).filter((location) => location !== data)
-                                    }))
-                                }
-                            />
-                        </div>
-                    );
-                })}
-            </div>
+        <StTopContainerBox>
+            <StTitle>모임 태그 </StTitle>
+            <StTopContainer>
+                <StP1>모임에 맞는 태그 생성하기 (중복 선택 가능)</StP1>
 
-            <div style={{ display: 'flex', columnGap: '1rem' }}>
-                <h3>성별</h3>
-                {gender.map((data) => {
-                    return (
-                        <div key={data}>
-                            <label>{data}</label>
-                            <input
-                                type="checkbox"
-                                onChange={(e) =>
-                                    setNewMeeting((prevNewMeeting) => ({
-                                        ...prevNewMeeting,
-                                        genders: e.target.checked
-                                            ? [...(prevNewMeeting.genders || []), data]
-                                            : (prevNewMeeting.genders || []).filter((gender) => gender !== data)
-                                    }))
-                                }
-                            />
-                        </div>
-                    );
-                })}
-            </div>
-            <div style={{ display: 'flex', columnGap: '1rem' }}>
-                <h3>나이</h3>
-                {age.map((data) => {
-                    return (
-                        <div key={data}>
-                            <label>{data}</label>
-                            <input
-                                type="checkbox"
-                                onChange={(e) =>
-                                    setNewMeeting((prevNewMeeting) => ({
-                                        ...prevNewMeeting,
-                                        ages: e.target.checked
-                                            ? [...(prevNewMeeting.ages || []), data]
-                                            : (prevNewMeeting.ages || []).filter((age) => age !== data)
-                                    }))
-                                }
-                            />
-                        </div>
-                    );
-                })}
-            </div>
-            <div style={{ display: 'flex', columnGap: '1rem' }}>
-                <h3>MBTI</h3>
-                {mbti.map((data) => {
-                    return (
-                        <div key={data}>
-                            <label>{data}</label>
-                            <input
-                                type="checkbox"
-                                onChange={(e) =>
-                                    setNewMeeting((prevNewMeeting) => ({
-                                        ...prevNewMeeting,
-                                        mbtis: e.target.checked
-                                            ? [...(prevNewMeeting.mbtis || []), data]
-                                            : (prevNewMeeting.mbtis || []).filter((mbti) => mbti !== data)
-                                    }))
-                                }
-                            />
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
+                <StP2>지역</StP2>
+                <StBox>
+                    {location01.map((data) => {
+                        return (
+                            <StDiv key={data}>
+                                <Stinput
+                                    type="checkbox"
+                                    onChange={(e) =>
+                                        setNewMeeting((prevNewMeeting) => ({
+                                            ...prevNewMeeting,
+                                            locations: e.target.checked
+                                                ? [...(prevNewMeeting.locations || []), data]
+                                                : (prevNewMeeting.locations || []).filter(
+                                                      (location) => location !== data
+                                                  )
+                                        }))
+                                    }
+                                />
+                                <StLabel>{data}</StLabel>
+                            </StDiv>
+                        );
+                    })}
+                </StBox>
+                <StBox>
+                    {location02.map((data) => {
+                        return (
+                            <StDiv key={data}>
+                                <Stinput
+                                    type="checkbox"
+                                    onChange={(e) =>
+                                        setNewMeeting((prevNewMeeting) => ({
+                                            ...prevNewMeeting,
+                                            locations: e.target.checked
+                                                ? [...(prevNewMeeting.locations || []), data]
+                                                : (prevNewMeeting.locations || []).filter(
+                                                      (location) => location !== data
+                                                  )
+                                        }))
+                                    }
+                                />
+                                <StLabel>{data}</StLabel>
+                            </StDiv>
+                        );
+                    })}
+                </StBox>
+
+                <StHr />
+
+                <StP2>성별</StP2>
+                <StBox>
+                    {gender.map((data) => {
+                        return (
+                            <StDiv key={data}>
+                                <Stinput
+                                    type="checkbox"
+                                    onChange={(e) =>
+                                        setNewMeeting((prevNewMeeting) => ({
+                                            ...prevNewMeeting,
+                                            genders: e.target.checked
+                                                ? [...(prevNewMeeting.genders || []), data]
+                                                : (prevNewMeeting.genders || []).filter((gender) => gender !== data)
+                                        }))
+                                    }
+                                />
+                                <StLabel>{data}</StLabel>
+                            </StDiv>
+                        );
+                    })}
+                </StBox>
+
+                <StHr />
+
+                <StP2>나이</StP2>
+                <StBox>
+                    {age.map((data) => {
+                        return (
+                            <StDiv key={data}>
+                                <Stinput
+                                    type="checkbox"
+                                    onChange={(e) =>
+                                        setNewMeeting((prevNewMeeting) => ({
+                                            ...prevNewMeeting,
+                                            ages: e.target.checked
+                                                ? [...(prevNewMeeting.ages || []), data]
+                                                : (prevNewMeeting.ages || []).filter((age) => age !== data)
+                                        }))
+                                    }
+                                />
+                                <StLabel>{data}</StLabel>
+                            </StDiv>
+                        );
+                    })}
+                </StBox>
+
+                <StHr />
+
+                <StP2>MBTI</StP2>
+                <StBox>
+                    {mbti.map((data) => {
+                        return (
+                            <StDiv key={data}>
+                                <Stinput
+                                    type="checkbox"
+                                    onChange={(e) =>
+                                        setNewMeeting((prevNewMeeting) => ({
+                                            ...prevNewMeeting,
+                                            mbtis: e.target.checked
+                                                ? [...(prevNewMeeting.mbtis || []), data]
+                                                : (prevNewMeeting.mbtis || []).filter((mbti) => mbti !== data)
+                                        }))
+                                    }
+                                />
+                                <StLabel>{data}</StLabel>
+                            </StDiv>
+                        );
+                    })}
+                </StBox>
+            </StTopContainer>
+        </StTopContainerBox>
     );
 }
 
 export default MbtiMeetingCreateTags;
+
+const StTopContainerBox = styled.div`
+    margin-top: 68px;
+    font-size: 26px;
+`;
+
+const StTopContainer = styled.div`
+    height: 700px;
+    width: 1200px;
+    font-size: 18px;
+    margin-top: 5px;
+    background-color: #ffffff;
+    border: 1px solid var(--content-border-color);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 1rem;
+    padding: 28px 40px;
+`;
+
+const StTitle = styled.p`
+    font-size: 26px;
+    margin: 0px 0px 10px 20px;
+`;
+
+const StP1 = styled.p`
+    font-size: 26px;
+    color: #121212;
+    margin-top: 28px;
+    margin-bottom: 64px;
+`;
+
+const StP2 = styled.p`
+    font-size: 28px;
+    color: #121212;
+    margin-bottom: 18px;
+`;
+
+const StBox = styled.div`
+    display: flex;
+`;
+
+const StDiv = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+`;
+
+const Stinput = styled.input`
+    width: 26px;
+    height: 26px;
+    margin-right: 6px;
+`;
+
+const StLabel = styled.label`
+    font-size: 22px;
+    color: #121212;
+    margin-right: 24px;
+`;
+
+const StHr = styled.hr`
+    border: 1px solid var(--hr-border-color);
+    border-width: 1px 0 0 0;
+    width: 1120px;
+    margin-bottom: 24px;
+`;
