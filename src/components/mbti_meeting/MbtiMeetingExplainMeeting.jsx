@@ -13,7 +13,8 @@ const MbtiMeetingExplainMeeting = () => {
             <StTitle>모임 설명</StTitle>
             <StBox>
                 <StPeedTitle
-                    placeholder="제목을 입력해주세요."
+                    placeholder="제목을 입력해주세요.(15글자)"
+                    maxLength={15}
                     value={newMeeting.title || ''}
                     onChange={(e) =>
                         setNewMeeting((prevNewMeeting) => ({
