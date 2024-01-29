@@ -5,7 +5,7 @@ import logo from '../../assets/home/footerLogo.png';
 import { auth } from '../../firebase/firebase.config';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/headerLogo.png';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const PwChange = () => {
     const [userId, setUserId] = useState('');

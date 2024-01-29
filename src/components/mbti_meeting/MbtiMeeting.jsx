@@ -19,8 +19,6 @@ const MbtiMeeting = () => {
     // console.log(userinformation);
     // console.log(userinformation.email);
     const nav = useNavigate();
-    const [isChecked, setChecked] = useState(false);
-    const [isChecke, setChecke] = useState(false);
     const [isVisible, setIsvisible] = useState(false);
     const [meet, setMeet] = useState([]);
     const [searchKeyWord, setSearchKeyWord] = useState('');
@@ -79,16 +77,6 @@ const MbtiMeeting = () => {
         };
     }, []);
 
-    const handleToggle = () => {
-        setChecked(!isChecked);
-        setChecke(false);
-    };
-
-    const handleToggl = () => {
-        setChecke(!isChecke);
-        setChecked(false);
-    };
-
     const upButtonHandler = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -137,25 +125,28 @@ const MbtiMeeting = () => {
                                 </StTitle>
                                 <StPositionDateUserContainer>
                                     <StContentsImgWrap>
-                                        <StContentsPositionImg src={positionImg}></StContentsPositionImg>
+                                        <StContentsPositionImg src={positionImg}></StContentsPositionImg>&nbsp;
                                         <StContents>{(meet.locations + '').split()}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
-                                        <StContentsDateImg src={dateImg}></StContentsDateImg>
+                                        <StContentsDateImg src={dateImg}></StContentsDateImg>&nbsp;
                                         <StContents>일정 : {meet.schedule}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsUserImg src={userImg} alt="" />
-                                        <StContents>인원 :0 / {meet.limitPeople}</StContents>
+                                        &nbsp;
+                                        <StContents>정원 : {meet.limitPeople}</StContents>
                                     </StContentsImgWrap>
                                 </StPositionDateUserContainer>
                                 <StPositionDateUserContainer>
                                     <StContentsImgWrap>
                                         <StContentsUsersImg src={usersImg} alt="" />
+                                        &nbsp;
                                         <StContents>성별 / {(meet.genders + '').split()}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsAgeImg src={ageImg} alt="" />
+                                        &nbsp;
                                         <StContents>나이 / {(meet.ages + '').split()}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
@@ -202,7 +193,6 @@ const StSearch = styled.input`
     margin: 20px auto;
     padding-left: 70px;
     border: 0px;
-    border-radius: 50px;
     font-size: 22px;
     background-color: var(--search-background-color);
     &:focus {
@@ -260,7 +250,7 @@ const StUpbutton = styled.button`
 `;
 
 const StMeetingContainer = styled.div`
-    min-width: 1400px;
+    min-width: 1500px;
     width: 70%;
     height: 5000px;
     margin: 40px auto;
@@ -323,7 +313,7 @@ const StContentsAgeImg = styled.img`
 `;
 
 const StContents = styled.span`
-    font-size: 14px;
+    font-size: 15px;
 `;
 
 const StMeetingLink = styled(Link)`
