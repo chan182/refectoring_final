@@ -203,7 +203,7 @@ const StBackGround = styled.div``;
 
 const StsearchInputWrapper = styled.div`
     width: 75%;
-    margin: 0px auto;
+    margin: 10px auto;
 `;
 
 const StsearchImg = styled.img`
