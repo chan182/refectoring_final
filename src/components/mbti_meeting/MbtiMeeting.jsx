@@ -58,6 +58,7 @@ const MbtiMeeting = () => {
     return (
         <StMeeting>
             <StSearchMeet>
+                <StText>자유롭게 모임을 만들고 가입해 활동해보세요!</StText>
                 <StSearchImgWrap>
                     <StSearchImg src={search} alt="search image" />
                     <StSearch
@@ -68,7 +69,6 @@ const MbtiMeeting = () => {
                         autoFocus
                     ></StSearch>
                 </StSearchImgWrap>
-                <StText>자유롭게 모임을 만들고 가입해 활동해보세요!</StText>
             </StSearchMeet>
             {/* <StSelectMeetSearchContainer>
                 <DropTag />
@@ -143,25 +143,25 @@ const StSearchMeet = styled.div`
 `;
 
 const StSearchImgWrap = styled.div`
-    width: 75%;
+    width: 1200px;
 `;
 
 const StSearchImg = styled.img`
     width: 48px;
     height: 48px;
-    position: relative;
-    top: 88px;
-    left: 20px;
+    position: absolute;
+    margin: 10px 0px 0px 20px;
 `;
 
 const StSearch = styled.input`
-    width: 100%;
-    height: 78px;
-    margin: 20px auto;
-    padding-left: 70px;
+    width: 1200px;
+    height: 72px;
+    padding-left: 81px;
     border: 0px;
     font-size: 22px;
+    border-radius: 50px;
     background-color: var(--search-background-color);
+
     &:focus {
         outline-color: var(--button-border-color);
     }
@@ -169,7 +169,7 @@ const StSearch = styled.input`
 
 const StText = styled.h1`
     font-size: 42px;
-    margin: 60px 0px 90px;
+    margin: 68px 0px 80px;
 `;
 
 const StCreateWrap = styled.div`
@@ -217,19 +217,17 @@ const StUpbutton = styled.button`
 `;
 
 const StMeetingContainer = styled.div`
-    min-width: 1500px;
-    width: 70%;
+    width: 1300px;
     height: 5000px;
-    margin: 40px auto;
+    margin: 40px 0px 0px 350px;
 `;
 
 const StMeetingWrap = styled.div`
-    width: 27%;
-    aspect-ratio: 1/0.78;
-    margin: 0px 3% 60px 3%;
+    width: 366px;
+    margin: 0px 52px 42px 0px;
     display: inline-block;
     border-radius: 16px;
-    border: 1px solid var(--button-border-color);
+    border: 1px solid #e7e7e7;
 `;
 
 const StImg = styled.img`
@@ -237,7 +235,7 @@ const StImg = styled.img`
     aspect-ratio: 1/0.5;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
-    border-bottom: 1px solid var(--button-border-color);
+    border-bottom: 1px solid #e7e7e7;
 `;
 
 const StContainer = styled.div`

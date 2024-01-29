@@ -25,7 +25,6 @@ const MbtiCommunity = () => {
     const [searchKeyWord, setSearchKeyWord] = useState('');
 
     ///////// 데이터 가져오기 및 filter 검색
-
     const { data } = useQuery({
         queryKey: ['communities', searchKeyWord],
         queryFn: getData
@@ -41,8 +40,8 @@ const MbtiCommunity = () => {
     const handleSearch = () => {
         queryClient.invalidateQueries(['communities', searchKeyWord]);
     };
-    ////////////// usePaginatedQuery를 사용하여 페이지별로 데이터 가져오기
 
+    ////////////// usePaginatedQuery를 사용하여 페이지별로 데이터 가져오기
     // const { resolvedData, latestData, status, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery(
     //     ['communities', searchKeyWord],
     //     getData,
@@ -59,7 +58,6 @@ const MbtiCommunity = () => {
     // };
 
     //////////////// 좋아요 기능
-
     const mutation = useMutation(
         async (id) => {
             // 해당 문서 값 가져오기
@@ -71,7 +69,6 @@ const MbtiCommunity = () => {
             console.log(user[0].uid);
 
             // 좋아요 기능 구현
-
             if (user[0]?.uid && postData.likes?.includes(user[0]?.uid)) {
                 return updateDoc(postRef, {
                     likes: arrayRemove(user[0].uid),
@@ -100,10 +97,11 @@ const MbtiCommunity = () => {
 
     return (
         <StBackGround>
+            <StBoardTitle>자유롭게 의견을 나누고 일상을 공유해보세요</StBoardTitle>
             <StsearchInputWrapper>
                 <StsearchImg src={readingGlasses} alt="검색창" />
                 <StsearchInput
-                    placeholder="검색어를 입력해주세요. (제목)"
+                    placeholder="검색어를 입력해주세요. "
                     value={searchKeyWord}
                     name="searchKeyWord"
                     onChange={(e) => setSearchKeyWord(e.target.value)}
@@ -111,7 +109,7 @@ const MbtiCommunity = () => {
                     autoFocus
                 />
             </StsearchInputWrapper>
-            <StBoardTitle>자유롭게 의견을 나누고 일상을 공유해보세요</StBoardTitle>
+
             <StfilteredButton>
                 <div>
                     <button>전체</button>
@@ -124,7 +122,7 @@ const MbtiCommunity = () => {
                         console.log(user);
                         if (!user[0]) {
                             Swal.fire({
-                                text: '로그인한 유저만 글 작성이 가능합니다.',
+                                text: '로그인 후에 이용이 가능합니다.',
                                 imageUrl: modal_logo
                             });
 
@@ -199,41 +197,39 @@ const MbtiCommunity = () => {
 
 export default MbtiCommunity;
 
-const StBackGround = styled.div``;
+const StBackGround = styled.div`
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+`;
 
 const StsearchInputWrapper = styled.div`
-    width: 75%;
-    margin: 0px auto;
+    width: 954px;
 `;
 
 const StsearchImg = styled.img`
     width: 48px;
     height: 48px;
-    position: relative;
-    top: 88px;
-    left: 20px;
+    position: absolute;
+    margin: 16px 0px 0px 20px;
 `;
 const StsearchInput = styled.input`
-    width: 100%;
+    width: 954px;
     height: 78px;
-    margin: 20px auto;
-    padding-left: 70px;
+    padding-left: 81px;
     border: 0px;
     font-size: 22px;
+    border-radius: 50px;
     background-color: var(--search-background-color);
+
     &:focus {
         outline-color: var(--button-border-color);
     }
 `;
 
 const StBoardTitle = styled.div`
-    color: #000;
     font-size: 42px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 120%; /* 50.4px */
-    margin: 0 auto;
-    max-width: 740px;
+    margin: 68px 0px 80px 0px;
 `;
 
 const StWriteButton = styled.button`
@@ -271,8 +267,8 @@ const StfilteredButton = styled.div`
     width: 955px;
 
     button {
-        color: black;
-        background-color: #f8f8f8;
+        color: white;
+        background-color: #abaad8;
         font-size: 22px;
         font-style: normal;
         font-weight: 300;

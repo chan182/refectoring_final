@@ -10,6 +10,7 @@ import { deleteComment } from '../../api/comment';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../recoil/Atom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+
 const MbtiComunityDetail = () => {
     const user = useRecoilValue(userAtom);
     const params = useParams();
@@ -25,7 +26,6 @@ const MbtiComunityDetail = () => {
     });
 
     /// 삭제하기
-
     const DeleteBoardMutation = useMutation((id) => deleteBoard(id), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('communities');
@@ -40,7 +40,6 @@ const MbtiComunityDetail = () => {
     };
 
     // 수정하기
-
     const UpdateMutation = useMutation((paramsId, title) => updateBoard(paramsId, title), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('communities');
@@ -53,7 +52,6 @@ const MbtiComunityDetail = () => {
     };
 
     // 데이터 로딩 !
-
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -162,7 +160,7 @@ const StCardWrapper = styled.div`
     border-radius: 26px;
     border: 1px solid #ededed;
     background: #fff;
-    margin: 142px auto 40px;
+    margin: 68px auto 40px;
 `;
 
 const StCardImage = styled.img`
