@@ -13,52 +13,26 @@ import userImg from '../../assets/mbtiMeeting/userimg.png';
 import usersImg from '../../assets/mbtiMeeting/usersimg.png';
 import ageImg from '../../assets/mbtiMeeting/ageimg.png';
 import DropTag from './DropTag';
+import { QueryClient, useQuery, useQueryClient } from 'react-query';
+import { getData } from '../../api/meeting';
+
 const MbtiMeeting = () => {
     // const user = useRecoilState(userAtom);
     // const userinformation = user[0];
     // console.log(userinformation);
     // console.log(userinformation.email);
+    const queryClient = useQueryClient();
     const nav = useNavigate();
     const [isVisible, setIsvisible] = useState(false);
-    const [meet, setMeet] = useState([]);
     const [searchKeyWord, setSearchKeyWord] = useState('');
 
-    //데이터 읽기
-    useEffect(() => {
-        const fetchData = async () => {
-            const q = query(collection(db, 'meet'));
-            const querySnapshot = await getDocs(q);
-            const initialMeet = [];
-            querySnapshot.forEach((doc) => {
-                const data = {
-                    id: doc.id,
-                    ...doc.data()
-                };
-                initialMeet.push(data);
-            });
-            setMeet(initialMeet);
-        };
-        fetchData();
-    }, []);
+    //데이터 가져오고 검색
+    const { data } = useQuery({
+        queryKey: ['meet', searchKeyWord],
+        queryFn: getData
+    });
 
-    //데이터 검색
-    const searchData = async () => {
-        const q = query(
-            collection(db, 'meet'),
-            where('title', '>=', searchKeyWord),
-            where('title', '<=', searchKeyWord + '\uf8ff')
-        );
-        const querySnapshot = await getDocs(q);
-        const initialMeet = [];
-        querySnapshot.forEach((doc) => {
-            const data = {
-                id: doc.id,
-                ...doc.data()
-            };
-            initialMeet.push(data);
-        });
-        setMeet(initialMeet);
-    };
+    const FilterData = data?.filter(({ data }) => data.title.includes(searchKeyWord));
 
     // 위로 올라가기 버튼
     useEffect(() => {
@@ -81,12 +55,6 @@ const MbtiMeeting = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            searchData();
-        }
-    };
-
     return (
         <StMeeting>
             <StSearchMeet>
@@ -98,7 +66,6 @@ const MbtiMeeting = () => {
                         name="searchKeyWord"
                         onChange={(e) => setSearchKeyWord(e.target.value)}
                         autoFocus
-                        onKeyUp={handleKeyDown}
                     ></StSearch>
                 </StSearchImgWrap>
                 <StText>자유롭게 모임을 만들고 가입해 활동해보세요!</StText>
@@ -115,39 +82,39 @@ const MbtiMeeting = () => {
                 <StCreateMeet>모임 생성하기</StCreateMeet>
             </StCreateWrap>
             <StMeetingContainer>
-                {meet.map((meet) => (
-                    <StMeetingLink to={`/mbti/meeting/detail/${meet.id}`} key={meet.id}>
+                {FilterData?.map(({ id, data }) => (
+                    <StMeetingLink to={`/mbti/meeting/detail/${id}`} key={id}>
                         <StMeetingWrap>
-                            <StImg src={meet.repreImg}></StImg>
+                            <StImg src={data.repreImg}></StImg>
                             <StContainer>
                                 <StTitle>
-                                    {meet.title}/{(meet.mbtis + '').split()}
+                                    {data.title}/{(data.mbtis + '').split()}
                                 </StTitle>
                                 <StPositionDateUserContainer>
                                     <StContentsImgWrap>
                                         <StContentsPositionImg src={positionImg}></StContentsPositionImg>&nbsp;
-                                        <StContents>{(meet.locations + '').split()}</StContents>
+                                        <StContents>{(data.locations + '').split()}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsDateImg src={dateImg}></StContentsDateImg>&nbsp;
-                                        <StContents>일정 : {meet.schedule}</StContents>
+                                        <StContents>일정 : {data.schedule}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsUserImg src={userImg} alt="" />
                                         &nbsp;
-                                        <StContents>정원 : {meet.limitPeople}</StContents>
+                                        <StContents>정원 : {data.limitPeople}</StContents>
                                     </StContentsImgWrap>
                                 </StPositionDateUserContainer>
                                 <StPositionDateUserContainer>
                                     <StContentsImgWrap>
                                         <StContentsUsersImg src={usersImg} alt="" />
                                         &nbsp;
-                                        <StContents>성별 / {(meet.genders + '').split()}</StContents>
+                                        <StContents>성별 / {(data.genders + '').split()}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsAgeImg src={ageImg} alt="" />
                                         &nbsp;
-                                        <StContents>나이 / {(meet.ages + '').split()}</StContents>
+                                        <StContents>나이 / {(data.ages + '').split()}</StContents>
                                     </StContentsImgWrap>
                                     <StContentsImgWrap>
                                         <StContentsAgeImg></StContentsAgeImg>
