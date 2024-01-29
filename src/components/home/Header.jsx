@@ -150,14 +150,6 @@ const StP = styled.p`
     }
 `;
 
-const StRightDiv = styled.div`
-    width: 124                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   px;
-    height: 80px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-`;
-
 const StLoginBtn = styled.button`
     width: 80px;
     height: 30px;
@@ -193,6 +185,14 @@ const StSignupBtn = styled.button`
     }
 `;
 
+const StRightDiv = styled.div`
+    width: 114px;
+    height: 80px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+`;
+
 const StProfileBox = styled.div`
     position: relative;
     display: flex;
@@ -200,12 +200,6 @@ const StProfileBox = styled.div`
     align-items: center;
     width: 164px;
     height: 80px;
-
-    img {
-        margin-right: 0px;
-        width: 28px;
-        height: 28px;
-    }
 `;
 
 const StProfileImg = styled.div`
@@ -233,8 +227,8 @@ const StDropBtn = styled.div`
     }
 
     & img {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         opacity: 0.6;
     }
 `;
