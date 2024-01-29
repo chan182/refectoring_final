@@ -8,6 +8,8 @@ import { userAtom } from '../../recoil/Atom';
 import profileImage from '../../assets/profile/profileImg.png';
 import { getComments, getReplies } from './getComment';
 import CommentDropdown from './CommentDropDown';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_community.png';
 
 const MeetingDetail = () => {
     const { id } = useParams();
@@ -229,7 +231,10 @@ const MeetingDetail = () => {
     };
 
     const handleRequest = () => {
-        alert(`${meeting.kakaoUrl} 로 연락주세요!`);
+        Swal.fire({
+            text: `${meeting.kakaoUrl} 로 연락주세요!`,
+            imageUrl: modal_logo
+        });
     };
 
     if (!meeting) {
