@@ -261,7 +261,7 @@ const Stwrapper = styled.div`
     border-radius: 26px;
     border: 1px solid #ededed;
     background: #fff;
-    margin: 0 auto;
+    margin: 0 auto 100px;
 `;
 
 const StCommentTitleWrapper = styled.div`

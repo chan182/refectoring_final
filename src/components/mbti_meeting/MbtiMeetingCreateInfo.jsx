@@ -214,24 +214,6 @@ const StImageContainer = styled.input`
     display: none;
 `;
 
-const StUploadImgBtn = styled.button`
-    border: 1px solid var(--button-border-color);
-    font-size: 20px;
-    width: 196px;
-    height: 48px;
-    background-color: white;
-    color: #6a6a6a;
-    border-radius: 6px;
-    cursor: pointer;
-    margin: 37px 0px 0px 74px;
-
-    &:hover {
-        transition: ease-in-out 0.2s;
-        background-color: var(--main-button-color);
-        color: #fff;
-    }
-`;
-
 const StContentBox = styled.div`
     margin-left: 10px;
 `;
@@ -266,6 +248,10 @@ const StDetailText = styled.input`
     color: #4e4e4e;
     border: none;
     border-radius: 0.5rem;
+
+    &:focus {
+        outline-color: var(--button-border-color);
+    }
 `;
 
 const StDetailTextBox2 = styled.div`
@@ -286,6 +272,10 @@ const StDetailText2 = styled.input`
     color: #4e4e4e;
     border: none;
     border-radius: 0.5rem;
+
+    &:focus {
+        outline-color: var(--button-border-color);
+    }
 `;
 
 const StDetailTextBox3 = styled.div`
@@ -306,6 +296,10 @@ const StDetailText3 = styled.input`
     color: #4e4e4e;
     border: none;
     border-radius: 0.5rem;
+
+    &:focus {
+        outline-color: var(--button-border-color);
+    }
 `;
 
 const StTitle = styled.p`

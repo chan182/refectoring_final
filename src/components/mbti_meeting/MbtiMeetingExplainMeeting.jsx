@@ -83,6 +83,10 @@ const StPeedTitle = styled.input`
     background-color: var(--light-gray);
     border: none;
     border-radius: 16px;
+
+    &:focus {
+        outline-color: var(--button-border-color);
+    }
 `;
 
 const StPeedContent = styled.input`
@@ -94,6 +98,10 @@ const StPeedContent = styled.input`
     background-color: var(--light-gray);
     border: none;
     border-radius: 16px;
+
+    &:focus {
+        outline-color: var(--button-border-color);
+    }
 `;
 
 const StPeedImgBox = styled.div`

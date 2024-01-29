@@ -162,7 +162,7 @@ const StCardWrapper = styled.div`
     border-radius: 26px;
     border: 1px solid #ededed;
     background: #fff;
-    margin: 142px auto 40px;
+    margin: 68px auto 40px;
 `;
 
 const StCardImage = styled.img`
