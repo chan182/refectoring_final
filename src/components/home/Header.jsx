@@ -62,12 +62,14 @@ const Header = () => {
                                 {/* 로그인 성공 시, */}
                                 <StProfileBox ref={mainProfileRef}>
                                     <img src={notification} />
-                                    <StProfileImg>
-                                        <img src={user.imageUrl || profileImage} />
-                                    </StProfileImg>
-                                    <StDropBtn ref={dropBtnRef} onClick={toggleDropdown}>
-                                        <img src={dorpArrow} />
-                                    </StDropBtn>
+                                    <StProfileDiv ref={dropBtnRef} onClick={toggleDropdown}>
+                                        <StProfileImg>
+                                            <img src={user.imageUrl || profileImage} />
+                                        </StProfileImg>
+                                        <StDropBtn>
+                                            <img src={dorpArrow} />
+                                        </StDropBtn>
+                                    </StProfileDiv>
                                     {isOpen && <MainProfile toggleDropdown={toggleDropdown} />}
                                 </StProfileBox>
                             </>
@@ -179,14 +181,13 @@ const StSignupBtn = styled.button`
     cursor: pointer;
 
     &:hover {
-        /* transform: scale(1.015); */
         background-color: var(--main-button-color);
         color: white;
     }
 `;
 
 const StRightDiv = styled.div`
-    width: 114px;
+    width: 166px;
     height: 80px;
     display: flex;
     justify-content: flex-end;
@@ -196,16 +197,26 @@ const StRightDiv = styled.div`
 const StProfileBox = styled.div`
     position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    width: 164px;
+    width: 114px;
     height: 80px;
+
+    img {
+        margin-right: 15px;
+        /* opacity: 0.5; */
+    }
+`;
+
+const StProfileDiv = styled.div`
+    display: flex;
 `;
 
 const StProfileImg = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 6px;
 
     & img {
         margin: 0px;
@@ -221,14 +232,15 @@ const StDropBtn = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    opacity: 0.6;
 
     &:hover {
         transform: scale(1.15);
     }
 
     & img {
-        width: 18px;
-        height: 18px;
+        width: 14px;
+        height: 14px;
         opacity: 0.6;
     }
 `;
