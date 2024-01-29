@@ -101,9 +101,9 @@ const MbtiCommunity = () => {
     return (
         <StBackGround>
             <StsearchInputWrapper>
-                <img src={readingGlasses} alt="검색창" />
+                <StsearchImg src={readingGlasses} alt="검색창" />
                 <StsearchInput
-                    placeholder="검색어를 입력하세요 (제목)"
+                    placeholder="검색어를 입력해주세요. (제목)"
                     value={searchKeyWord}
                     name="searchKeyWord"
                     onChange={(e) => setSearchKeyWord(e.target.value)}
@@ -202,28 +202,27 @@ export default MbtiCommunity;
 const StBackGround = styled.div``;
 
 const StsearchInputWrapper = styled.div`
-    background-color: var(--light-gray);
-    border-radius: 100px;
-    display: flex;
-    max-width: 1440px;
-    padding: 15px 21px;
-    gap: 12px;
-    margin: 60px auto;
+    width: 75%;
+    margin: 10px auto;
 `;
 
+const StsearchImg = styled.img`
+    width: 48px;
+    height: 48px;
+    position: relative;
+    top: 88px;
+    left: 20px;
+`;
 const StsearchInput = styled.input`
-    width: 1398px;
-    color: black;
-    background-color: transparent;
-    border: none;
-
+    width: 100%;
+    height: 78px;
+    margin: 20px auto;
+    padding-left: 70px;
+    border: 0px;
     font-size: 22px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
-    letter-spacing: 0.44px;
+    background-color: var(--search-background-color);
     &:focus {
-        outline: none;
+        outline-color: var(--button-border-color);
     }
 `;
 
