@@ -171,9 +171,8 @@ const StTitleInput = styled.input`
 
 const StcontentInput = styled.textarea`
     padding: 20px;
-    height: 400px;
+    height: 300px;
     border: none;
-    height: px;
     border-radius: 16px;
     background: #f8f8f8;
 `;
