@@ -59,7 +59,6 @@ const MbtiComunityDetail = () => {
     if (isError) {
         return <div>Error loading data</div>;
     }
-
     return (
         <StCardWrapper>
             <StCardImage src={data?.communityImage} alt="컨텐츠의 사진" />
@@ -100,16 +99,7 @@ const MbtiComunityDetail = () => {
             <StButtonWrapper>
                 {user?.uid == data?.id ? (
                     <>
-                        {/* <Stbutton
-                            onClick={() => {
-                                setEditMode(!editMode);
-                                setContent(data?.content);
-                                setTitle(data?.title);
-                                console.log();
-                            }}
-                        >
-                            글 수정
-                        </Stbutton> */}
+                        <Stbutton onClick={() => navigate(`/mbti/community/edit/${params.id}`)}>글 수정</Stbutton>
                         <Stbutton onClick={handleDeleteCommunity}>글 삭제</Stbutton>
                     </>
                 ) : (

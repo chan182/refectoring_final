@@ -101,7 +101,7 @@ const CommentList = () => {
                 const commentsSnapshot = await getDocs(commentsQuery);
                 const totalComments = commentsSnapshot.size;
                 setCommentCount(totalComments);
-                console.log('댓글 갯수:', totalComments);
+
                 // 여기에서 totalComments를 원하는 대로 활용할 수 있습니다.
             } catch (error) {
                 console.error('댓글 갯수를 가져오는 중 에러 발생:', error);
