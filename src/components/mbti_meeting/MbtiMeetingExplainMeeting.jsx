@@ -13,7 +13,8 @@ const MbtiMeetingExplainMeeting = () => {
             <StTitle>모임 설명</StTitle>
             <StBox>
                 <StPeedTitle
-                    placeholder="제목을 입력해주세요."
+                    placeholder="제목을 입력해주세요.(15글자)"
+                    maxLength={15}
                     value={newMeeting.title || ''}
                     onChange={(e) =>
                         setNewMeeting((prevNewMeeting) => ({
@@ -32,7 +33,7 @@ const MbtiMeetingExplainMeeting = () => {
                         }))
                     }
                 ></StPeedContent>
-                <StPeedImgBox>
+                {/* <StPeedImgBox>
                     <StImg>
                         <img src={x} />
                     </StImg>
@@ -51,7 +52,7 @@ const MbtiMeetingExplainMeeting = () => {
                     <StImg>
                         <img src={x} />
                     </StImg>
-                </StPeedImgBox>
+                </StPeedImgBox> */}
             </StBox>
         </>
     );
@@ -60,7 +61,7 @@ const MbtiMeetingExplainMeeting = () => {
 export default MbtiMeetingExplainMeeting;
 
 const StBox = styled.div`
-    height: 860px;
+    /* height: 860px; */
     width: 1200px;
     padding: 20px;
     background-color: #ffffff;
@@ -83,6 +84,10 @@ const StPeedTitle = styled.input`
     background-color: var(--light-gray);
     border: none;
     border-radius: 16px;
+
+    &:focus {
+        outline-color: var(--button-border-color);
+    }
 `;
 
 const StPeedContent = styled.input`
@@ -94,6 +99,10 @@ const StPeedContent = styled.input`
     background-color: var(--light-gray);
     border: none;
     border-radius: 16px;
+
+    &:focus {
+        outline-color: var(--button-border-color);
+    }
 `;
 
 const StPeedImgBox = styled.div`

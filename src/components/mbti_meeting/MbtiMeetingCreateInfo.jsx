@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { createMeetingState } from '../../recoil/recoilAtoms';
+import cameraImg from '../../assets/mbtiMeeting/camera.png';
 
 const MbtiMeetingCreateInfo = () => {
     const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
@@ -38,9 +39,15 @@ const MbtiMeetingCreateInfo = () => {
                 <StImgBox>
                     <StImg>
                         {newMeeting.repreImg ? (
-                            <img src={newMeeting.repreImg} alt="선택된 이미지" />
+                            <img
+                                src={newMeeting.repreImg}
+                                alt="선택된 이미지"
+                                onClick={() => imageInputRef.current.click()}
+                            />
                         ) : (
-                            <StUnselectedImg />
+                            <StUnselectedImg onClick={() => imageInputRef.current.click()}>
+                                <img src={cameraImg} /> 사진 업로드
+                            </StUnselectedImg>
                         )}
                         <StImageContainer
                             type="file"
@@ -48,7 +55,6 @@ const MbtiMeetingCreateInfo = () => {
                             onChange={handleImageChange}
                         ></StImageContainer>
                     </StImg>
-                    <StUploadImgBtn onClick={() => imageInputRef.current.click()}>모임 대표사진 업로드</StUploadImgBtn>
                 </StImgBox>
                 <StContentBox>
                     <StTextContainer>
@@ -147,7 +153,7 @@ const StTopContainerBox = styled.div`
 `;
 
 const StTopContainer = styled.div`
-    height: 540px;
+    height: 450px;
     width: 1200px;
     font-size: 18px;
     margin-top: 5px;
@@ -180,6 +186,7 @@ const StImg = styled.div`
         width: 100%;
         height: 100%;
         object-fit: cover;
+        cursor: pointer;
     }
 `;
 
@@ -188,28 +195,23 @@ const StUnselectedImg = styled.div`
     width: 346px;
     border-radius: 50%;
     background-color: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 14px;
+    text-decoration: underline;
+    color: #888888;
+    cursor: pointer;
+
+    img {
+        width: 48px;
+        height: 48px;
+    }
 `;
 
 const StImageContainer = styled.input`
     display: none;
-`;
-
-const StUploadImgBtn = styled.button`
-    border: 1px solid var(--button-border-color);
-    font-size: 20px;
-    width: 196px;
-    height: 48px;
-    background-color: white;
-    color: #6a6a6a;
-    border-radius: 6px;
-    cursor: pointer;
-    margin: 37px 0px 0px 74px;
-
-    &:hover {
-        transition: ease-in-out 0.2s;
-        background-color: var(--main-button-color);
-        color: #fff;
-    }
 `;
 
 const StContentBox = styled.div`
@@ -246,6 +248,10 @@ const StDetailText = styled.input`
     color: #4e4e4e;
     border: none;
     border-radius: 0.5rem;
+
+    &:focus {
+        outline-color: var(--button-border-color);
+    }
 `;
 
 const StDetailTextBox2 = styled.div`
@@ -266,6 +272,10 @@ const StDetailText2 = styled.input`
     color: #4e4e4e;
     border: none;
     border-radius: 0.5rem;
+
+    &:focus {
+        outline-color: var(--button-border-color);
+    }
 `;
 
 const StDetailTextBox3 = styled.div`
@@ -286,6 +296,10 @@ const StDetailText3 = styled.input`
     color: #4e4e4e;
     border: none;
     border-radius: 0.5rem;
+
+    &:focus {
+        outline-color: var(--button-border-color);
+    }
 `;
 
 const StTitle = styled.p`

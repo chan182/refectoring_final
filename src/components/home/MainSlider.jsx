@@ -3,27 +3,47 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import styled from 'styled-components';
+import moveArrow from '../../assets/home/moveArrow.png';
+import PeedBanner from '../../assets/home/mbtiPopularPeedBanner.jpg';
+import MeetingBanner from '../../assets/home/mbtiPopularMeetingBanner.jpg';
+import MbtiTestBanner from '../../assets/home/mbtiTestBanner.jpg';
+import MbtiMatchinggBanner from '../../assets/home/mbtiMatchingBanner.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const MainSlider = () => {
+    const nav = useNavigate();
+
     return (
         <StSlide>
             <Slider {...settings}>
-                <List>
-                    <StH1>슬라이드 1</StH1>
-                    <StH2>슬라이드 1 내용입니다.</StH2>
-                </List>
-                <List>
-                    <StH1>슬라이드 2</StH1>
-                    <StH2>슬라이드 2 내용입니다.</StH2>
-                </List>
-                <List>
-                    <StH1>슬라이드 3</StH1>
-                    <StH2>슬라이드 3 내용입니다.</StH2>
-                </List>
-                <List>
-                    <StH1>슬라이드 4</StH1>
-                    <StH2>슬라이드 4 내용입니다.</StH2>
-                </List>
+                <List1>
+                    <StH1>MBTI 궁합 보러가기</StH1>
+                    <StP>상대방과 나의 MBTI 궁합을 확인해보세요!</StP>
+                    <StP onClick={() => nav('/mbti/matching')}>
+                        MBTI 궁합 보러가기 <img src={moveArrow} />{' '}
+                    </StP>
+                </List1>
+                <List2>
+                    <StH1>나의 MBTI 알아보기</StH1>
+                    <StP>검사를 통해 나의 MBTI를 확인해보세요!</StP>
+                    <StP onClick={() => nav('/mbti/test')}>
+                        MBTI 검사하기 <img src={moveArrow} />{' '}
+                    </StP>
+                </List2>
+                <List3>
+                    <StH1>우리동네 러닝 모임</StH1>
+                    <StP>오늘 가장 인기있는 모임을 추천 합니다!</StP>
+                    <StP onClick={() => nav('/mbti/meeting')}>
+                        MBTI 모임 보러가기 <img src={moveArrow} />{' '}
+                    </StP>
+                </List3>
+                <List4>
+                    <StH1>집이 좋은 I 외출시키기</StH1>
+                    <StP>오늘 가장 있기있는 게시글을 추천 합니다!</StP>
+                    <StP onClick={() => nav('/mbti/community')}>
+                        MBTI 커뮤니티 보러가기 <img src={moveArrow} />{' '}
+                    </StP>
+                </List4>
             </Slider>
         </StSlide>
     );
@@ -73,18 +93,66 @@ const StSlide = styled.div`
     }
 `;
 
-const List = styled.div`
+const List1 = styled.div`
     width: 100%;
     height: 350px;
-    padding: 100px 0px 0px 250px;
-    background-color: var(--box-border-color);
+    padding: 100px 0px 0px 240px;
+    background-image: url(${MbtiMatchinggBanner});
+    background-color: lightgray;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+`;
+
+const List2 = styled.div`
+    width: 100%;
+    height: 350px;
+    padding: 100px 0px 0px 240px;
+    background-image: url(${MbtiTestBanner});
+    background-color: lightgray;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+`;
+
+const List3 = styled.div`
+    width: 100%;
+    height: 350px;
+    padding: 100px 0px 0px 240px;
+    background-image: url(${MeetingBanner});
+    background-color: lightgray;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+`;
+
+const List4 = styled.div`
+    width: 100%;
+    height: 350px;
+    padding: 100px 0px 0px 240px;
+    background-image: url(${PeedBanner});
+    background-color: lightgray;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 `;
 
 const StH1 = styled.h1`
     font-size: 50px;
-    padding-bottom: 20px;
+    color: #fcfcfc;
+    margin-bottom: 12px;
 `;
 
-const StH2 = styled.h2`
-    font-size: 25px;
+const StP = styled.p`
+    font-size: 18px;
+    color: #fcfcfc;
+    margin-bottom: 48px;
+    display: flex;
+    cursor: pointer;
+
+    img {
+        margin-left: 6px;
+        width: 18px;
+        height: 18px;
+    }
 `;

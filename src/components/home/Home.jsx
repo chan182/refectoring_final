@@ -51,7 +51,7 @@ const StBox = styled.div`
 `;
 
 const StComponents = styled.div`
-    width: 80%;
+    width: 75%;
     height: 100%;
     padding-top: 40px;
     display: flex;
@@ -59,12 +59,11 @@ const StComponents = styled.div`
 `;
 
 const StComponent = styled.div`
-    width: 22%;
+    width: 23%;
     height: 100%;
-    border-radius: 10px;
+    border-radius: 16px;
     padding: 30px;
-
-    border: 2px solid var(--button-border-color);
+    box-shadow: 0px 0px 5px #d3d3d3;
     position: relative;
 
     & img {

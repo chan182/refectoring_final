@@ -8,7 +8,8 @@ import { userAtom } from '../../recoil/Atom';
 import profileImage from '../../assets/profile/profileImg.png';
 import { getComments, getReplies } from './getComment';
 import CommentDropdown from './CommentDropDown';
-import { createMeetingState, selectedTagsState } from '../../recoil/recoilAtoms';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_community.png';
 
 const MeetingDetail = () => {
     const { id } = useParams();
@@ -17,8 +18,6 @@ const MeetingDetail = () => {
     const [newComment, setNewComment] = useState('');
     const [newReply, setNewReply] = useState({});
     const user = useRecoilValue(userAtom);
-    const selectedTags = useRecoilValue(selectedTagsState);
-    const createMeeting = useRecoilValue(createMeetingState);
     const [commentCount, setCommentCount] = useState(0);
 
     useEffect(() => {
@@ -73,7 +72,7 @@ const MeetingDetail = () => {
                 const commentData = {
                     content: newComment,
                     email: user.email,
-                    userImageUrl: user.imageUrl,
+                    userImageUrl: user.imageUrl || profileImage,
                     nickname: user.nickname,
                     createdAt: new Date().toLocaleDateString('ko', {
                         year: '2-digit',
@@ -118,7 +117,7 @@ const MeetingDetail = () => {
             const replyData = {
                 content: newReply[commentId],
                 email: user.email,
-                userImageUrl: user.imageUrl,
+                userImageUrl: user.imageUrl || profileImage,
                 nickname: user.nickname,
                 createdAt: new Date().toLocaleDateString('ko', {
                     year: '2-digit',
@@ -232,7 +231,10 @@ const MeetingDetail = () => {
     };
 
     const handleRequest = () => {
-        alert(`${meeting.kakaoOpenChatUrl}`);
+        Swal.fire({
+            text: `${meeting.kakaoUrl} 로 연락주세요!`,
+            imageUrl: modal_logo
+        });
     };
 
     if (!meeting) {
@@ -242,11 +244,11 @@ const MeetingDetail = () => {
     return (
         <T.StWholeContainer>
             <T.StTopContainerBox>
-                {meeting.title}
+                {meeting.name}
                 <T.StTopContainer>
                     <T.StImageContainer>
                         <img
-                            src={meeting?.imageurl}
+                            src={meeting?.repreImg}
                             alt={`Meeting Image`}
                             style={{ width: '346px', height: '346px', borderRadius: '50%' }}
                         />
@@ -266,32 +268,53 @@ const MeetingDetail = () => {
                             <T.StTextContainerBox>
                                 <T.StDetailTextBox>
                                     모임 인원
-                                    <T.StDetailText>{meeting.recruitment}</T.StDetailText>
+                                    <T.StDetailText>{meeting.limitPeople}</T.StDetailText>
                                 </T.StDetailTextBox>
                                 <T.StDetailTextBox>
-                                    MBTI
-                                    <T.StDetailText>{meeting.mbti}</T.StDetailText>
+                                    모임 일정
+                                    <T.StDetailText>{meeting.schedule}</T.StDetailText>
                                 </T.StDetailTextBox>
                             </T.StTextContainerBox>
                             <T.StDetailTextBox2>
                                 모임 소개
-                                <T.StDetailText2></T.StDetailText2>
+                                <T.StDetailText2>{meeting.oneLineIntro}</T.StDetailText2>
                             </T.StDetailTextBox2>
                         </T.StTextContainer>
 
-                        <T.StBookmarkButton>모임 저장</T.StBookmarkButton>
+                        {/* <T.StBookmarkButton>모임 저장</T.StBookmarkButton> */}
                     </T.StContentBox>
                 </T.StTopContainer>
             </T.StTopContainerBox>
             <T.StTagBox>
                 <T.StTagName>모임 태그</T.StTagName>
-                <T.StTagContent></T.StTagContent>
+                <T.StTagContent>
+                    {meeting.locations.map((location, index) => (
+                        <div key={index} className="tagBox">
+                            {location}
+                        </div>
+                    ))}
+                    {meeting.genders.map((gender, index) => (
+                        <div key={index} className="tagBox">
+                            {gender}
+                        </div>
+                    ))}
+                    {meeting.ages.map((age, index) => (
+                        <div key={index} className="tagBox">
+                            {age}
+                        </div>
+                    ))}
+                    {meeting.mbtis.map((mbti, index) => (
+                        <div key={index} className="tagBox">
+                            {mbti}
+                        </div>
+                    ))}
+                </T.StTagContent>
             </T.StTagBox>
             <T.StDivisionLine />
             <T.StContentContainerBox>
                 {` 모임 설명`}
                 <T.StBottomContainer>
-                    <T.StContentContainer>{meeting.eventDescription}</T.StContentContainer>
+                    <T.StContentContainer>{meeting.content}</T.StContentContainer>
                 </T.StBottomContainer>
                 <T.StRequestButton onClick={handleRequest}>가입문의</T.StRequestButton>
             </T.StContentContainerBox>
@@ -301,14 +324,20 @@ const MeetingDetail = () => {
                 <T.StCommentContainer>
                     <T.StCommentBox1>
                         <T.StCommentCount>모임 후기{`  ${commentCount}개`}</T.StCommentCount>
-                        <T.StCommentFilter>정렬기준</T.StCommentFilter>
+                        {/* <T.StCommentFilter>정렬기준</T.StCommentFilter> */}
                     </T.StCommentBox1>
                     <T.StCommentBox2>
                         <T.StCommentImage>
                             <img
-                                src={user ? user.imageUrl : profileImage}
+                                src={user && user.imageUrl ? user.imageUrl : profileImage}
                                 alt={`이벤트 이미지`}
-                                style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '50%' }}
+                                style={{
+                                    width: '38px',
+                                    height: '38px',
+                                    borderRadius: '50%',
+                                    objectFit: 'contain',
+                                    objectPosition: 'center'
+                                }}
                             />
                         </T.StCommentImage>
                         <T.StCommentInput
@@ -350,7 +379,10 @@ const MeetingDetail = () => {
                                     {comment.showReplyInput && (
                                         <T.StCommentInputBox1>
                                             <T.StCommentInputBox2>
-                                                <img src={user.imageUrl} alt="User" />
+                                                <img
+                                                    src={user && user.imageUrl ? user.imageUrl : profileImage}
+                                                    alt="User"
+                                                />
                                                 <T.StReplyInput
                                                     placeholder="답글 추가..."
                                                     value={newReply[comment.id] || ''}
