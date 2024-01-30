@@ -1,34 +1,49 @@
-import React, { useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useRecoilValue } from 'recoil';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { userAtom } from '../../recoil/Atom';
 import { addCommunity } from '../../api/board';
 import modal_logo from '../../assets/home/mbti_community.png';
 import { v4 as uuidv4 } from 'uuid';
-import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import { deleteObject, getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { storage } from '../../firebase/firebase.config';
 import Swal from 'sweetalert2';
 import backImage from '../../assets/community/backOImage.png';
-export default function UpdateTest() {
+import { communityDetailGetDate } from '../../api/boardDetail';
+import { updateBoard } from '../../api/boardDetail';
+
+const MbtiCommunityDetailEdit = () => {
+    const params = useParams();
     const [imageFile, setImageFile] = useState();
     const user = useRecoilValue(userAtom);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+
     const queryClient = useQueryClient();
     const nav = useNavigate();
 
-    // 게시글 추가하기
-    const mutationAdd = useMutation((newCommunity) => addCommunity(newCommunity), {
-        onSuccess: (data) => {
-            queryClient.invalidateQueries('communties');
-            console.log('성공 !!');
-        }
+    // 기존 api 코드 사용하여 데이터 정보 가져오기
+
+    const { isLoading, isError, data } = useQuery({
+        queryKey: ['communities'],
+        queryFn: () => communityDetailGetDate(params.id)
     });
+
+    // 첫 렌더 시 기존 데이터에 있는 제목, 내용, 이미지 가져오기
+    useEffect(() => {
+        if (user) {
+            setTitle(data.title);
+            setContent(data.content);
+            setImageFile(data.communityImage);
+        }
+    }, [user]);
+
     const handleFileUpload = (event) => {
-        const file = event.target.files[0];
+        const file = event.target.files[0] || data.communityImage;
         console.log(file);
         const fileReader = new FileReader();
         fileReader?.readAsDataURL(file);
@@ -37,49 +52,51 @@ export default function UpdateTest() {
             setImageFile(result);
         };
     };
+
     const handleDeleteImage = () => {
         setImageFile(null);
     };
 
-    // 글쓰기
+    // 게시글 수정하기
 
-    const handleAddCommunity = async () => {
-        if (!title || !content || !imageFile) {
+    const mutationUpdate = useMutation((updateCommunity) => updateBoard(params.id, updateCommunity), {
+        onSuccess: (data) => {
+            queryClient.invalidateQueries('communties');
+            console.log('성공 !!');
+        }
+    });
+
+    const handleUpdateCommuntiy = async () => {
+        console.log(1111);
+        if (!title || !content) {
             Swal.fire({
                 text: '모든 공간을 채워주세요 ^^ 활동에 많은 도움이 됩니다.',
                 imageUrl: modal_logo
             });
             return;
         }
+
         const key = `${user?.uid}/${uuidv4()}`;
         const storageRef = ref(storage, key);
+        let newImageUrl = '';
 
-        let userimageUrl = '';
         try {
-            if (imageFile) {
-                const data = await uploadString(storageRef, imageFile, 'data_url');
-                userimageUrl = await getDownloadURL(data?.ref);
-            }
+            const data = await uploadString(storageRef, imageFile, 'data_url');
+            newImageUrl = await getDownloadURL(data?.ref);
+            console.log(data);
             const now = dayjs();
-
-            const newCommunity = {
+            const updateCommunity = {
                 title,
                 content,
                 createdAt: now.format('YY-MM-DD HH:mm:ss'),
-                nickname: user.nickname,
-                id: user.uid,
-                likes: '',
-                likecount: '',
-                ImageUrl: user.imageUrl,
-                mbti: user.mbti,
-                communityImage: userimageUrl
+                communityImage: newImageUrl || data.communityImage
             };
-
-            mutationAdd.mutate(newCommunity);
+            console.log(title);
+            mutationUpdate.mutate(updateCommunity);
             alert('성공했습니다.');
             nav('/mbti/community');
-        } catch {
-            console.log('실패하였습니다.');
+        } catch (error) {
+            console.log('실패하였습니다.', error);
         }
     };
 
@@ -117,13 +134,15 @@ export default function UpdateTest() {
                     )}
                 </StPeed>
                 <StBtns>
-                    <StEditBtn onClick={handleAddCommunity}>저장하기</StEditBtn>
+                    <StEditBtn onClick={handleUpdateCommuntiy}>저장하기</StEditBtn>
                     <StCancelBtn onClick={() => nav('/mbti/community')}>글 작성 취소하기</StCancelBtn>
                 </StBtns>
             </StDiv>
         </StBox>
     );
-}
+};
+
+export default MbtiCommunityDetailEdit;
 
 const StBox = styled.div`
     width: 100%;
@@ -171,8 +190,9 @@ const StTitleInput = styled.input`
 
 const StcontentInput = styled.textarea`
     padding: 20px;
-    height: 300px;
+    height: 400px;
     border: none;
+    height: px;
     border-radius: 16px;
     background: #f8f8f8;
 `;
