@@ -87,14 +87,14 @@ const MbtiComunityDetail = () => {
                     <img src={heart} alt="좋아요 이미지" />
                     {data?.likecount}
                 </StlikeInformation>
-                {/* <StMessageInformation>
+                <StMessageInformation>
                     <img src={messageImoge} alt="" />
                     <div>0</div>
                 </StMessageInformation>
                 <StViewInformation>
                     <img src={eyeImoge} alt="" />
                     <div>0</div>
-                </StViewInformation> */}
+                </StViewInformation>
             </StuserInfoWrapper>
             <StButtonWrapper>
                 {user?.uid == data?.id ? (

@@ -17,7 +17,7 @@ import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firest
 import { db } from '../../firebase/firebase.config';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
-
+import blackVector from '../../assets/community/blackVector.svg';
 const MbtiCommunity = () => {
     const user = useRecoilState(userAtom);
     const queryClient = useQueryClient();

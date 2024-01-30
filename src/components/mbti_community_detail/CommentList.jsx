@@ -1,5 +1,17 @@
 import dayjs from 'dayjs';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, updateDoc } from 'firebase/firestore';
+import {
+    addDoc,
+    arrayRemove,
+    arrayUnion,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    orderBy,
+    query,
+    updateDoc
+} from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -15,7 +27,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import dropdown from '../../assets/community/dropdown.png';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
-
+import blackVector from '../../assets/community/blackVector.svg';
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
     const [showButtons, setShowButtons] = useState(false);
@@ -112,6 +124,41 @@ const CommentList = () => {
 
     const toggledown = (id) => {
         setSelectedCommentId(selectedCommentId === id ? null : id);
+    };
+    // 좋아요 기능 !! ! !!
+    const mutation = useMutation(
+        async (postId) => {
+            console.log(postId);
+            console.log(params.id);
+            const postRef = doc(db, 'communities', params.id, 'comments', postId);
+            // console.log(postRef);
+            const postDoc = await getDoc(postRef);
+            const postData = postDoc.data();
+            console.log(postData.likes);
+            console.log(user.uid);
+            if (user?.uid && postData.likes?.includes(user.uid)) {
+                return updateDoc(postRef, {
+                    likes: arrayRemove(user.uid),
+                    likecount: postData.likecount ? postData.likecount - 1 : 0
+                });
+            } else {
+                return updateDoc(postRef, {
+                    likes: arrayUnion(user.uid),
+                    likecount: postData.likecount ? postData.likecount + 1 : 1
+                });
+            }
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['comments']);
+            }
+        }
+    );
+
+    const handleLke = (postId) => {
+        // console.log(postId);
+        // console.log(params.id);
+        mutation.mutate(postId);
     };
 
     return (
@@ -232,19 +279,23 @@ const CommentList = () => {
                             </Stcomment>
 
                             <StUpDown>
-                                {/* <StUp>
-                                    <button>
+                                <StUp>
+                                    <button
+                                        onClick={() => {
+                                            handleLke(id);
+                                        }}
+                                    >
                                         {user?.uid && data?.likes?.includes(user?.uid) ? (
-                                            <img src={fullheart} alt="좋아요버튼" />
+                                            <img src={blackVector} alt="좋아요눌린버튼" />
                                         ) : (
-                                            <img src={upVector} alt="좋아요버튼" />
+                                            <img src={upVector} alt="좋아요안눌린버튼" />
                                         )}
                                     </button>
-                                    <div>0</div>
+                                    <div>{data?.likecount}</div>
                                 </StUp>
                                 <StDown>
                                     <img src={downVector} alt="" />
-                                </StDown> */}
+                                </StDown>
                             </StUpDown>
                         </StCommentWrapper>
                     </StCommentCardList>
@@ -443,7 +494,6 @@ const StUpDown = styled.div`
 const StUp = styled.div`
     display: flex;
     align-items: center;
-    gap: 13px;
 `;
 
 const StDown = styled.div`

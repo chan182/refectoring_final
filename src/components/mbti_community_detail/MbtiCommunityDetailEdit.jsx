@@ -93,7 +93,10 @@ const MbtiCommunityDetailEdit = () => {
             };
             console.log(title);
             mutationUpdate.mutate(updateCommunity);
-            alert('성공했습니다.');
+            Swal.fire({
+                text: '',
+                imageUrl: modal_logo
+            });
             nav('/mbti/community');
         } catch (error) {
             console.log('실패하였습니다.', error);
