@@ -7,10 +7,11 @@ import { useQuery } from 'react-query';
 import { getData } from '../../api/board';
 import { useRecoilState } from 'recoil';
 import { userAtom } from '../../recoil/Atom';
+import { useNavigate } from 'react-router-dom';
 
 const UserWritelist = () => {
     const [user, setUser] = useRecoilState(userAtom);
-
+    const navigate = useNavigate();
     const { data } = useQuery({
         queryKey: ['communities'],
         queryFn: getData
@@ -25,13 +26,18 @@ const UserWritelist = () => {
                 <Stbolder>
                     <StFilterLIst>
                         <StMyPeedListFilterBtn>내가 쓴 게시글</StMyPeedListFilterBtn>
-                        <StMyBookmarkListFilterBtn>내가 북마크한 게시글</StMyBookmarkListFilterBtn>
+                        <StMyBookmarkListFilterBtn>좋아요 한 글 </StMyBookmarkListFilterBtn>
+                        <StMyBookmarkListFilterBtn>내가 북마크한 모임</StMyBookmarkListFilterBtn>
                     </StFilterLIst>
                     <Stcontents>
                         {filteredData.map((item) => {
                             console.log(item.data.title);
                             return (
-                                <div>
+                                <StCardWrapper
+                                    onClick={() => {
+                                        navigate('/mbti/community/');
+                                    }}
+                                >
                                     <StfilteredTitle>{item?.data.title}</StfilteredTitle>
                                     <StImoges>
                                         <img src={heartImoge} alt="" />
@@ -41,7 +47,7 @@ const UserWritelist = () => {
                                         <img src={eyeImoge} alt="" />
                                         <StViewCount>0</StViewCount>
                                     </StImoges>
-                                </div>
+                                </StCardWrapper>
                             );
                         })}
                     </Stcontents>
@@ -122,6 +128,10 @@ const Stcontents = styled.div`
         border-radius: 6px;
         background: #f9f9ff;
     }
+`;
+
+const StCardWrapper = styled.div`
+    cursor: pointer;
 `;
 
 const StfilteredTitle = styled.div``;
