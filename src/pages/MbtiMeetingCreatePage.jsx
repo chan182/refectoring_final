@@ -16,11 +16,28 @@ const MbtiMeetingCreatePage = () => {
 
     const createMeetingButtonHandler = async () => {
         try {
-            const meetCollectionRef = await addDoc(collection(db, 'meet'), newMeeting);
+            const currentDate = new Date();
+
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth() + 1;
+            const date = currentDate.getDate();
+
+            const updatedMeeting = {
+                ...newMeeting,
+                date: `${year} / ${month} / ${date}`
+            };
+
+            setNewMeeting(updatedMeeting);
+
+            const meetCollectionRef = await addDoc(collection(db, 'meet'), updatedMeeting);
             console.log('모임이 성공적으로 meet 컬렉션에 추가되었습니다.');
+
+            // newMeeting 상태 초기화
+            setNewMeeting(null);
+
             nav('/mbti/meeting');
         } catch (error) {
-            console.error('meet 컬렉션에 meetingData를 추가하는 과정에서 오류가 발생했습니다:', error);
+            console.error('meet 컬렉션에 newMeeting 데이터를 추가하는 과정에서 오류가 발생했습니다:', error);
         }
     };
 

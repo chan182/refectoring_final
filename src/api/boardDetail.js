@@ -19,11 +19,12 @@ const deleteBoard = async (paramId) => {
 
 // 수정하기
 
-const updateBoard = async (paramId, title) => {
+const updateBoard = async (paramId, updateCommunity) => {
     console.log(paramId);
-    console.log(title);
+    console.log(updateCommunity);
+
     const communityRef = doc(db, 'communities', paramId);
-    await updateDoc(communityRef, title);
+    await updateDoc(communityRef, updateCommunity);
 };
 
 export { communityDetailGetDate, deleteBoard, updateBoard };

@@ -19,6 +19,10 @@ const MeetingDetail = () => {
     const [newReply, setNewReply] = useState({});
     const user = useRecoilValue(userAtom);
     const [commentCount, setCommentCount] = useState(0);
+    const [editCommentId, setEditCommentId] = useState(null);
+    const [editCommentContent, setEditCommentContent] = useState('');
+    const [editReplyId, setEditReplyId] = useState(null);
+    const [editReplyContent, setEditReplyContent] = useState('');
 
     useEffect(() => {
         const fetchMeetingData = async () => {
@@ -180,29 +184,41 @@ const MeetingDetail = () => {
     };
 
     const handleEditComment = async (commentId) => {
-        const updatedCommentContent = prompt(
-            '댓글을 수정하세요:',
-            comments.find((comment) => comment.id === commentId)?.content
-        );
+        // 수정 중인 댓글인 경우에는 댓글 수정 처리를 진행하지 않음
+        if (editCommentId === commentId) {
+            setEditCommentId(null);
+            setEditCommentContent('');
+            return;
+        }
 
-        if (updatedCommentContent !== null) {
-            try {
-                const commentDocRef = doc(db, `meet/${id}/comments`, commentId);
-                await updateDoc(commentDocRef, { content: updatedCommentContent });
+        // 댓글 수정 중이 아닌 경우, 해당 댓글의 내용을 가져와 상태에 저장
+        const commentContentToEdit = comments.find((comment) => comment.id === commentId)?.content;
+        setEditCommentId(commentId);
+        setEditCommentContent(commentContentToEdit || '');
+    };
 
-                // 댓글 수정 후, 화면을 갱신합니다.
-                const updatedCommentsQuerySnapshot = await getDocs(
-                    query(collection(db, `meet/${id}/comments`), orderBy('createdAt', 'desc'))
-                );
-                const updatedComments = updatedCommentsQuerySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
+    const handleSaveEditComment = async (commentId) => {
+        // 수정 중인 댓글의 내용을 저장하고 서버에 업데이트
+        try {
+            const commentDocRef = doc(db, `meet/${id}/comments`, commentId);
+            await updateDoc(commentDocRef, { content: editCommentContent });
 
-                setComments(updatedComments);
-            } catch (error) {
-                console.error('댓글 수정 중 에러 발생: ', error);
-            }
+            // 댓글 수정 후, 화면을 갱신합니다.
+            const updatedCommentsQuerySnapshot = await getDocs(
+                query(collection(db, `meet/${id}/comments`), orderBy('createdAt', 'desc'))
+            );
+            const updatedComments = updatedCommentsQuerySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            setComments(updatedComments);
+
+            // 수정이 완료되었으므로 상태 초기화
+            setEditCommentId(null);
+            setEditCommentContent('');
+        } catch (error) {
+            console.error('댓글 수정 중 에러 발생: ', error);
         }
     };
 
@@ -211,6 +227,20 @@ const MeetingDetail = () => {
 
         if (shouldDelete) {
             try {
+                // 해당 댓글의 대댓글 가져오기
+                const repliesQuerySnapshot = await getDocs(
+                    query(collection(db, `meet/${id}/comments/${commentId}/replies`), orderBy('createdAt', 'desc'))
+                );
+
+                // 대댓글 삭제
+                await Promise.all(
+                    repliesQuerySnapshot.docs.map(async (replyDoc) => {
+                        const replyId = replyDoc.id;
+                        await deleteDoc(doc(db, `meet/${id}/comments/${commentId}/replies`, replyId));
+                    })
+                );
+
+                // 댓글 삭제
                 const commentDocRef = doc(db, `meet/${id}/comments`, commentId);
                 await deleteDoc(commentDocRef);
 
@@ -226,6 +256,87 @@ const MeetingDetail = () => {
                 setComments(updatedComments);
             } catch (error) {
                 console.error('댓글 삭제 중 에러 발생: ', error);
+            }
+        }
+    };
+
+    const handleEditReply = (commentId, replyId) => {
+        // 이미 수정 중이라면 수정 취소
+        if (editReplyId === replyId) {
+            setEditReplyId(null);
+            setEditReplyContent('');
+        } else {
+            // 대댓글 수정 시작
+            setEditReplyId(replyId);
+            setEditReplyContent(
+                comments.find((comment) => comment.id === commentId)?.replies.find((reply) => reply.id === replyId)
+                    ?.content || ''
+            );
+        }
+    };
+
+    const handleSaveEditReply = async (commentId, replyId) => {
+        try {
+            const replyDocRef = doc(db, `meet/${id}/comments/${commentId}/replies`, replyId);
+            await updateDoc(replyDocRef, { content: editReplyContent });
+
+            // 상태 업데이트 및 수정 모드 초기화
+            const updatedRepliesQuerySnapshot = await getDocs(
+                query(collection(db, `meet/${id}/comments/${commentId}/replies`), orderBy('createdAt', 'desc'))
+            );
+            const updatedReplies = updatedRepliesQuerySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            setComments((prevComments) =>
+                prevComments.map((comment) =>
+                    comment.id === commentId
+                        ? {
+                              ...comment,
+                              replies: updatedReplies
+                          }
+                        : comment
+                )
+            );
+
+            // 수정 완료
+            setEditReplyId(null);
+            setEditReplyContent('');
+        } catch (error) {
+            console.error('답글 수정 중 에러 발생: ', error);
+        }
+    };
+
+    const handleDeleteReply = async (commentId, replyId) => {
+        const shouldDelete = window.confirm('정말로 답글을 삭제하시겠습니까?');
+
+        if (shouldDelete) {
+            try {
+                const replyDocRef = doc(db, `meet/${id}/comments/${commentId}/replies`, replyId);
+                await deleteDoc(replyDocRef);
+
+                // 상태 업데이트
+                const updatedRepliesQuerySnapshot = await getDocs(
+                    query(collection(db, `meet/${id}/comments/${commentId}/replies`), orderBy('createdAt', 'desc'))
+                );
+                const updatedReplies = updatedRepliesQuerySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                setComments((prevComments) =>
+                    prevComments.map((comment) =>
+                        comment.id === commentId
+                            ? {
+                                  ...comment,
+                                  replies: updatedReplies
+                              }
+                            : comment
+                    )
+                );
+            } catch (error) {
+                console.error('답글 삭제 중 에러 발생: ', error);
             }
         }
     };
@@ -360,7 +471,23 @@ const MeetingDetail = () => {
                                         <p className="createdAt">{comment.createdAt}</p>
                                     </div>
                                     <div className="contentBox">
-                                        <p className="comment">{comment.content}</p>
+                                        <p className="comment">
+                                            {comment.id === editCommentId ? (
+                                                <>
+                                                    <T.StCommentEditTextarea
+                                                        value={editCommentContent}
+                                                        onChange={(e) => setEditCommentContent(e.target.value)}
+                                                    />
+                                                    <T.StEditCompleteButton1
+                                                        onClick={() => handleSaveEditComment(comment.id)}
+                                                    >
+                                                        수정 완료
+                                                    </T.StEditCompleteButton1>
+                                                </>
+                                            ) : (
+                                                comment.content
+                                            )}
+                                        </p>
                                         <div className="dropDown">
                                             {/* 댓글 수정 및 삭제를 위한 드롭다운 메뉴 */}
                                             {user && user.email === comment.email && (
@@ -415,8 +542,45 @@ const MeetingDetail = () => {
                                                                     </T.StReplyNameTime>
                                                                 </T.StReplyCommentStatus>
                                                                 <T.StReplyComment>
-                                                                    <p className="comment">{reply.content}</p>
+                                                                    <p className="comment">
+                                                                        {editReplyId === reply.id ? (
+                                                                            <>
+                                                                                <T.StReplyEditTextarea
+                                                                                    value={editReplyContent}
+                                                                                    onChange={(e) =>
+                                                                                        setEditReplyContent(
+                                                                                            e.target.value
+                                                                                        )
+                                                                                    }
+                                                                                />
+                                                                                <T.StEditCompleteButton2
+                                                                                    onClick={() =>
+                                                                                        handleSaveEditReply(
+                                                                                            comment.id,
+                                                                                            reply.id
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    수정 완료
+                                                                                </T.StEditCompleteButton2>
+                                                                            </>
+                                                                        ) : (
+                                                                            reply.content
+                                                                        )}
+                                                                    </p>
                                                                 </T.StReplyComment>
+                                                                <T.StReplyEditDeleteBox>
+                                                                    {user && user.email === reply.email && (
+                                                                        <CommentDropdown
+                                                                            onEdit={() =>
+                                                                                handleEditReply(comment.id, reply.id)
+                                                                            }
+                                                                            onDelete={() =>
+                                                                                handleDeleteReply(comment.id, reply.id)
+                                                                            }
+                                                                        />
+                                                                    )}
+                                                                </T.StReplyEditDeleteBox>
                                                             </T.StReplySection>
                                                         </div>
                                                     ))}
