@@ -7,9 +7,9 @@ function MbtiMeetingCreateTags() {
     const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
     const location01 = ['전지역', '서울', '인천', '대전', '광주', '대구', '부산', '울산'];
     const location02 = ['경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주'];
-    const gender = ['남자', '여자', '남/여'];
-    const age = ['10대', '20대', '30대', '40대', '50대 이상'];
-    const mbti = ['E', 'I', 'N', 'S', 'F', 'T', 'P', 'J'];
+    const gender = ['남/여', '남자', '여자'];
+    const age = ['전연령', '10대', '20대', '30대', '40대', '50대 이상'];
+    const mbti = ['모든 유형', 'E', 'I', 'N', 'S', 'F', 'T', 'P', 'J'];
 
     return (
         <StTopContainerBox>

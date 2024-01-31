@@ -13,9 +13,8 @@ const MbtiMeetingExplainMeeting = () => {
             <StTitle>모임 설명</StTitle>
             <StBox>
                 <StPeedTitle
-                    placeholder="제목을 입력해주세요.(15글자)"
-                    maxLength={15}
-                    value={newMeeting.title || ''}
+                    placeholder="제목을 입력해주세요."
+                    value={newMeeting && newMeeting.title ? newMeeting.title : ''}
                     onChange={(e) =>
                         setNewMeeting((prevNewMeeting) => ({
                             ...prevNewMeeting,
@@ -25,7 +24,9 @@ const MbtiMeetingExplainMeeting = () => {
                 ></StPeedTitle>
                 <StPeedContent
                     placeholder="내용을 입력해주세요."
-                    value={newMeeting.content || ''}
+                    cols="40"
+                    rows="8"
+                    value={newMeeting && newMeeting.content ? newMeeting.content : ''}
                     onChange={(e) =>
                         setNewMeeting((prevNewMeeting) => ({
                             ...prevNewMeeting,
@@ -80,7 +81,7 @@ const StPeedTitle = styled.input`
     height: 47px;
     margin-bottom: 14px;
     font-size: 18px;
-    padding: 13px;
+    padding: 14px;
     background-color: var(--light-gray);
     border: none;
     border-radius: 16px;
@@ -90,15 +91,16 @@ const StPeedTitle = styled.input`
     }
 `;
 
-const StPeedContent = styled.input`
+const StPeedContent = styled.textarea`
     width: 100%;
     height: 483px;
     margin-bottom: 14px;
     font-size: 18px;
-    padding: 13px;
+    padding: 40px 14px;
     background-color: var(--light-gray);
     border: none;
     border-radius: 16px;
+    resize: none;
 
     &:focus {
         outline-color: var(--button-border-color);
