@@ -37,7 +37,6 @@ const CommentList = () => {
     const [userCommentId, setUserCommentId] = useState('');
     const [updateComment, setUpdateComment] = useState('');
     const [sortOption, setSortOption] = useState('latest');
-    const [showSortOptions, setShowSortOptions] = useState(false);
     const [CommentCount, setCommentCount] = useState(0);
     const params = useParams();
     const queryClient = useQueryClient();
@@ -165,32 +164,16 @@ const CommentList = () => {
         <Stwrapper>
             <StCommentTitleWrapper>
                 <StTitle>{CommentCount} 개 </StTitle>
-                {/* <StFilteredbutton>
+                <StFilteredbutton>
                     <img src={filteredImoge} alt="" />
-                    <div onClick={() => setShowSortOptions(!showSortOptions)}>
+                    <div>
                         정렬기준
-                        {showSortOptions && (
-                            <StSortOptions>
-                                <button
-                                    onClick={() => {
-                                        setSortOption('latest');
-                                        setShowSortOptions(false);
-                                    }}
-                                >
-                                    최신순
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setSortOption('popular');
-                                        setShowSortOptions(false);
-                                    }}
-                                >
-                                    인기순
-                                </button>
-                            </StSortOptions>
-                        )}
+                        <StSortOptions>
+                            <button>최신순</button>
+                            <button>인기순</button>
+                        </StSortOptions>
                     </div>
-                </StFilteredbutton> */}
+                </StFilteredbutton>
             </StCommentTitleWrapper>
             <StInputWrapper>
                 <StImageIntutWrapper>
@@ -339,14 +322,6 @@ const StFilteredbutton = styled.div`
 const StSortOptions = styled.div`
     display: flex;
     flex-direction: column;
-    position: absolute;
-    left: 35%; /* Adjusted to be relative to the parent's width */
-    transform: translateX(-50%); /* Center horizontally */
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    z-index: 1;
-    margin-top: 4px;
 
     button {
         padding: 8px;
