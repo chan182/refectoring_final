@@ -84,7 +84,7 @@ const MbtiCommunity = () => {
         {
             onSuccess: () => {
                 // 무효화 시키기
-                queryClient.invalidateQueries(['communities', searchKeyWord]);
+                queryClient.invalidateQueries('communities');
             }
         }
     );
