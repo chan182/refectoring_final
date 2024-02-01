@@ -88,7 +88,7 @@ const MbtiMeeting = () => {
                             <StImg src={data.repreImg}></StImg>
                             <StContainer>
                                 <StTitle>
-                                    {data.title}/{(data.mbtis + '').split()}
+                                    {data.name} / {(data.mbtis + '').split()}
                                 </StTitle>
                                 <StPositionDateUserContainer>
                                     <StContentsImgWrap>

@@ -55,13 +55,13 @@ const settings = {
     dots: true,
     arrows: true,
     infinite: true,
-    speed: 3000,
+    speed: 2000,
     // centerMode: true,
     slidesToShow: 1,
     slidesToScroll: 1,
     // variableWidth: true,
     autoplay: true,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 4000,
     pauseOnHover: true
 };
 

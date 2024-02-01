@@ -12,16 +12,6 @@ const MbtiMeetingExplainMeeting = () => {
         <>
             <StTitle>모임 설명</StTitle>
             <StBox>
-                <StPeedTitle
-                    placeholder="제목을 입력해주세요."
-                    value={newMeeting && newMeeting.title ? newMeeting.title : ''}
-                    onChange={(e) =>
-                        setNewMeeting((prevNewMeeting) => ({
-                            ...prevNewMeeting,
-                            title: e.target.value
-                        }))
-                    }
-                ></StPeedTitle>
                 <StPeedContent
                     placeholder="내용을 입력해주세요."
                     cols="40"
@@ -74,21 +64,6 @@ const StBox = styled.div`
 const StTitle = styled.p`
     font-size: 26px;
     margin: 0px 0px 10px 20px;
-`;
-
-const StPeedTitle = styled.input`
-    width: 100%;
-    height: 47px;
-    margin-bottom: 14px;
-    font-size: 18px;
-    padding: 14px;
-    background-color: var(--light-gray);
-    border: none;
-    border-radius: 16px;
-
-    &:focus {
-        outline-color: var(--button-border-color);
-    }
 `;
 
 const StPeedContent = styled.textarea`
