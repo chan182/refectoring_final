@@ -49,7 +49,7 @@ const CommentList = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedOption, setSelectedOption] = useState('latest');
     const navigate = useNavigate();
-
+    console.log('11111111111');
     const getCommentsQueryFn = () => {
         // console.log(selectedOption);
         if (selectedOption === 'latest') {
@@ -62,10 +62,7 @@ const CommentList = () => {
 
     const { data } = useQuery({
         queryKey: ['comments', selectedOption],
-        queryFn: getCommentsQueryFn,
-        onSuccess: (data) => {
-            queryClient.invalidateQueries(['comments', selectedOption]);
-        }
+        queryFn: getCommentsQueryFn
     });
 
     // 댓글 추가하기
