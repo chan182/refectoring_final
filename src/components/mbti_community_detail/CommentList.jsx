@@ -49,7 +49,7 @@ const CommentList = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedOption, setSelectedOption] = useState('latest');
     const navigate = useNavigate();
-    console.log('11111111111');
+    console.log('데이터 로딩 중 !!!!!');
     const getCommentsQueryFn = () => {
         // console.log(selectedOption);
         if (selectedOption === 'latest') {
