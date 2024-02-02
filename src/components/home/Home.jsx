@@ -63,7 +63,7 @@ const StComponent = styled.div`
     height: 100%;
     border-radius: 16px;
     padding: 30px;
-    box-shadow: 0px 0px 5px #d3d3d3;
+    box-shadow: 0px 0px 3px #d3d3d3;
     position: relative;
 
     & img {

@@ -32,7 +32,7 @@ const MbtiMeeting = () => {
         queryFn: getData
     });
 
-    const FilterData = data?.filter(({ data }) => data.title.includes(searchKeyWord));
+    const FilterData = data?.filter(({ data }) => data.name.includes(searchKeyWord));
 
     // 위로 올라가기 버튼
     useEffect(() => {
@@ -88,7 +88,7 @@ const MbtiMeeting = () => {
                             <StImg src={data.repreImg}></StImg>
                             <StContainer>
                                 <StTitle>
-                                    {data.title}/{(data.mbtis + '').split()}
+                                    {data.name} / {(data.mbtis + '').split()}
                                 </StTitle>
                                 <StPositionDateUserContainer>
                                     <StContentsImgWrap>
