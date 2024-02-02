@@ -21,10 +21,13 @@ const MbtiMeetingCreatePage = () => {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth() + 1;
             const date = currentDate.getDate();
+            const hours = currentDate.getHours();
+            const minutes = currentDate.getMinutes();
+            const seconds = currentDate.getSeconds();
 
             const updatedMeeting = {
                 ...newMeeting,
-                date: `${year} / ${month} / ${date}`
+                date: `${year}/${month}/${date}  ${hours}:${minutes}:${seconds}`
             };
 
             setNewMeeting(updatedMeeting);
