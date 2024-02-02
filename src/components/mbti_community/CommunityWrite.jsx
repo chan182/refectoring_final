@@ -24,7 +24,7 @@ export default function UpdateTest() {
     const mutationAdd = useMutation((newCommunity) => addCommunity(newCommunity), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('communties');
-            console.log('성공 !!');
+            // console.log('성공 !!');
         }
     });
     const handleFileUpload = (event) => {
@@ -76,7 +76,10 @@ export default function UpdateTest() {
             };
 
             mutationAdd.mutate(newCommunity);
-            alert('성공했습니다.');
+            Swal.fire({
+                text: '업로드에 성공',
+                imageUrl: modal_logo
+            });
             nav('/mbti/community');
         } catch {
             console.log('실패하였습니다.');

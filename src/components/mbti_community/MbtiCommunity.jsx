@@ -40,7 +40,7 @@ const MbtiCommunity = () => {
     const handleSearch = () => {
         queryClient.invalidateQueries(['communities', searchKeyWord]);
     };
-
+    // console.log('검색검색검색검색검색');
     ////////////// usePaginatedQuery를 사용하여 페이지별로 데이터 가져오기
     // const { resolvedData, latestData, status, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery(
     //     ['communities', searchKeyWord],
@@ -84,7 +84,7 @@ const MbtiCommunity = () => {
         {
             onSuccess: () => {
                 // 무효화 시키기
-                queryClient.invalidateQueries(['communities', searchKeyWord]);
+                queryClient.invalidateQueries('communities');
             }
         }
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import MbtiMeetingCreateTags from '../components/mbti_meeting/MbtiMeetingCreateTags';
 import MbtiMeetingExplainMeeting from '../components/mbti_meeting/MbtiMeetingExplainMeeting';
 import MbtiMeetingCreateInfo from '../components/mbti_meeting/MbtiMeetingCreateInfo';
@@ -21,10 +21,13 @@ const MbtiMeetingCreatePage = () => {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth() + 1;
             const date = currentDate.getDate();
+            const hours = currentDate.getHours();
+            const minutes = currentDate.getMinutes();
+            const seconds = currentDate.getSeconds();
 
             const updatedMeeting = {
                 ...newMeeting,
-                date: `${year} / ${month} / ${date}`
+                date: `${year}/${month}/${date}  ${hours}:${minutes}:${seconds}`
             };
 
             setNewMeeting(updatedMeeting);
@@ -49,7 +52,26 @@ const MbtiMeetingCreatePage = () => {
             <StHr />
             <MbtiMeetingExplainMeeting />
             <StBtnBox>
-                <StCreateButton onClick={() => createMeetingButtonHandler()}>생성하기</StCreateButton>
+                <StCreateButton
+                    disabled={
+                        !newMeeting ||
+                        !newMeeting.repreImg ||
+                        !newMeeting.name ||
+                        !newMeeting.managerName ||
+                        !newMeeting.limitPeople ||
+                        !newMeeting.schedule ||
+                        !newMeeting.kakaoUrl ||
+                        !newMeeting.oneLineIntro ||
+                        !newMeeting.locations ||
+                        !newMeeting.genders ||
+                        !newMeeting.ages ||
+                        !newMeeting.mbtis ||
+                        !newMeeting.content
+                    }
+                    onClick={() => createMeetingButtonHandler()}
+                >
+                    생성하기
+                </StCreateButton>
                 <StCancelButton onClick={() => nav('/')}>취소하기</StCancelButton>
             </StBtnBox>
         </StWholeContainer>
@@ -89,8 +111,20 @@ const StCreateButton = styled.button`
     color: white;
     border: none;
     border-radius: 6px;
-    cursor: pointer;
     margin-right: 10px;
+    cursor: pointer;
+
+    ${(props) => {
+        if (props.disabled) {
+            return css`
+                background-color: var(--bold-gray);
+            `;
+        }
+        return css`
+            background-color: var(--main-button-color);
+            color: white;
+        `;
+    }}
 `;
 
 const StCancelButton = styled.button`
