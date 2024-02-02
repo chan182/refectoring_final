@@ -5,7 +5,7 @@ import { addDoc, collection, getDocs, orderBy, query } from 'firebase/firestore'
 import { db } from '../firebase/firebase.config';
 
 // 게시글 가져오기
-const getData = async (params) => {
+const getData = async (paramsId) => {
     const q = query(collection(db, 'communities'), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
 

@@ -51,7 +51,8 @@ const CommentList = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedOption, setSelectedOption] = useState('latest');
     const navigate = useNavigate();
-    console.log('데이터 로딩 중 !!!!!');
+    const [isOpen, setIsOpen] = useState(false);
+
     const getCommentsQueryFn = () => {
         // console.log(selectedOption);
         if (selectedOption === 'latest') {
@@ -61,11 +62,16 @@ const CommentList = () => {
             return getCommentsByLikeCount(params.id);
         }
     };
+    const handleToggleDropdown = (id) => {
+        setIsOpen(!isOpen);
+        setSelectedCommentId(id);
+    };
 
     const { data } = useQuery({
         queryKey: ['comments', selectedOption],
         queryFn: getCommentsQueryFn
     });
+    // console.log(data[0].id);
 
     const handleInputChange = debounce((value) => {
         setContent(value);
@@ -96,7 +102,7 @@ const CommentList = () => {
             nickname: user.nickname,
             id: user.uid,
             likes: '',
-            likecount: ''
+            likecount: 0
         };
         setContent('');
 
@@ -112,7 +118,18 @@ const CommentList = () => {
     });
 
     const handleDeleteComment = async (id) => {
-        DeleteMutation.mutate(id);
+        Swal.fire({
+            imageUrl: modal_logo,
+            title: '정말 삭제하시겠습니까?',
+            showDenyButton: true,
+            confirmButtonText: 'YES'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire({ imageUrl: modal_logo, title: '삭제되었습니다.' });
+                DeleteMutation.mutate(id);
+            }
+        });
     };
 
     // 댓글 수정하기
@@ -120,6 +137,7 @@ const CommentList = () => {
     const UpdateMutation = useMutation((id) => switchComment(id, params.id, updateComment), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('comments');
+            setIsOpen(!isOpen);
         }
     });
 
@@ -145,10 +163,6 @@ const CommentList = () => {
         };
         fetchCommentCount();
     }, [params.id]);
-
-    const toggledown = (id) => {
-        setSelectedCommentId(selectedCommentId === id ? null : id);
-    };
 
     // 좋아요 기능 !! ! !!
 
@@ -234,6 +248,7 @@ const CommentList = () => {
                 )}
             </StInputWrapper>
             {data?.map(({ id, data }) => {
+                // console.log(id);
                 return (
                     <StCommentCardList key={id}>
                         <StProfileImoge src={data?.ImageUrl} alt="" />
@@ -243,13 +258,24 @@ const CommentList = () => {
                                     <div>{data?.nickname}</div>
                                     <div>{data?.createdAt}</div>
                                 </StFlex>
-                                <StFlex>
-                                    <button onClick={() => toggledown(id)}>
-                                        <StDropDownImage src={dropdown} alt="" />
-                                    </button>
-                                    {user?.uid === data?.id && selectedCommentId === id ? (
-                                        <StButtons>
-                                            <button
+                                <StCommentDropdown>
+                                    <DropdownButton onClick={() => handleToggleDropdown(id)}>
+                                        <img
+                                            src={dropdown}
+                                            alt="수정/삭제 버튼"
+                                            style={{
+                                                width: '24px',
+                                                height: '30px',
+                                                marginTop: '-20px',
+                                                border: 'none',
+                                                cursor: 'pointer'
+                                            }}
+                                        />
+                                    </DropdownButton>
+                                    {/* {isOpen == true && user?.uid === data?.id && selectedCommentId === id ? ( */}
+                                    {isOpen == true && selectedCommentId === id ? (
+                                        <MenuBox>
+                                            <StEditButton
                                                 onClick={() => {
                                                     console.log(id);
                                                     setEditMode(!editMode);
@@ -259,19 +285,22 @@ const CommentList = () => {
                                                 }}
                                             >
                                                 댓글 수정
-                                            </button>
-                                            <button
+                                            </StEditButton>
+                                            <StDeleteButton
                                                 onClick={() => {
                                                     handleDeleteComment(id);
                                                 }}
                                             >
                                                 댓글 삭제
-                                            </button>
-                                        </StButtons>
+                                            </StDeleteButton>
+                                        </MenuBox>
                                     ) : (
                                         <></>
                                     )}
-                                </StFlex>
+
+                                    {/* ) : (<></>
+                                    )} */}
+                                </StCommentDropdown>
                             </StCommentUserInfo>
 
                             <Stcomment>
@@ -447,6 +476,53 @@ const StFlex = styled.div`
     display: flex;
     gap: 10px;
     height: 23px;
+`;
+
+const DropdownButton = styled.button`
+    background: none;
+    border: none;
+    cursor: pointer;
+`;
+
+const MenuBox = styled.div`
+    position: absolute;
+    top: 65%;
+    left: -150%;
+    width: 75px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #ededed;
+`;
+
+const StEditButton = styled.button`
+    width: 75px;
+    height: 27px;
+    margin-left: -10px;
+    white-space: nowrap;
+    &:hover {
+        background-color: var(--button-border-color);
+        color: white;
+    }
+`;
+
+const StDeleteButton = styled.button`
+    width: 75px;
+    height: 27px;
+    margin-left: -10px;
+    white-space: nowrap;
+    &:hover {
+        background-color: var(--button-border-color);
+        color: white;
+    }
+`;
+
+const StCommentDropdown = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: column;
 `;
 
 const StButtons = styled.button`
