@@ -39,7 +39,7 @@ const MbtiMeetingCreateInfo = () => {
             <StTopContainer>
                 <StImgBox>
                     <StImg>
-                        {newMeeting && newMeeting.repreImg ? (
+                        {newMeeting && newMeeting?.repreImg ? (
                             <img
                                 src={newMeeting.repreImg}
                                 alt="선택된 이미지"
