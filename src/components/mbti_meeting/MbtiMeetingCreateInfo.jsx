@@ -6,7 +6,7 @@ import cameraImg from '../../assets/mbtiMeeting/camera.png';
 
 const MbtiMeetingCreateInfo = () => {
     const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
-
+    const bookmark = '';
     console.log('newMeeting', newMeeting);
 
     const imageInputRef = useRef(null);
@@ -28,6 +28,7 @@ const MbtiMeetingCreateInfo = () => {
 
         setNewMeeting((prevNewMeeting) => ({
             ...prevNewMeeting,
+            bookmark,
             repreImg: dataURL
         }));
     };

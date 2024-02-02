@@ -33,7 +33,7 @@ const MbtiMeeting = () => {
         queryFn: getData
     });
 
-    const FilterData = data?.filter(({ data }) => data.title.includes(searchKeyWord));
+    const FilterData = data?.filter(({ data }) => data.name.includes(searchKeyWord));
 
     // 북마크
     const mutation = useMutation(
@@ -121,7 +121,7 @@ const MbtiMeeting = () => {
                         <StContainer>
                             <StTitle>
                                 <div>
-                                    {data.title}/{(data.mbtis + '').split()}
+                                    {data.name}/{(data.mbtis + '').split()}
                                 </div>
                                 {user[0] ? (
                                     <StBookMark
