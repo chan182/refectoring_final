@@ -11,6 +11,11 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../recoil/Atom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Swal from 'sweetalert2';
+<<<<<<< HEAD
+=======
+import modal_logo from '../../assets/home/mbti_community.png';
+
+>>>>>>> 48d773fac08afe9977e3ab15617f68f03bd243cc
 const MbtiComunityDetail = () => {
     const user = useRecoilValue(userAtom);
     const params = useParams();
@@ -30,18 +35,32 @@ const MbtiComunityDetail = () => {
     const DeleteBoardMutation = useMutation((id) => deleteBoard(id), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('communities');
+<<<<<<< HEAD
 
+=======
+>>>>>>> 48d773fac08afe9977e3ab15617f68f03bd243cc
             navigate('/mbti/community');
         }
     });
     const handleDeleteCommunity = async () => {
         Swal.fire({
+<<<<<<< HEAD
             title: '정말 삭제하시겠습니까?',
             showCancelButton: true,
             confirmButtonText: 'YES'
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire('삭제되었습니다.!');
+=======
+            imageUrl: modal_logo,
+            title: '정말 삭제하시겠습니까?',
+            showDenyButton: true,
+            confirmButtonText: 'YES'
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire({ imageUrl: modal_logo, title: '삭제되었습니다.' });
+>>>>>>> 48d773fac08afe9977e3ab15617f68f03bd243cc
                 DeleteBoardMutation.mutate(params.id);
             }
         });

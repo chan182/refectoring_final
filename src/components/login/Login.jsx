@@ -8,17 +8,24 @@ import modal_logo from '../../assets/home/headerLogo.png';
 import kakao from '../../assets/login/kakao.png';
 import { auth } from '../../firebase/firebase.config';
 import GoogleLogin from './GoogleLogin';
+import { useRecoilState } from 'recoil';
+import { createMeetingState } from '../../recoil/recoilAtoms';
 
 const Login = () => {
     const navigate = useNavigate();
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
+    const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
 
     const handleClickLoginButton = async () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, userId, userPw);
             const user = userCredential.user;
             navigate('/');
+            setNewMeeting((prevNewMeeting) => ({
+                ...prevNewMeeting,
+                userId: userId
+            }));
             Swal.fire({
                 title: '로그인 성공!',
                 text: '다양한 유형의 사람들과 자유롭게 소통하세요 !',

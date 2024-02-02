@@ -25,7 +25,7 @@ export default function UpdateTest() {
     const mutationAdd = useMutation((newCommunity) => addCommunity(newCommunity), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('communties');
-            console.log('성공 !!');
+            // console.log('성공 !!');
         }
     });
     const handleFileUpload = (event) => {
