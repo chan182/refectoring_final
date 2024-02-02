@@ -1,5 +1,17 @@
 import dayjs from 'dayjs';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, updateDoc } from 'firebase/firestore';
+import {
+    addDoc,
+    arrayRemove,
+    arrayUnion,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    orderBy,
+    query,
+    updateDoc
+} from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
@@ -9,12 +21,20 @@ import upVector from '../../assets/community/Vector-up.svg';
 import filteredImoge from '../../assets/community/align-left.svg';
 import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
-import { addComment, deleteComment, getComments, switchComment } from '../../api/comment';
+import {
+    addComment,
+    deleteComment,
+    getCommentsByCreatedAt,
+    getCommentsByLikeCount,
+    switchComment
+} from '../../api/comment';
 import fullheart from '../../assets/community/fullheart.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import dropdown from '../../assets/community/dropdown.png';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
+import blackVector from '../../assets/community/blackVector.svg';
+import { debounce } from 'lodash';
 
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
@@ -24,22 +44,40 @@ const CommentList = () => {
     const [editMode, setEditMode] = useState(false);
     const [userCommentId, setUserCommentId] = useState('');
     const [updateComment, setUpdateComment] = useState('');
-    const [sortOption, setSortOption] = useState('latest');
-    const [showSortOptions, setShowSortOptions] = useState(false);
     const [CommentCount, setCommentCount] = useState(0);
     const params = useParams();
     const queryClient = useQueryClient();
     const [selectedCommentId, setSelectedCommentId] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
-    // 댓글 추가하기
+    const [selectedOption, setSelectedOption] = useState('latest');
+    const navigate = useNavigate();
+    console.log('데이터 로딩 중 !!!!!');
+    const getCommentsQueryFn = () => {
+        // console.log(selectedOption);
+        if (selectedOption === 'latest') {
+            return getCommentsByCreatedAt(params.id);
+        } else if (selectedOption === 'best') {
+            // 좋아요가 많은 순으로 가져오는 함수를 사용하도록 변경
+            return getCommentsByLikeCount(params.id);
+        }
+    };
 
+    const { data } = useQuery({
+        queryKey: ['comments', selectedOption],
+        queryFn: getCommentsQueryFn
+    });
+
+    const handleInputChange = debounce((value) => {
+        setContent(value);
+    }, 300);
+
+    // 댓글 추가하기
     const mutationAdd = useMutation((newComment) => addComment(newComment, params.id), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('comments');
             console.log('성공 !!');
         }
     });
-    const navigate = useNavigate();
 
     const handleAddComment = async (paramsId) => {
         if (!user) {
@@ -89,9 +127,7 @@ const CommentList = () => {
         UpdateMutation.mutate(id);
     };
 
-    // 댓글들 가져오기
-
-    const { data } = useQuery({ queryKey: ['comments'], queryFn: () => getComments(params.id) });
+    // 댓글 갯수 세기 (비효율 코드..?)
 
     useEffect(() => {
         const fetchCommentCount = async () => {
@@ -101,7 +137,7 @@ const CommentList = () => {
                 const commentsSnapshot = await getDocs(commentsQuery);
                 const totalComments = commentsSnapshot.size;
                 setCommentCount(totalComments);
-                console.log('댓글 갯수:', totalComments);
+
                 // 여기에서 totalComments를 원하는 대로 활용할 수 있습니다.
             } catch (error) {
                 console.error('댓글 갯수를 가져오는 중 에러 발생:', error);
@@ -114,36 +150,56 @@ const CommentList = () => {
         setSelectedCommentId(selectedCommentId === id ? null : id);
     };
 
+    // 좋아요 기능 !! ! !!
+
+    const mutation = useMutation(
+        async (postId) => {
+            console.log(postId);
+            console.log(params.id);
+            const postRef = doc(db, 'communities', params.id, 'comments', postId);
+            // console.log(postRef);
+            const postDoc = await getDoc(postRef);
+            const postData = postDoc.data();
+            // console.log(postData.likes);
+            // console.log(user.uid);
+            if (user?.uid && postData.likes?.includes(user.uid)) {
+                return updateDoc(postRef, {
+                    likes: arrayRemove(user.uid),
+                    likecount: postData.likecount ? postData.likecount - 1 : 0
+                });
+            } else {
+                return updateDoc(postRef, {
+                    likes: arrayUnion(user.uid),
+                    likecount: postData.likecount ? postData.likecount + 1 : 1
+                });
+            }
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['comments']);
+            }
+        }
+    );
+
+    const handleLke = (postId) => {
+        // console.log(postId);
+        // console.log(params.id);
+        mutation.mutate(postId);
+    };
+
     return (
         <Stwrapper>
             <StCommentTitleWrapper>
-                <StTitle>{CommentCount} 개 </StTitle>
-                {/* <StFilteredbutton>
-                    <img src={filteredImoge} alt="" />
-                    <div onClick={() => setShowSortOptions(!showSortOptions)}>
-                        정렬기준
-                        {showSortOptions && (
-                            <StSortOptions>
-                                <button
-                                    onClick={() => {
-                                        setSortOption('latest');
-                                        setShowSortOptions(false);
-                                    }}
-                                >
-                                    최신순
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setSortOption('popular');
-                                        setShowSortOptions(false);
-                                    }}
-                                >
-                                    인기순
-                                </button>
-                            </StSortOptions>
-                        )}
-                    </div>
-                </StFilteredbutton> */}
+                <StTitle>댓글 {CommentCount} 개 </StTitle>
+                <StSortOptions
+                    value={selectedOption}
+                    onChange={(e) => {
+                        setSelectedOption(e.target.value);
+                    }}
+                >
+                    <option value="latest">최신순</option>
+                    <option value="best">인기순</option>
+                </StSortOptions>
             </StCommentTitleWrapper>
             <StInputWrapper>
                 <StImageIntutWrapper>
@@ -232,19 +288,23 @@ const CommentList = () => {
                             </Stcomment>
 
                             <StUpDown>
-                                {/* <StUp>
-                                    <button>
+                                <StUp>
+                                    <button
+                                        onClick={() => {
+                                            handleLke(id);
+                                        }}
+                                    >
                                         {user?.uid && data?.likes?.includes(user?.uid) ? (
-                                            <img src={fullheart} alt="좋아요버튼" />
+                                            <img src={blackVector} alt="좋아요눌린버튼" />
                                         ) : (
-                                            <img src={upVector} alt="좋아요버튼" />
+                                            <img src={upVector} alt="좋아요안눌린버튼" />
                                         )}
                                     </button>
-                                    <div>0</div>
+                                    <div>{data?.likecount}</div>
                                 </StUp>
                                 <StDown>
                                     <img src={downVector} alt="" />
-                                </StDown> */}
+                                </StDown>
                             </StUpDown>
                         </StCommentWrapper>
                     </StCommentCardList>
@@ -279,31 +339,19 @@ const StTitle = styled.div`
     line-height: 120%; /* 26.4px */
 `;
 
-const StFilteredbutton = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 4px;
-`;
-
-const StSortOptions = styled.div`
+const StSortOptions = styled.select`
     display: flex;
     flex-direction: column;
-    position: absolute;
-    left: 35%; /* Adjusted to be relative to the parent's width */
-    transform: translateX(-50%); /* Center horizontally */
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    z-index: 1;
-    margin-top: 4px;
-
-    button {
-        padding: 8px;
+    padding: 7px;
+    font-size: 16px;
+    border: none;
+    option {
+        padding: 10px;
         text-align: left;
         border: none;
         background: none;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 18px;
 
         &:hover {
             background-color: #f2f2f2;
@@ -385,7 +433,7 @@ const StCommentWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 10x;
 `;
 
 const StCommentUserInfo = styled.div`
@@ -398,6 +446,7 @@ const StCommentUserInfo = styled.div`
 const StFlex = styled.div`
     display: flex;
     gap: 10px;
+    height: 23px;
 `;
 
 const StButtons = styled.button`
@@ -417,7 +466,7 @@ const StButtons = styled.button`
 
 const Stcomment = styled.div`
     width: 1044px;
-
+    margin-bottom: 10px;
     overflow: hidden;
     color: #121212;
     text-overflow: ellipsis;
@@ -443,7 +492,6 @@ const StUpDown = styled.div`
 const StUp = styled.div`
     display: flex;
     align-items: center;
-    gap: 13px;
 `;
 
 const StDown = styled.div`

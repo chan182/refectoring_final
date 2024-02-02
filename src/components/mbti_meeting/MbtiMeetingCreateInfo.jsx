@@ -38,7 +38,7 @@ const MbtiMeetingCreateInfo = () => {
             <StTopContainer>
                 <StImgBox>
                     <StImg>
-                        {newMeeting.repreImg ? (
+                        {newMeeting && newMeeting.repreImg ? (
                             <img
                                 src={newMeeting.repreImg}
                                 alt="선택된 이미지"
@@ -62,8 +62,9 @@ const MbtiMeetingCreateInfo = () => {
                             <StDetailTextBox>
                                 모임 이름
                                 <StDetailText
-                                    placeholder="모임의 이름을 입력해주세요."
-                                    value={newMeeting.name || ''}
+                                    placeholder="모임의 이름을 입력해주세요.(15자 이내)"
+                                    maxLength={15}
+                                    value={newMeeting && newMeeting.name ? newMeeting.name : ''}
                                     onChange={(e) =>
                                         setNewMeeting((prevNewMeeting) => ({
                                             ...prevNewMeeting,
@@ -76,7 +77,7 @@ const MbtiMeetingCreateInfo = () => {
                                 모집 관리자
                                 <StDetailText
                                     placeholder="모임의 관리자 이름을 입력해주세요."
-                                    value={newMeeting.managerName || ''}
+                                    value={newMeeting && newMeeting.managerName ? newMeeting.managerName : ''}
                                     onChange={(e) =>
                                         setNewMeeting((prevNewMeeting) => ({
                                             ...prevNewMeeting,
@@ -91,7 +92,7 @@ const MbtiMeetingCreateInfo = () => {
                                 모임 정원
                                 <StDetailText
                                     placeholder="모임의 정원을 입력해주세요. (ex. 10명)"
-                                    value={newMeeting.limitPeople || ''}
+                                    value={newMeeting && newMeeting.limitPeople ? newMeeting.limitPeople : ''}
                                     onChange={(e) =>
                                         setNewMeeting((prevNewMeeting) => ({
                                             ...prevNewMeeting,
@@ -104,7 +105,7 @@ const MbtiMeetingCreateInfo = () => {
                                 모임 일정
                                 <StDetailText
                                     placeholder="모임의 일정을 입력해주세요. (ex. 주 5회)"
-                                    value={newMeeting.schedule || ''}
+                                    value={newMeeting && newMeeting.schedule ? newMeeting.schedule : ''}
                                     onChange={(e) =>
                                         setNewMeeting((prevNewMeeting) => ({
                                             ...prevNewMeeting,
@@ -117,7 +118,7 @@ const MbtiMeetingCreateInfo = () => {
                         <StDetailTextBox3>1:1 오픈 채팅방 만드는 방법</StDetailTextBox3>
                         <StDetailText3
                             placeholder="카카오톡 오픈채팅방의 URL을 입력해주세요."
-                            value={newMeeting.kakaoUrl || ''}
+                            value={newMeeting && newMeeting.kakaoUrl ? newMeeting.kakaoUrl : ''}
                             onChange={(e) =>
                                 setNewMeeting((prevNewMeeting) => ({
                                     ...prevNewMeeting,
@@ -129,7 +130,7 @@ const MbtiMeetingCreateInfo = () => {
                             모임 한줄 소개
                             <StDetailText2
                                 placeholder="모임에 대해 간단하게 소개해주세요."
-                                value={newMeeting.oneLineIntro || ''}
+                                value={newMeeting && newMeeting.oneLineIntro ? newMeeting.oneLineIntro : ''}
                                 onChange={(e) =>
                                     setNewMeeting((prevNewMeeting) => ({
                                         ...prevNewMeeting,

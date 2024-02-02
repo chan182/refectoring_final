@@ -266,6 +266,23 @@ export const StComments = styled.div`
     }
 `;
 
+export const StCommentEditTextarea = styled.input`
+    font-size: 18px;
+    width: 95%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+`;
+
+export const StEditCompleteButton1 = styled.button`
+    margin-left: 89%;
+`;
+
+export const StEditCompleteButton2 = styled.button`
+    margin-left: 85%;
+`;
+
 export const StReplyCommentBox = styled.div`
     display: flex;
     flex-direction: column;
@@ -296,6 +313,24 @@ export const StReplyComment = styled.div`
     width: 90%;
     margin-left: 6%;
     margin-top: -3%;
+`;
+
+export const StReplyEditTextarea = styled.input`
+    font-size: 18px;
+    width: 92%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+`;
+
+export const StReplyEditDeleteBox = styled.div`
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    margin-left: 95%;
+    margin-top: -7%;
 `;
 
 export const StCommentInput = styled.input`

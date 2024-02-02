@@ -1,9 +1,19 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebase.config';
 
-// 댓글 가져오기
-const getComments = async (paramsId) => {
+// 최신 순 댓글 가져오기
+const getCommentsByCreatedAt = async (paramsId) => {
     const q = query(collection(db, 'communities', paramsId, 'comments'), orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
+};
+
+// 좋아요가 많은 순으로 댓글 가져오기
+
+const getCommentsByLikeCount = async (paramsId) => {
+    const q = query(collection(db, 'communities', paramsId, 'comments'), orderBy('likecount', 'desc'));
+
     const querySnapshot = await getDocs(q);
 
     return querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
@@ -28,4 +38,4 @@ const switchComment = async (id, paramsId, updateComment) => {
     await updateDoc(commentDocRef, { content: updateComment });
 };
 
-export { getComments, addComment, deleteComment, switchComment };
+export { getCommentsByCreatedAt, addComment, deleteComment, switchComment, getCommentsByLikeCount };
