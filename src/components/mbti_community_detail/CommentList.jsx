@@ -34,6 +34,8 @@ import dropdown from '../../assets/community/dropdown.png';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
 import blackVector from '../../assets/community/blackVector.svg';
+import { debounce } from 'lodash';
+
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
     const [showButtons, setShowButtons] = useState(false);
@@ -64,6 +66,10 @@ const CommentList = () => {
         queryKey: ['comments', selectedOption],
         queryFn: getCommentsQueryFn
     });
+
+    const handleInputChange = debounce((value) => {
+        setContent(value);
+    }, 300);
 
     // 댓글 추가하기
     const mutationAdd = useMutation((newComment) => addComment(newComment, params.id), {
