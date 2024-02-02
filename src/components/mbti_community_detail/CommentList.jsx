@@ -45,11 +45,16 @@ const CommentList = () => {
     const [CommentCount, setCommentCount] = useState(0);
     const params = useParams();
     const queryClient = useQueryClient();
-    const [selectedCommentId, setSelectedCommentId] = useState(null);
-    const [showDropdown, setShowDropdown] = useState(false);
     const [selectedOption, setSelectedOption] = useState('latest');
     const navigate = useNavigate();
-    console.log('데이터 로딩 중 !!!!!');
+    const [isOpen, setIsOpen] = useState(true);
+
+    const handleToggleDropdown = () => {
+        // console.log('클릭!!');
+        setIsOpen(!isOpen);
+        // console.log(isOpen);
+    };
+    // console.log('데이터 로딩 중 !!!!!');
     const getCommentsQueryFn = () => {
         // console.log(selectedOption);
         if (selectedOption === 'latest') {
@@ -139,10 +144,6 @@ const CommentList = () => {
         };
         fetchCommentCount();
     }, [params.id]);
-
-    const toggledown = (id) => {
-        setSelectedCommentId(selectedCommentId === id ? null : id);
-    };
 
     // 좋아요 기능 !! ! !!
 
@@ -238,30 +239,45 @@ const CommentList = () => {
                                     <div>{data?.createdAt}</div>
                                 </StFlex>
                                 <StFlex>
-                                    <button onClick={() => toggledown(id)}>
-                                        <StDropDownImage src={dropdown} alt="" />
-                                    </button>
-                                    {user?.uid === data?.id && selectedCommentId === id ? (
-                                        <StButtons>
-                                            <button
-                                                onClick={() => {
-                                                    console.log(id);
-                                                    setEditMode(!editMode);
-                                                    setUserCommentId(id);
-                                                    setUpdateComment(data?.content);
-                                                    handlerUpdateComment(id);
-                                                }}
-                                            >
-                                                댓글 수정
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    handleDeleteComment(id);
-                                                }}
-                                            >
-                                                댓글 삭제
-                                            </button>
-                                        </StButtons>
+                                    {user?.uid === data?.id ? (
+                                        <StCommentDropdown>
+                                            <DropdownButton onClick={handleToggleDropdown}>
+                                                <img
+                                                    src={dropdown}
+                                                    alt="수정/삭제 버튼"
+                                                    style={{
+                                                        width: '24px',
+                                                        height: '30px',
+                                                        marginTop: '-20px',
+                                                        border: 'none',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                />
+                                            </DropdownButton>
+                                            {isOpen && userCommentId === id ? (
+                                                <MenuBox>
+                                                    <StEditButton
+                                                        onClick={() => {
+                                                            setEditMode(!editMode);
+                                                            setUpdateComment(data?.content);
+                                                            handlerUpdateComment(id);
+                                                            setUserCommentId(id);
+                                                        }}
+                                                    >
+                                                        댓글 수정
+                                                    </StEditButton>
+                                                    <StDeleteButton
+                                                        onClick={() => {
+                                                            handleDeleteComment(id);
+                                                        }}
+                                                    >
+                                                        댓글 삭제
+                                                    </StDeleteButton>
+                                                </MenuBox>
+                                            ) : (
+                                                <></>
+                                            )}
+                                        </StCommentDropdown>
                                     ) : (
                                         <></>
                                     )}
@@ -443,19 +459,51 @@ const StFlex = styled.div`
     height: 23px;
 `;
 
-const StButtons = styled.button`
+const DropdownButton = styled.button`
+    background: none;
+    border: none;
+    cursor: pointer;
+`;
+
+const MenuBox = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 65%;
+    width: 80px;
+    height: 70px;
     display: flex;
     flex-direction: column;
-    right: 10%;
-    gap: 10px;
-    color: #fff;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 120%;
-    width: 84px;
-    padding: 4px;
-    border: 1px;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #ededed;
+`;
+
+const StCommentDropdown = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+`;
+
+const StEditButton = styled.button`
+    width: 75px;
+    height: 27px;
+    margin-left: -10px;
+    white-space: nowrap;
+    &:hover {
+        background-color: var(--button-border-color);
+        color: white;
+    }
+`;
+
+const StDeleteButton = styled.button`
+    width: 75px;
+    height: 27px;
+    margin-left: -10px;
+    white-space: nowrap;
+    &:hover {
+        background-color: var(--button-border-color);
+        color: white;
+    }
 `;
 
 const Stcomment = styled.div`

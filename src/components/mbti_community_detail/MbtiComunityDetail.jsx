@@ -10,7 +10,7 @@ import { deleteComment } from '../../api/comment';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../recoil/Atom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-
+import Swal from 'sweetalert2';
 const MbtiComunityDetail = () => {
     const user = useRecoilValue(userAtom);
     const params = useParams();
@@ -24,19 +24,27 @@ const MbtiComunityDetail = () => {
         queryKey: ['communities'],
         queryFn: () => communityDetailGetDate(params.id)
     });
+    console.log(data);
 
     /// 삭제하기
     const DeleteBoardMutation = useMutation((id) => deleteBoard(id), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('communities');
-            alert('삭제 성공하였습니다.');
+
             navigate('/mbti/community');
         }
     });
-
     const handleDeleteCommunity = async () => {
-        console.log(params.id);
-        DeleteBoardMutation.mutate(params.id);
+        Swal.fire({
+            title: '정말 삭제하시겠습니까?',
+            showCancelButton: true,
+            confirmButtonText: 'YES'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('삭제되었습니다.!');
+                DeleteBoardMutation.mutate(params.id);
+            }
+        });
     };
 
     // 수정하기
