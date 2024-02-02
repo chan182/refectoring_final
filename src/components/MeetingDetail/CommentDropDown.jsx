@@ -82,6 +82,7 @@ const MenuBox = styled.div`
     align-items: center;
     background-color: #ffffff;
     border: 1px solid #ededed;
+    z-index: 999;
 `;
 
 const StEditButton = styled.button`
