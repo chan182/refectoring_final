@@ -31,11 +31,11 @@ const UserWritelist = () => {
                     </StFilterLIst>
                     <Stcontents>
                         {filteredData.map((item) => {
-                            console.log(item.data.title);
+                            console.log(item.id);
                             return (
                                 <StCardWrapper
                                     onClick={() => {
-                                        navigate('/mbti/community/');
+                                        navigate(`/mbti/community/${item.id}`);
                                     }}
                                 >
                                     <StfilteredTitle>{item?.data.title}</StfilteredTitle>
