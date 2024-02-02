@@ -267,7 +267,7 @@ const StUpbutton = styled.button`
 const StMeetingContainer = styled.div`
     width: 1300px;
     height: 5000px;
-    margin: 40px auto;
+    margin: 40px auto 0px;
 `;
 
 const StMeetingWrap = styled.div`
