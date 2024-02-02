@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import mcoiLogo from '../../assets/mbtiTest/mcoiLogo.svg';
 import * as T from '../mbti_test/mbtiTestStyle';
 import { mbtiInfo } from './mbtiInfo';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_community.png';
 
 const MbtiMatching = () => {
     const [mbti1Type, setMbti1Type] = useState('');
@@ -27,7 +29,10 @@ const MbtiMatching = () => {
             setMatchingResult(result.text);
             setMatchingResultColor(result.color);
         } else {
-            alert('MBTI를 입력해주세요!');
+            Swal.fire({
+                text: `MBTI를 입력해주세요!`,
+                imageUrl: modal_logo
+            });
         }
     };
 

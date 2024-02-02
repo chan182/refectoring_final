@@ -288,6 +288,7 @@ export const StReplyCommentBox = styled.div`
     flex-direction: column;
     margin-top: -3.5%;
     max-width: 97%;
+    min-height: 10em;
     max-height: 15em;
     overflow-y: auto;
     overflow-x: hidden;
@@ -313,6 +314,8 @@ export const StReplyComment = styled.div`
     width: 90%;
     margin-left: 6%;
     margin-top: -3%;
+    white-space: pre-wrap;
+    word-break: break-all;
 `;
 
 export const StReplyEditTextarea = styled.input`
@@ -329,7 +332,7 @@ export const StReplyEditDeleteBox = styled.div`
     height: 20px;
     display: flex;
     justify-content: center;
-    margin-left: 95%;
+    margin-left: 97%;
     margin-top: -7%;
 `;
 
@@ -429,6 +432,21 @@ export const StRequestButton = styled.button`
     } */
 `;
 
+export const StDeleteButton2 = styled.button`
+    background-color: #ff5757;
+    color: #ffffff;
+    padding: 8px 16px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 16px;
+
+    &:hover {
+        background-color: #e53e3e;
+    }
+`;
+
 export const StBookmarkButton = styled.div`
     border: 1px solid #969696;
     font-size: 15px;
@@ -449,6 +467,11 @@ export const StBookmarkButton = styled.div`
         color: #fff;
         border: none;
     }
+`;
+
+export const StAddReplyNbutton = styled.div`
+    display: flex;
+    flex-direction: row;
 `;
 
 export const StReplyButton = styled.button``;
