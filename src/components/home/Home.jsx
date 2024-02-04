@@ -11,7 +11,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     return (
-        <>
+        <StContainer>
             <MainSlider />
             <StBox>
                 <StComponents>
@@ -37,16 +37,22 @@ const Home = () => {
                     </StComponent>
                 </StComponents>
             </StBox>
-        </>
+        </StContainer>
     );
 };
 
 export default Home;
 
+const StContainer = styled.div`
+    width: 100%;
+    height: 33%;
+`;
+
 const StBox = styled.div`
     width: 100%;
     height: 350px;
     display: flex;
+    margin-bottom: 40px;
     justify-content: center;
 `;
 

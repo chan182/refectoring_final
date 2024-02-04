@@ -6,17 +6,16 @@ import Header from '../components/home/Header';
 
 const Layout = () => {
     return (
-        <StDiv>
+        <>
             <Header />
             <Outlet />
             <Footer />
-        </StDiv>
+        </>
     );
 };
 
 export default Layout;
 
 const StDiv = styled.div`
-    position: relative;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
 `;
