@@ -34,6 +34,7 @@ const StPostingBox = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    /* position: absolute; */
     bottom: 0;
     border: 1px solid var(--box-border-color);
     border-width: 1px 0 0 0;
