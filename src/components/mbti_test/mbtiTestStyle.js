@@ -47,7 +47,7 @@ export const StTestContainer = styled.div`
     width: 1200px;
     height: 640px;
     margin: 0 auto;
-    padding: 20px;
+    /* padding: 20px; */
     background-color: #fff;
     border-radius: 0.5rem;
     /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
@@ -138,6 +138,16 @@ export const StButtonContainer = styled.div`
     gap: 15px;
 `;
 
+export const StButtonContainer2 = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    gap: 15px;
+    margin-top: 12%;
+`;
+
 export const StCompleteButton = styled.button`
     padding: 10px;
     font-size: 16px;
@@ -158,6 +168,27 @@ export const StCompleteButton = styled.button`
         /* box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575); */
     }
 `;
+
+export const StCompleteButton2 = styled.button`
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    background-color: var(--main-button-color);
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 20%;
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
+
+    /* &:hover {
+        transition: ease-in-out 0.2s;
+        background-color: var(--main-button-color);
+        color: #fff;
+        /* box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575);} */
+`;
+
 export const StTypeDescription = styled.p`
     font-size: 16px;
     padding: 0px 295px 50px;
@@ -208,16 +239,17 @@ export const StLogoImage = styled.div`
 
 export const StLogoImageBox = styled.div`
     width: 1150px;
+    height: 50px;
     display: flex;
     justify-content: center;
 `;
 
 export const StTestStartComment = styled.h1`
-    font-size: 54px;
-    width: 914px;
+    font-size: 48px;
+    width: 820px;
     height: 136px;
-    margin-top: 82px;
-    margin-left: 130px;
+    margin-top: 10px;
+    margin-left: 15%;
     padding: 0px 10px;
     display: flex;
     align-items: center;
@@ -254,4 +286,25 @@ export const StTestStartButton = styled.button`
         color: #fff;
         /* box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575); */
     }
+`;
+
+export const StTestStartButton2 = styled.button`
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    background-color: var(--main-button-color);
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    width: 17%;
+    height: 80%;
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
+
+    /* &:hover {
+        transition: ease-in-out 0.2s;
+        background-color: var(--main-button-color);
+        color: #fff;
+        /* box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575); */
+    /* } */
 `;
