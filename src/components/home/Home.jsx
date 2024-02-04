@@ -47,6 +47,7 @@ const StBox = styled.div`
     width: 100%;
     height: 350px;
     display: flex;
+    margin-bottom: 40px;
     justify-content: center;
 `;
 

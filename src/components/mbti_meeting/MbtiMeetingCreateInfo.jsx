@@ -1,15 +1,19 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { createMeetingState } from '../../recoil/recoilAtoms';
 import cameraImg from '../../assets/mbtiMeeting/camera.png';
+import MakeKakaoUrlExp from './MakeKakaoUrlExp';
 
 const MbtiMeetingCreateInfo = () => {
     const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
+    const [isOpen, setIsOpen] = useState(false);
     const bookmark = '';
+
     console.log('newMeeting', newMeeting);
 
     const imageInputRef = useRef(null);
+
     const handleImageChange = async (event) => {
         const selectedImage = event.target.files[0];
         console.log('selectedImage : ', selectedImage);
@@ -33,8 +37,13 @@ const MbtiMeetingCreateInfo = () => {
         }));
     };
 
+    const modalOpenHandler = () => {
+        setIsOpen(true);
+    };
+
     return (
         <StTopContainerBox>
+            {isOpen ? <MakeKakaoUrlExp setIsOpen={setIsOpen} /> : <></>}
             <StTitle>모임 생성 </StTitle>
             <StTopContainer>
                 <StImgBox>
@@ -116,7 +125,9 @@ const MbtiMeetingCreateInfo = () => {
                                 ></StDetailText>
                             </StDetailTextBox>
                         </StTextContainerBox>
-                        <StDetailTextBox3>1:1 오픈 채팅방 만드는 방법</StDetailTextBox3>
+                        <StDetailTextBox3 onClick={() => modalOpenHandler()}>
+                            1:1 오픈 채팅방 만드는 방법
+                        </StDetailTextBox3>
                         <StDetailText3
                             placeholder="카카오톡 오픈채팅방의 URL을 입력해주세요."
                             value={newMeeting && newMeeting.kakaoUrl ? newMeeting.kakaoUrl : ''}
@@ -284,6 +295,7 @@ const StDetailTextBox3 = styled.div`
     font-size: 14px;
     color: #888888;
     text-decoration: underline;
+    cursor: pointer;
 `;
 
 const StDetailText3 = styled.input`

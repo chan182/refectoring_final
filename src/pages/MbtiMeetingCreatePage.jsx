@@ -8,10 +8,13 @@ import { createMeetingState } from '../recoil/recoilAtoms';
 import { db } from '../firebase/firebase.config';
 import { addDoc, collection } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
+import { userAtom } from '../recoil/Atom';
+import Swal from 'sweetalert2';
+import logo from '../assets/home/headerLogo.png';
 
 const MbtiMeetingCreatePage = () => {
     const [newMeeting, setNewMeeting] = useRecoilState(createMeetingState);
-
+    const user = useRecoilState(userAtom);
     const nav = useNavigate();
 
     const createMeetingButtonHandler = async () => {
@@ -27,18 +30,30 @@ const MbtiMeetingCreatePage = () => {
 
             const updatedMeeting = {
                 ...newMeeting,
-                date: `${year}/${month}/${date}  ${hours}:${minutes}:${seconds}`
+                date: `${year}/${month}/${date}  ${hours}:${minutes}:${seconds}`,
+                userId: user[0].email
             };
 
             setNewMeeting(updatedMeeting);
 
             const meetCollectionRef = await addDoc(collection(db, 'meet'), updatedMeeting);
-            console.log('모임이 성공적으로 meet 컬렉션에 추가되었습니다.');
 
             // newMeeting 상태 초기화
             setNewMeeting(null);
 
-            nav('/mbti/meeting');
+            Swal.fire({
+                title: '모임 생성완료!',
+                text: `모임이 생성 되었습니다 !
+                다양한 사람들과 교류를 시작해보세요 !`,
+                imageUrl: logo,
+                imageWidth: 300,
+                imageAlt: 'Custom image',
+                confirmButtonText: '모임 페이지로 이동',
+                confirmButtonColor: '#756ab6'
+            }).then(() => {
+                // 프로필 페이지로 이동
+                nav('/mbti/meeting');
+            });
         } catch (error) {
             console.error('meet 컬렉션에 newMeeting 데이터를 추가하는 과정에서 오류가 발생했습니다:', error);
         }
@@ -83,6 +98,7 @@ export default MbtiMeetingCreatePage;
 const StWholeContainer = styled.div`
     height: 100%;
     width: 100%;
+    position: relative;
     display: grid;
     justify-content: center;
     background-color: var(--background-color);
