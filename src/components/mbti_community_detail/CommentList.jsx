@@ -1,24 +1,11 @@
 import dayjs from 'dayjs';
-import {
-    addDoc,
-    arrayRemove,
-    arrayUnion,
-    collection,
-    deleteDoc,
-    doc,
-    getDoc,
-    getDocs,
-    orderBy,
-    query,
-    updateDoc
-} from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import downVector from '../../assets/community/Vector-down.svg';
 import upVector from '../../assets/community/Vector-up.svg';
-import filteredImoge from '../../assets/community/align-left.svg';
 import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
 import {
@@ -28,18 +15,15 @@ import {
     getCommentsByLikeCount,
     switchComment
 } from '../../api/comment';
-import fullheart from '../../assets/community/fullheart.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import dropdown from '../../assets/community/dropdown.png';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
 import blackVector from '../../assets/community/blackVector.svg';
-import { debounce } from 'lodash';
 
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
     const [showButtons, setShowButtons] = useState(false);
-    const [comments, setComments] = useState([]);
     const [content, setContent] = useState('');
     const [editMode, setEditMode] = useState(false);
     const [userCommentId, setUserCommentId] = useState('');
@@ -49,19 +33,10 @@ const CommentList = () => {
     const queryClient = useQueryClient();
     const [selectedOption, setSelectedOption] = useState('latest');
     const navigate = useNavigate();
-<<<<<<< HEAD
     const [isOpen, setIsOpen] = useState(true);
+    const [selectedCommentId, setSelectedCommentId] = useState();
 
-    const handleToggleDropdown = () => {
-        // console.log('클릭!!');
-        setIsOpen(!isOpen);
-        // console.log(isOpen);
-    };
     // console.log('데이터 로딩 중 !!!!!');
-=======
-    const [isOpen, setIsOpen] = useState(false);
-
->>>>>>> 48d773fac08afe9977e3ab15617f68f03bd243cc
     const getCommentsQueryFn = () => {
         // console.log(selectedOption);
         if (selectedOption === 'latest') {
@@ -81,10 +56,6 @@ const CommentList = () => {
         queryFn: getCommentsQueryFn
     });
     // console.log(data[0].id);
-
-    const handleInputChange = debounce((value) => {
-        setContent(value);
-    }, 300);
 
     // 댓글 추가하기
     const mutationAdd = useMutation((newComment) => addComment(newComment, params.id), {
@@ -267,48 +238,6 @@ const CommentList = () => {
                                     <div>{data?.nickname}</div>
                                     <div>{data?.createdAt}</div>
                                 </StFlex>
-<<<<<<< HEAD
-                                <StFlex>
-                                    {user?.uid === data?.id ? (
-                                        <StCommentDropdown>
-                                            <DropdownButton onClick={handleToggleDropdown}>
-                                                <img
-                                                    src={dropdown}
-                                                    alt="수정/삭제 버튼"
-                                                    style={{
-                                                        width: '24px',
-                                                        height: '30px',
-                                                        marginTop: '-20px',
-                                                        border: 'none',
-                                                        cursor: 'pointer'
-                                                    }}
-                                                />
-                                            </DropdownButton>
-                                            {isOpen && userCommentId === id ? (
-                                                <MenuBox>
-                                                    <StEditButton
-                                                        onClick={() => {
-                                                            setEditMode(!editMode);
-                                                            setUpdateComment(data?.content);
-                                                            handlerUpdateComment(id);
-                                                            setUserCommentId(id);
-                                                        }}
-                                                    >
-                                                        댓글 수정
-                                                    </StEditButton>
-                                                    <StDeleteButton
-                                                        onClick={() => {
-                                                            handleDeleteComment(id);
-                                                        }}
-                                                    >
-                                                        댓글 삭제
-                                                    </StDeleteButton>
-                                                </MenuBox>
-                                            ) : (
-                                                <></>
-                                            )}
-                                        </StCommentDropdown>
-=======
                                 <StCommentDropdown>
                                     <DropdownButton onClick={() => handleToggleDropdown(id)}>
                                         <img
@@ -324,7 +253,7 @@ const CommentList = () => {
                                         />
                                     </DropdownButton>
                                     {/* {isOpen == true && user?.uid === data?.id && selectedCommentId === id ? ( */}
-                                    {isOpen == true && selectedCommentId === id ? (
+                                    {isOpen === true && selectedCommentId === id ? (
                                         <MenuBox>
                                             <StEditButton
                                                 onClick={() => {
@@ -345,7 +274,6 @@ const CommentList = () => {
                                                 댓글 삭제
                                             </StDeleteButton>
                                         </MenuBox>
->>>>>>> 48d773fac08afe9977e3ab15617f68f03bd243cc
                                     ) : (
                                         <></>
                                     )}
@@ -538,53 +466,10 @@ const DropdownButton = styled.button`
 
 const MenuBox = styled.div`
     position: absolute;
-<<<<<<< HEAD
-    top: 50%;
-    left: 65%;
-    width: 80px;
-    height: 70px;
-=======
     top: 65%;
     left: -150%;
     width: 75px;
     height: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #ffffff;
-    border: 1px solid #ededed;
-`;
-
-const StEditButton = styled.button`
-    width: 75px;
-    height: 27px;
-    margin-left: -10px;
-    white-space: nowrap;
-    &:hover {
-        background-color: var(--button-border-color);
-        color: white;
-    }
-`;
-
-const StDeleteButton = styled.button`
-    width: 75px;
-    height: 27px;
-    margin-left: -10px;
-    white-space: nowrap;
-    &:hover {
-        background-color: var(--button-border-color);
-        color: white;
-    }
-`;
-
-const StCommentDropdown = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-`;
-
-const StButtons = styled.button`
->>>>>>> 48d773fac08afe9977e3ab15617f68f03bd243cc
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -632,11 +517,6 @@ const Stcomment = styled.div`
     font-weight: 400;
     line-height: 148%; /* 26.64px */
     letter-spacing: -0.09px;
-`;
-
-const StDropDownImage = styled.img`
-    width: 24px;
-    height: 30px;
 `;
 
 const StUpDown = styled.div`
