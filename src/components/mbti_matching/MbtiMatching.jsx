@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import mcoiLogo from '../../assets/mbtiTest/mcoiLogo.svg';
+import mcoiLogo from '../../assets/mbtiMatching/Group 10.png';
 import * as T from '../mbti_test/mbtiTestStyle';
 import { mbtiInfo } from './mbtiInfo';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_matching.png';
+import { MBTIimage } from './textImage';
 
 const MbtiMatching = () => {
     const [mbti1Type, setMbti1Type] = useState('');
@@ -14,11 +17,33 @@ const MbtiMatching = () => {
     const navigate = useNavigate();
 
     const handleMbti1TypeChange = (e) => {
-        setMbti1Type(e.target.value.toUpperCase());
+        const inputValue = e.target.value;
+        const englishOnly = inputValue.replace(/[^a-zA-Z]/g, ''); // 영어만 허용
+
+        if (inputValue !== englishOnly) {
+            // 한글이 입력된 경우
+            Swal.fire({
+                text: `영문으만 입력해주세요!`,
+                imageUrl: modal_logo
+            });
+        }
+
+        setMbti1Type(englishOnly.toUpperCase());
     };
 
     const handleMbti2TypeChange = (e) => {
-        setMbti2Type(e.target.value.toUpperCase());
+        const inputValue = e.target.value;
+        const englishOnly = inputValue.replace(/[^a-zA-Z]/g, ''); // 영어만 허용
+
+        if (inputValue !== englishOnly) {
+            // 한글이 입력된 경우
+            Swal.fire({
+                text: `영문으만 입력해주세요!`,
+                imageUrl: modal_logo
+            });
+        }
+
+        setMbti2Type(englishOnly.toUpperCase());
     };
 
     const handleGenerateMatch = () => {
@@ -27,7 +52,10 @@ const MbtiMatching = () => {
             setMatchingResult(result.text);
             setMatchingResultColor(result.color);
         } else {
-            alert('MBTI를 입력해주세요!');
+            Swal.fire({
+                text: `MBTI를 입력해주세요!`,
+                imageUrl: modal_logo
+            });
         }
     };
 
@@ -48,26 +76,32 @@ const MbtiMatching = () => {
     return (
         <>
             {matchingResult ? (
-                <T.StScreenBox2>
-                    <T.StTestContainer>
-                        <StMatchingComment></StMatchingComment>
-                        <StMatchingResultMent color={matchingResultColor}>"{matchingResult}"</StMatchingResultMent>
+                <StScreenBox2>
+                    <StTestContainer>
+                        <StMatchingComment>
+                            {' '}
+                            {mbtiInfo[mbti1Type] && mbtiInfo[mbti2Type]
+                                ? '궁합이 나왔어요!'
+                                : '유효하지 않은 MBTI 유형입니다!'}
+                        </StMatchingComment>
                         <StMatchingResultInput>
-                            <StMatchingResultText>{mbti1Type}</StMatchingResultText>
-                            <StMatchingInputspan>+</StMatchingInputspan>
-                            <StMatchingResultText>{mbti2Type}</StMatchingResultText>
+                            <StMatchingResultImage src={MBTIimage[mbti1Type] || MBTIimage.DEFAULT} alt={mbti1Type} />
+                            <StMatchingInputspan2>+</StMatchingInputspan2>
+                            <StMatchingResultImage src={MBTIimage[mbti2Type] || MBTIimage.DEFAULT} alt={mbti2Type} />
                         </StMatchingResultInput>
+                        <StMatchingResultMent color={matchingResultColor}>"{matchingResult}"</StMatchingResultMent>
+
                         <T.StButtonContainer>
                             {/* <T.StTestStartButton onClick={() => navigate('/')}>홈으로 돌아가기</T.StTestStartButton> */}
                             <T.StTestStartButton onClick={() => window.location.reload()}>다시하기</T.StTestStartButton>
                         </T.StButtonContainer>
-                        <T.StLogoImageBox>
+                        {/* <T.StLogoImageBox>
                             <T.StLogoImage>
                                 <img src={mcoiLogo} alt="로고이미지" />
                             </T.StLogoImage>
-                        </T.StLogoImageBox>
-                    </T.StTestContainer>
-                </T.StScreenBox2>
+                        </T.StLogoImageBox> */}
+                    </StTestContainer>
+                </StScreenBox2>
             ) : (
                 <T.StScreenBox2>
                     <T.StTestContainer>
@@ -91,7 +125,9 @@ const MbtiMatching = () => {
                         </StMatchingInputBox>
                         <T.StButtonContainer>
                             {/* <T.StTestStartButton onClick={() => navigate('/')}>홈으로 돌아가기</T.StTestStartButton> */}
-                            <T.StTestStartButton onClick={handleGenerateMatch}>결과 보기</T.StTestStartButton>
+                            <T.StTestStartButton onClick={handleGenerateMatch} disabled={!mbti1Type || !mbti2Type}>
+                                결과 보기
+                            </T.StTestStartButton>
                         </T.StButtonContainer>
 
                         <T.StLogoImageBox>
@@ -107,6 +143,23 @@ const MbtiMatching = () => {
 };
 
 export default MbtiMatching;
+
+const StScreenBox2 = styled.div`
+    height: 150vh;
+    background-color: #fcfcfc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const StTestContainer = styled.div`
+    width: 1200px;
+    height: 1300px;
+    margin: 0 auto;
+    margin-top: -3%;
+    background-color: #fff;
+    border-radius: 0.5rem;
+`;
 
 const StMatchingResultInput = styled.div`
     display: flex;
@@ -142,6 +195,15 @@ const StMatchingInputspan = styled.span`
     color: #4e4e4e;
 `;
 
+const StMatchingInputspan2 = styled.span`
+    font-size: 82px;
+    color: #4e4e4e;
+    width: 82px;
+    height: 82px;
+    font-weight: 100;
+    margin-top: 8%;
+`;
+
 const StTestStartComment = styled.h1`
     font-size: 54px;
     width: 914px;
@@ -167,6 +229,14 @@ const StMatchingResultText = styled.p`
     align-items: center;
     justify-content: center;
     color: var(--light-purple);
+`;
+
+const StMatchingResultImage = styled.img`
+    width: 360px;
+    height: 270px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 const StMatchingResultMent = styled.h1`

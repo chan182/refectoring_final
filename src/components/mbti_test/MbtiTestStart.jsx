@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import mcoiLogo from '../../assets/mbtiTest/mcoiLogo.svg';
 import * as T from './mbtiTestStyle';
 import { questions } from './questions';
-import { typeDescriptions, typeDescriptionsDetails } from './typeDescriptions';
+import { typeDescriptions, typeDescriptionsDetails, typeDescriptionsImage } from './typeDescriptions';
+import { StyledTypeDescription } from './StyledTypeDesctiption';
 
 const MbtiResult = ({ setCounts, counts, setCurrentQuestion, setIsModalOpen }) => {
     const navigate = useNavigate();
@@ -27,11 +28,12 @@ const MbtiResult = ({ setCounts, counts, setCurrentQuestion, setIsModalOpen }) =
     const dominantType = getDominantTraits();
     const dominantTypeDescription = typeDescriptions[dominantType];
     const dominantTypeDescriptionDetail = typeDescriptionsDetails[dominantType];
+    const imageSrc = typeDescriptionsImage[dominantType];
 
     const handleReloadClick = () => {
         setIsModalOpen(false);
         setTimeout(() => {
-            navigate('/');
+            navigate('/mbti/matching');
         }, 0);
     };
 
@@ -43,23 +45,27 @@ const MbtiResult = ({ setCounts, counts, setCurrentQuestion, setIsModalOpen }) =
     return (
         <T.StTestResultContainer>
             <T.StQuestionContainer>
-                <T.StResultText>{dominantType}</T.StResultText>
-                <T.StTypeDescription>{dominantTypeDescription}</T.StTypeDescription>
-                <T.StResultMent>{dominantTypeDescriptionDetail}</T.StResultMent>
+                <T.StResultText>당신의 유형은!</T.StResultText>
+                <T.StTestResultbox>
+                    <T.StTestResultImg src={imageSrc} alt={`Image for ${dominantType} type`} />
+                    <T.StTestResultContentBox>
+                        <StyledTypeDescription result={dominantType}>{dominantTypeDescription}</StyledTypeDescription>
+
+                        <T.StResultMent>{dominantTypeDescriptionDetail}</T.StResultMent>
+                    </T.StTestResultContentBox>
+                </T.StTestResultbox>
             </T.StQuestionContainer>
-            <T.StButtonContainer>
+            <T.StButtonContainer2>
                 <T.StCompleteButton onClick={handleReloadClick} disabled={false}>
-                    홈으로 돌아가기
+                    궁합 보러가기
                 </T.StCompleteButton>
-                <T.StCompleteButton onClick={handleReturnHomeClick} disabled={false}>
-                    검사 다시하기
-                </T.StCompleteButton>
-            </T.StButtonContainer>
+                <T.StCompleteButton2 onClick={handleReturnHomeClick} disabled={false}>
+                    다시하기
+                </T.StCompleteButton2>
+            </T.StButtonContainer2>
             <T.StResultLogoContainer>
                 <T.StLogoImageBox>
-                    <T.StLogoImage>
-                        <img src={mcoiLogo} alt="로고이미지" />
-                    </T.StLogoImage>
+                    <T.StTestStartText>참고 사이트: httos://www.16personalities.com/ 내용 일부 발췌</T.StTestStartText>
                 </T.StLogoImageBox>
             </T.StResultLogoContainer>
         </T.StTestResultContainer>
@@ -161,13 +167,16 @@ const MbtiTestStart = ({ setIsModalOpen }) => {
                                 </T.StOptionButton>
                             </T.StOptionsContainer>
                         </T.StQuestionContainer>
-                        <T.StButtonContainer>
+                        <T.StButtonContainer2>
                             <T.StCompleteButton onClick={goHomeButton}>검사 종료하기</T.StCompleteButton>
-                        </T.StButtonContainer>
+                        </T.StButtonContainer2>
                         <T.StLogoImageBox>
-                            <T.StLogoImage>
+                            {/* <T.StLogoImage>
                                 <img src={mcoiLogo} alt="로고이미지" />
-                            </T.StLogoImage>
+                            </T.StLogoImage> */}
+                            <T.StTestStartText>
+                                성격 테스트를 통해 자신의 성향과 행동에 대한 정확한 분석 결과를 확인해 보세요.
+                            </T.StTestStartText>
                         </T.StLogoImageBox>
 
                         {/* <StProgressContainer>

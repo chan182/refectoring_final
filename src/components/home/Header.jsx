@@ -210,6 +210,7 @@ const StProfileBox = styled.div`
 
 const StProfileDiv = styled.div`
     display: flex;
+    cursor: pointer;
 `;
 
 const StProfileImg = styled.div`
@@ -231,7 +232,6 @@ const StDropBtn = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
     opacity: 0.6;
 
     &:hover {

@@ -19,7 +19,9 @@ function MbtiMeetingCreateTags() {
                     모임에 맞는 태그 생성하기 <span>* 필수 선택사항 / 중복 선택 가능</span>
                 </StP1>
 
-                <StP2>지역</StP2>
+                <StP2>
+                    지역 <span>* 최대 2개</span>
+                </StP2>
                 <StBox>
                     {location01.map((data) => {
                         return (
@@ -71,7 +73,9 @@ function MbtiMeetingCreateTags() {
 
                 <StHr />
 
-                <StP2>성별</StP2>
+                <StP2>
+                    성별 <span>* 최대 1개</span>
+                </StP2>
                 <StBox>
                     {gender.map((data) => {
                         return (
@@ -97,7 +101,9 @@ function MbtiMeetingCreateTags() {
 
                 <StHr />
 
-                <StP2>나이</StP2>
+                <StP2>
+                    나이 <span>* 최대 2개</span>
+                </StP2>
                 <StBox>
                     {age.map((data) => {
                         return (
@@ -186,6 +192,7 @@ const StP1 = styled.p`
     span {
         margin-left: 16px;
         font-size: 15px;
+        opacity: 0.7;
     }
 `;
 
@@ -193,6 +200,14 @@ const StP2 = styled.p`
     font-size: 28px;
     color: #121212;
     margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+
+    span {
+        margin-left: 16px;
+        font-size: 15px;
+        opacity: 0.7;
+    }
 `;
 
 const StBox = styled.div`

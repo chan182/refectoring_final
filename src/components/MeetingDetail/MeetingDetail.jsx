@@ -10,6 +10,8 @@ import { getComments, getReplies } from './getComment';
 import CommentDropdown from './CommentDropDown';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
+import LikeDislikeButton from './LikeDislikeButton';
+import CommentSorting from './CommentSorting';
 
 const MeetingDetail = () => {
     const { id } = useParams();
@@ -67,7 +69,10 @@ const MeetingDetail = () => {
     const handleAddComment = async () => {
         // 로그인 여부 확인
         if (!user) {
-            alert('댓글을 작성하려면 먼저 로그인하세요.');
+            Swal.fire({
+                text: `댓글을 작성하려면 먼저 로그인하세요.`,
+                imageUrl: modal_logo
+            });
             setNewComment('');
             return;
         }
@@ -112,7 +117,10 @@ const MeetingDetail = () => {
                 console.error('댓글 추가 중 에러 발생: ', error);
             }
         } else {
-            alert('댓글을 입력해 주세요!!!');
+            Swal.fire({
+                text: `댓글을 입력해 주세요!!!`,
+                imageUrl: modal_logo
+            });
         }
     };
 
@@ -169,7 +177,10 @@ const MeetingDetail = () => {
     const handleCancelReply = (commentId) => {
         // 로그인 여부 확인
         if (!user) {
-            alert('댓글을 작성하려면 먼저 로그인하세요.');
+            Swal.fire({
+                text: `댓글을 작성하려면 먼저 로그인하세요.`,
+                imageUrl: modal_logo
+            });
             return;
         }
         setComments((prevComments) =>
@@ -223,7 +234,13 @@ const MeetingDetail = () => {
     };
 
     const handleDeleteComment = async (commentId) => {
-        const shouldDelete = window.confirm('정말로 댓글을 삭제하시겠습니까?');
+        const { value: shouldDelete } = await Swal.fire({
+            title: '정말로 댓글을 삭제하시겠습니까?',
+            imageUrl: modal_logo,
+            showCancelButton: true,
+            confirmButtonText: '예',
+            cancelButtonText: '아니오'
+        });
 
         if (shouldDelete) {
             try {
@@ -309,7 +326,13 @@ const MeetingDetail = () => {
     };
 
     const handleDeleteReply = async (commentId, replyId) => {
-        const shouldDelete = window.confirm('정말로 답글을 삭제하시겠습니까?');
+        const { value: shouldDelete } = await Swal.fire({
+            title: '정말로 답글을 삭제하시겠습니까?',
+            imageUrl: modal_logo,
+            showCancelButton: true,
+            confirmButtonText: '예',
+            cancelButtonText: '아니오'
+        });
 
         if (shouldDelete) {
             try {
@@ -337,6 +360,24 @@ const MeetingDetail = () => {
                 );
             } catch (error) {
                 console.error('답글 삭제 중 에러 발생: ', error);
+            }
+        }
+    };
+
+    const handleDeleteMeeting = async () => {
+        const { value: shouldDelete } = await Swal.fire({
+            title: '정말로 모임을 삭제하시겠습니까?',
+            imageUrl: modal_logo,
+            showCancelButton: true,
+            confirmButtonText: '예',
+            cancelButtonText: '아니오'
+        });
+
+        if (shouldDelete) {
+            try {
+                await deleteDoc(doc(db, 'meet', id));
+            } catch (error) {
+                console.error('모임 삭제 중 에러 발생: ', error);
             }
         }
     };
@@ -427,7 +468,12 @@ const MeetingDetail = () => {
                 <T.StBottomContainer>
                     <T.StContentContainer>{meeting.content}</T.StContentContainer>
                 </T.StBottomContainer>
-                <T.StRequestButton onClick={handleRequest}>가입문의</T.StRequestButton>
+                {user && meeting && user.email === meeting.userId && (
+                    <T.StRequestButton2 onClick={handleDeleteMeeting}>모임 삭제</T.StRequestButton2>
+                )}
+                {!user || !meeting || user.email !== meeting.userId ? (
+                    <T.StRequestButton onClick={handleRequest}>가입문의</T.StRequestButton>
+                ) : null}
             </T.StContentContainerBox>
             <T.StDivisionLine />
             <T.StCommentContainerBox>
@@ -435,7 +481,7 @@ const MeetingDetail = () => {
                 <T.StCommentContainer>
                     <T.StCommentBox1>
                         <T.StCommentCount>모임 후기{`  ${commentCount}개`}</T.StCommentCount>
-                        {/* <T.StCommentFilter>정렬기준</T.StCommentFilter> */}
+                        <CommentSorting id={id} setComments={setComments} />
                     </T.StCommentBox1>
                     <T.StCommentBox2>
                         <T.StCommentImage>
@@ -498,9 +544,13 @@ const MeetingDetail = () => {
                                             )}
                                         </div>
                                     </div>
-                                    <T.StReplyButton onClick={() => handleCancelReply(comment.id)}>
-                                        {comment.showReplyInput ? '' : '답글 달기'}
-                                    </T.StReplyButton>
+                                    {/* 좋아요와 싫어요 버튼 */}
+                                    <T.StAddReplyNbutton>
+                                        <LikeDislikeButton meetingId={id} commentId={comment.id} user={user} />
+                                        <T.StReplyButton onClick={() => handleCancelReply(comment.id)}>
+                                            {comment.showReplyInput ? '' : '답글 달기'}
+                                        </T.StReplyButton>
+                                    </T.StAddReplyNbutton>
 
                                     {/* 대댓글 입력 부분 */}
                                     {comment.showReplyInput && (

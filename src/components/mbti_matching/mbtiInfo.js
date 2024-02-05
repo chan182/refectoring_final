@@ -13,7 +13,7 @@ export const mbtiInfo = {
     },
     INFJ: {
         천생연분: ['ENFP', 'ENTP'],
-        좋은궁합: ['INFP', 'ENFP', 'INFJ', 'INTJ', 'INTP', 'ENTP'],
+        좋은궁합: ['INFP', 'ENFJ', 'INFJ', 'INTJ', 'INTP', 'ENTP'],
         보통궁합: [],
         안맞는궁합: ['ISFP', 'ESFP', 'ISTP', 'ESTP', 'ISFJ', 'ESFJ', 'ISTJ', 'ESTJ']
     },
@@ -43,7 +43,7 @@ export const mbtiInfo = {
     },
     INTP: {
         천생연분: ['ENFJ', 'ENTJ'],
-        좋은궁합: ['INFP', 'INTP', 'ENFP', 'ENFJ', 'ENTP', 'INFJ', 'INTJ'],
+        좋은궁합: ['INFP', 'INTP', 'ENFP', 'ESTJ', 'ENTP', 'INFJ', 'INTJ'],
         보통궁합: ['ISFP', 'ESFP', 'ISTP', 'ESTP', 'ISFJ', 'ESFJ', 'ISTJ'],
         안맞는궁합: []
     },
@@ -71,9 +71,9 @@ export const mbtiInfo = {
         안맞는궁합: []
     },
     ESTJ: {
-        천생연분: ['ISFP', 'ISTP'],
+        천생연분: ['ISFP', 'ISTP', 'INTP'],
         좋은궁합: ['ISFJ', 'ISTJ', 'ESFJ', 'ESTJ'],
-        보통궁합: ['ISFP', 'ISTP', 'INTJ', 'INTP', 'ENTP', 'ENTJ'],
+        보통궁합: ['INTJ', 'ENTP', 'ENTJ', 'ESFP', 'ESTP'],
         안맞는궁합: ['INFJ', 'INFP', 'ENFP', 'ENFJ']
     },
     ESFJ: {
@@ -87,5 +87,11 @@ export const mbtiInfo = {
         좋은궁합: ['ENFP', 'ENFJ', 'ENTJ', 'ENTP', 'INFJ', 'INTJ'],
         보통궁합: ['ISFP', 'ESFP', 'ISTP', 'ESTP', 'ISFJ', 'ESFJ', 'ISTJ', 'ESTJ'],
         안맞는궁합: []
+    },
+    ENFJ: {
+        천생연분: ['INFP', 'INTP'],
+        좋은궁합: ['ENFP', 'ENFJ', 'ENTJ', 'ENTP', 'INFJ', 'INTJ'],
+        보통궁합: ['ISFP', 'ESFP', 'ISTP', 'ESTP', 'ISFJ', 'ISTJ'],
+        안맞는궁합: ['ESFJ', 'ESTJ']
     }
 };
