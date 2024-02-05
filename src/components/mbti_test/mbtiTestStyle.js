@@ -9,7 +9,7 @@ export const StScreenBox = styled.div`
 `;
 
 export const StScreenBox2 = styled.div`
-    height: 80vh;
+    height: 90vh;
     background-color: #fcfcfc;
     display: flex;
     justify-content: center;
@@ -45,17 +45,41 @@ export const StTestResultContainer = styled.div`
 
 export const StTestContainer = styled.div`
     width: 1200px;
-    height: 640px;
+    height: 765px;
     margin: 0 auto;
+    margin-top: -3%;
     /* padding: 20px; */
     background-color: #fff;
     border-radius: 0.5rem;
+
     /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
 `;
 
 export const StQuestionContainer = styled.div`
     margin-bottom: 20px;
+    margin-top: 5%;
     text-align: center;
+`;
+
+export const StTestResultbox = styled.div`
+    height: 420px;
+    margin-top: 2%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 7%;
+`;
+
+export const StTestResultImg = styled.img`
+    width: 400px;
+    height: 450px;
+    margin-top: 2%;
+    margin-left: 7%;
+`;
+
+export const StTestResultContentBox = styled.div`
+    margin-top: 8%;
 `;
 
 export const StQuestionFont = styled.h1`
@@ -81,22 +105,20 @@ export const StQuestionText = styled.h2`
 `;
 
 export const StResultMent = styled.h1`
-    font-size: 18px;
-    width: 50%;
-    margin-left: 26%;
+    font-size: 20px;
+    height: 468px;
+    width: 583px;
     white-space: pre-line;
     line-height: 1.5;
-    max-height: calc(18px * 11);
+    max-height: calc(18px * 20);
     overflow: auto;
     text-align: left;
 `;
 
 export const StResultText = styled.h1`
-    font-size: 35px;
-    font-weight: 800;
-    margin-top: 30px;
+    font-size: 48px;
+    margin-top: -10%;
     width: 100%;
-    color: #756ab6;
 `;
 
 export const StOptionsContainer = styled.div`
@@ -104,7 +126,8 @@ export const StOptionsContainer = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 21px;
-    height: 180px;
+    margin-bottom: 15%;
+    height: 250px;
     padding: 0 200px;
 `;
 
@@ -118,13 +141,14 @@ export const StOptionButton = styled.button`
     border-radius: 0.5rem;
     cursor: pointer;
     width: 680px;
-    height: 86px;
+    height: 134px;
     /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
 
     &:hover {
         transition: ease-in-out 0.2s;
         background-color: #abaad8;
         color: #ffffff;
+        font-weight: bold;
         /* box-shadow: 0px 4px 8px rgba(79, 5, 122, 0.575); */
     }
 `;
@@ -136,6 +160,7 @@ export const StButtonContainer = styled.div`
     align-items: center;
     height: 60px;
     gap: 15px;
+    margin-top: 3%;
 `;
 
 export const StButtonContainer2 = styled.div`
@@ -190,14 +215,13 @@ export const StCompleteButton2 = styled.button`
 `;
 
 export const StTypeDescription = styled.p`
-    font-size: 16px;
-    padding: 0px 295px 50px;
+    font-size: 20px;
     color: #333;
     background-color: #fff;
-    height: 125px;
+    height: 102px;
+    width: 583px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: left;
 `;
 
 export const StProgressContainer = styled.div`
@@ -233,15 +257,15 @@ export const StResultLogoContainer = styled.div`
 
 export const StLogoImage = styled.div`
     width: 87px;
-    height: 48px;
-    margin-top: 50px;
+    height: 128px;
 `;
 
 export const StLogoImageBox = styled.div`
-    width: 1150px;
-    height: 50px;
+    width: 100%;
+    height: 20%;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    margin-top: 10%;
 `;
 
 export const StTestStartComment = styled.h1`

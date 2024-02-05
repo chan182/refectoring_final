@@ -432,6 +432,25 @@ export const StRequestButton = styled.button`
     } */
 `;
 
+export const StRequestButton2 = styled.button`
+    font-size: 20px;
+    width: 196px;
+    height: 48px;
+    margin-left: 82.7%;
+    margin-top: 1%;
+    background-color: #ecebf5;
+    color: #b2afcf;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    &:hover {
+        transition: ease-in-out 0.2s;
+        background-color: var(--main-button-color);
+        color: #fff;
+    }
+`;
+
 export const StDeleteButton2 = styled.button`
     background-color: #ff5757;
     color: #ffffff;
