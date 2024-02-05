@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import mcoiLogo from '../../assets/mbtiTest/mcoiLogo.svg';
 import * as T from './mbtiTestStyle';
 import { questions } from './questions';
-import { typeDescriptions, typeDescriptionsDetails } from './typeDescriptions';
+import { typeDescriptions, typeDescriptionsDetails, typeDescriptionsImage } from './typeDescriptions';
+import { StyledTypeDescription } from './StyledTypeDesctiption';
 
 const MbtiResult = ({ setCounts, counts, setCurrentQuestion, setIsModalOpen }) => {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ const MbtiResult = ({ setCounts, counts, setCurrentQuestion, setIsModalOpen }) =
     const dominantType = getDominantTraits();
     const dominantTypeDescription = typeDescriptions[dominantType];
     const dominantTypeDescriptionDetail = typeDescriptionsDetails[dominantType];
+    const imageSrc = typeDescriptionsImage[dominantType];
 
     const handleReloadClick = () => {
         setIsModalOpen(false);
@@ -43,9 +45,15 @@ const MbtiResult = ({ setCounts, counts, setCurrentQuestion, setIsModalOpen }) =
     return (
         <T.StTestResultContainer>
             <T.StQuestionContainer>
-                <T.StResultText>{dominantType}</T.StResultText>
-                <T.StTypeDescription>{dominantTypeDescription}</T.StTypeDescription>
-                <T.StResultMent>{dominantTypeDescriptionDetail}</T.StResultMent>
+                <T.StResultText>당신의 유형은!</T.StResultText>
+                <T.StTestResultbox>
+                    <T.StTestResultImg src={imageSrc} alt={`Image for ${dominantType} type`} />
+                    <T.StTestResultContentBox>
+                        <StyledTypeDescription result={dominantType}>{dominantTypeDescription}</StyledTypeDescription>
+
+                        <T.StResultMent>{dominantTypeDescriptionDetail}</T.StResultMent>
+                    </T.StTestResultContentBox>
+                </T.StTestResultbox>
             </T.StQuestionContainer>
             <T.StButtonContainer2>
                 <T.StCompleteButton onClick={handleReloadClick} disabled={false}>

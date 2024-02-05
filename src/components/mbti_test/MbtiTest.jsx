@@ -61,7 +61,7 @@ const customModalStyles = {
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: '65%',
-        height: '71.5%',
+        height: '80%',
         // maxWidth: '90vw',
         // maxHeight: '90vh',
         padding: '20px',
@@ -74,7 +74,6 @@ const customModalStyles = {
 const StStartimg = styled.img`
     width: 80%;
     height: 60%;
-    margin-top: -2%;
     margin-bottom: 1%;
     margin-left: 10%;
 `;

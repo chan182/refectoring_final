@@ -375,11 +375,7 @@ const MeetingDetail = () => {
 
         if (shouldDelete) {
             try {
-                // 모임 게시물 삭제
                 await deleteDoc(doc(db, 'meet', id));
-
-                // 필요에 따라 사용자를 다른 페이지로 리다이렉션하거나 삭제 완료를 처리합니다.
-                // 사용자를 다른 페이지로 리다이렉션하거나 확인 메시지를 표시하는 것이 좋습니다.
             } catch (error) {
                 console.error('모임 삭제 중 에러 발생: ', error);
             }
@@ -472,10 +468,12 @@ const MeetingDetail = () => {
                 <T.StBottomContainer>
                     <T.StContentContainer>{meeting.content}</T.StContentContainer>
                 </T.StBottomContainer>
-                <T.StRequestButton onClick={handleRequest}>가입문의</T.StRequestButton>
-                {/* {user.email === meeting.managerEmail && (
-                    <T.StDeleteButton2 onClick={handleDeleteMeeting}>모임 삭제</T.StDeleteButton2>
-                )} */}
+                {user && meeting && user.email === meeting.userId && (
+                    <T.StRequestButton2 onClick={handleDeleteMeeting}>모임 삭제</T.StRequestButton2>
+                )}
+                {!user || !meeting || user.email !== meeting.userId ? (
+                    <T.StRequestButton onClick={handleRequest}>가입문의</T.StRequestButton>
+                ) : null}
             </T.StContentContainerBox>
             <T.StDivisionLine />
             <T.StCommentContainerBox>
