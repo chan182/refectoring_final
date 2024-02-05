@@ -199,17 +199,19 @@ const StSearchImg = styled.img`
     width: 48px;
     height: 48px;
     position: absolute;
-    margin: 10px 0px 0px 20px;
+    margin: 12px 0px 0px 120px;
 `;
 
 const StSearch = styled.input`
-    width: 100%;
+    width: 85%;
     height: 72px;
     padding-left: 81px;
     border: 0px;
     font-size: 22px;
     border-radius: 50px;
+    margin: 0 100px;
     background-color: var(--search-background-color);
+
     &:focus {
         outline-color: var(--button-border-color);
     }
