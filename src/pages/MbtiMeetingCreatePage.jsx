@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import MbtiMeetingCreateTags from '../components/mbti_meeting/MbtiMeetingCreateTags';
 import MbtiMeetingExplainMeeting from '../components/mbti_meeting/MbtiMeetingExplainMeeting';
 import MbtiMeetingCreateInfo from '../components/mbti_meeting/MbtiMeetingCreateInfo';
+import modal_logo from '../assets/home/mbti_community.png';
 import { useRecoilState } from 'recoil';
 import { createMeetingState } from '../recoil/recoilAtoms';
 import { db } from '../firebase/firebase.config';
@@ -18,6 +19,28 @@ const MbtiMeetingCreatePage = () => {
     const nav = useNavigate();
 
     const createMeetingButtonHandler = async () => {
+        if (
+            !newMeeting ||
+            !newMeeting.repreImg ||
+            !newMeeting.name ||
+            !newMeeting.managerName ||
+            !newMeeting.limitPeople ||
+            !newMeeting.schedule ||
+            !newMeeting.kakaoUrl ||
+            !newMeeting.oneLineIntro ||
+            !newMeeting.locations ||
+            !newMeeting.genders ||
+            !newMeeting.ages ||
+            !newMeeting.mbtis ||
+            !newMeeting.content
+        ) {
+            Swal.fire({
+                text: '모든 공간을 채워주세요 ♡',
+                imageUrl: modal_logo
+            });
+            return;
+        }
+
         try {
             const currentDate = new Date();
 
@@ -67,26 +90,7 @@ const MbtiMeetingCreatePage = () => {
             <StHr />
             <MbtiMeetingExplainMeeting />
             <StBtnBox>
-                <StCreateButton
-                    disabled={
-                        !newMeeting ||
-                        !newMeeting.repreImg ||
-                        !newMeeting.name ||
-                        !newMeeting.managerName ||
-                        !newMeeting.limitPeople ||
-                        !newMeeting.schedule ||
-                        !newMeeting.kakaoUrl ||
-                        !newMeeting.oneLineIntro ||
-                        !newMeeting.locations ||
-                        !newMeeting.genders ||
-                        !newMeeting.ages ||
-                        !newMeeting.mbtis ||
-                        !newMeeting.content
-                    }
-                    onClick={() => createMeetingButtonHandler()}
-                >
-                    생성하기
-                </StCreateButton>
+                <StCreateButton onClick={() => createMeetingButtonHandler()}>생성하기</StCreateButton>
                 <StCancelButton onClick={() => nav('/')}>취소하기</StCancelButton>
             </StBtnBox>
         </StWholeContainer>
@@ -129,18 +133,6 @@ const StCreateButton = styled.button`
     border-radius: 6px;
     margin-right: 10px;
     cursor: pointer;
-
-    ${(props) => {
-        if (props.disabled) {
-            return css`
-                background-color: var(--bold-gray);
-            `;
-        }
-        return css`
-            background-color: var(--main-button-color);
-            color: white;
-        `;
-    }}
 `;
 
 const StCancelButton = styled.button`
