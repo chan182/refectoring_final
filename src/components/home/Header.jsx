@@ -61,7 +61,7 @@ const Header = () => {
                             <>
                                 {/* 로그인 성공 시, */}
                                 <StProfileBox ref={mainProfileRef}>
-                                    <img src={notification} />
+                                    {/* <img src={notification} /> */}
                                     <StProfileDiv ref={dropBtnRef} onClick={toggleDropdown}>
                                         <StProfileImg>
                                             <img src={user.imageUrl || profileImage} />

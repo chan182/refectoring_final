@@ -160,7 +160,6 @@ function MbtiMeetingCreateTags() {
 export default MbtiMeetingCreateTags;
 
 const StTopContainerBox = styled.div`
-    margin-top: 68px;
     font-size: 26px;
 `;
 
