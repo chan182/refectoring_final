@@ -28,7 +28,7 @@ const MbtiMeeting = () => {
     const [searchKeyWord, setSearchKeyWord] = useState('');
 
     //데이터 검색
-    const { isLoading, data } = useQuery({
+    const { data } = useQuery({
         queryKey: ['meet', searchKeyWord],
         queryFn: getData
     });
@@ -82,10 +82,6 @@ const MbtiMeeting = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    if (isLoading) {
-        return <h1>로딩중입니다</h1>;
-    }
-
     return (
         <StMeeting>
             <StSearchMeet>
@@ -102,7 +98,7 @@ const MbtiMeeting = () => {
                 </StSearchImgWrap>
             </StSearchMeet>
             {/* <StSelectMeetSearchContainer>
-                <DropTag />
+            <DropTag />
             </StSelectMeetSearchContainer> */}
             <StCreateWrap
                 onClick={() => {
@@ -267,7 +263,7 @@ const StUpbutton = styled.button`
 const StMeetingContainer = styled.div`
     width: 1300px;
     height: 5000px;
-    margin: 40px auto;
+    margin: 40px auto 0px;
 `;
 
 const StMeetingWrap = styled.div`

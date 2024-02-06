@@ -1,23 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import eyeImoge from '../../assets/profile/eye.svg';
-import heartImoge from '../../assets/profile/heart.svg';
-import messageSquare from '../../assets/profile/message-square.svg';
-import { useQuery } from 'react-query';
-import { getData } from '../../api/board';
-import { useRecoilState } from 'recoil';
-import { userAtom } from '../../recoil/Atom';
-import { useNavigate } from 'react-router-dom';
+import Bookmark from './Bookmark';
+import Community from './Community';
 
 const UserWritelist = () => {
-    const [user, setUser] = useRecoilState(userAtom);
-    const navigate = useNavigate();
-    const { data } = useQuery({
-        queryKey: ['communities'],
-        queryFn: getData
-    });
+    const [isBookmark, setIsBookmark] = useState(false);
+    const [isCommunity, setIsCommunity] = useState(true);
 
-    const filteredData = Array.isArray(data) ? data.filter((item) => item.data.id === user?.uid) : [];
+    const bookmarkToggleHandler = () => {
+        setIsBookmark(!isBookmark);
+        setIsCommunity(!isCommunity);
+    };
+
+    const communityToggleHandler = () => {
+        setIsCommunity(!isCommunity);
+        setIsBookmark(!isBookmark);
+    };
 
     return (
         <>
@@ -25,32 +23,21 @@ const UserWritelist = () => {
             <StmainWrapper>
                 <Stbolder>
                     <StFilterLIst>
-                        <StMyPeedListFilterBtn>내가 쓴 게시글</StMyPeedListFilterBtn>
-                        <StMyBookmarkListFilterBtn>좋아요 한 글 </StMyBookmarkListFilterBtn>
-                        <StMyBookmarkListFilterBtn>내가 북마크한 모임</StMyBookmarkListFilterBtn>
+                        <StMyPeedListFilterBtn onClick={communityToggleHandler}>내가 쓴 게시글</StMyPeedListFilterBtn>
+                        <StMyBookmarkListFilterBtn onClick={bookmarkToggleHandler}>
+                            내가 북마크한 모임
+                        </StMyBookmarkListFilterBtn>
                     </StFilterLIst>
-                    <Stcontents>
-                        {filteredData.map((item) => {
-                            console.log(item.data.title);
-                            return (
-                                <StCardWrapper
-                                    onClick={() => {
-                                        navigate('/mbti/community/');
-                                    }}
-                                >
-                                    <StfilteredTitle>{item?.data.title}</StfilteredTitle>
-                                    <StImoges>
-                                        <img src={heartImoge} alt="" />
-                                        <StLikeCount>{item?.data.likecount || 0}</StLikeCount>
-                                        <img src={messageSquare} alt="" />
-                                        <StCommentCount>0</StCommentCount>
-                                        <img src={eyeImoge} alt="" />
-                                        <StViewCount>0</StViewCount>
-                                    </StImoges>
-                                </StCardWrapper>
-                            );
-                        })}
-                    </Stcontents>
+                    {isCommunity && (
+                        <div>
+                            <Community />
+                        </div>
+                    )}
+                    {isBookmark && (
+                        <div>
+                            <Bookmark />
+                        </div>
+                    )}
                 </Stbolder>
             </StmainWrapper>
         </>
@@ -117,29 +104,3 @@ const StTitle = styled.div`
     width: 60%;
     padding: 0px 0px 0px 10px;
 `;
-
-const Stcontents = styled.div`
-    div {
-        display: flex;
-        flex-direction: row;
-        margin: 10px;
-        justify-content: space-between;
-        align-items: center;
-        border-radius: 6px;
-        background: #f9f9ff;
-    }
-`;
-
-const StCardWrapper = styled.div`
-    cursor: pointer;
-`;
-
-const StfilteredTitle = styled.div``;
-
-const StImoges = styled.div``;
-
-const StLikeCount = styled.div``;
-
-const StCommentCount = styled.div``;
-
-const StViewCount = styled.div``;
