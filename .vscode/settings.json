@@ -2,7 +2,9 @@
     "prettier.configPath": ".prettierrc",
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     }

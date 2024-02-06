@@ -12,6 +12,7 @@ import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { storage } from '../../firebase/firebase.config';
 import Swal from 'sweetalert2';
 import backImage from '../../assets/community/backOImage.png';
+
 export default function UpdateTest() {
     const [imageFile, setImageFile] = useState();
     const user = useRecoilValue(userAtom);
@@ -76,11 +77,7 @@ export default function UpdateTest() {
             };
 
             mutationAdd.mutate(newCommunity);
-            Swal.fire({
-                text: '업로드에 성공',
-                imageUrl: modal_logo
-            });
-            nav('/mbti/community');
+            nav('/mbti/community/');
         } catch {
             console.log('실패하였습니다.');
         }

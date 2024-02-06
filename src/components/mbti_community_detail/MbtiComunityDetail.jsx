@@ -3,10 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import heart from '../../assets/community/blackheart.svg';
 import eyeImoge from '../../assets/community/eyeImoge.svg';
-import redheart from '../../assets/community/heart.svg';
 import messageImoge from '../../assets/community/messageImoge.svg';
 import { communityDetailGetDate, deleteBoard, updateBoard } from '../../api/boardDetail';
-import { deleteComment } from '../../api/comment';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../recoil/Atom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -26,6 +24,7 @@ const MbtiComunityDetail = () => {
         queryKey: ['communities'],
         queryFn: () => communityDetailGetDate(params.id)
     });
+    console.log(data);
 
     /// 삭제하기
     const DeleteBoardMutation = useMutation((id) => deleteBoard(id), {
@@ -34,7 +33,6 @@ const MbtiComunityDetail = () => {
             navigate('/mbti/community');
         }
     });
-
     const handleDeleteCommunity = async () => {
         Swal.fire({
             imageUrl: modal_logo,
@@ -108,7 +106,7 @@ const MbtiComunityDetail = () => {
                 </StViewInformation>
             </StuserInfoWrapper>
             <StButtonWrapper>
-                {user?.uid == data?.id ? (
+                {user?.uid === data?.id ? (
                     <>
                         <Stbutton onClick={() => navigate(`/mbti/community/edit/${params.id}`)}>글 수정</Stbutton>
                         <Stbutton onClick={handleDeleteCommunity}>글 삭제</Stbutton>

@@ -6,9 +6,7 @@ import { db } from '../firebase/firebase.config';
 const communityDetailGetDate = async (paramsId) => {
     const docRef = doc(db, 'communities', paramsId);
     const docSnapshot = await getDoc(docRef);
-    if (docSnapshot.exists()) {
-        return { id: docSnapshot.id, ...docSnapshot.data() };
-    }
+    return { id: docSnapshot.id, ...docSnapshot.data() };
 };
 
 // 삭제하기

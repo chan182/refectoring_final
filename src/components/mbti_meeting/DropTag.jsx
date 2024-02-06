@@ -1,12 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-import ZoneCheckedDropTag from './ZoneCheckedDropTag';
 import { useRecoilState } from 'recoil';
-import { tagCategoryState, selectedTagsState } from '../../recoil/recoilAtoms';
-import NoCheckedDropTag from './NoCheckedDropTag';
-import GenderCheckedDropTag from './GenderCheckedDropTag';
+import styled from 'styled-components';
+import { selectedTagsState, tagCategoryState } from '../../recoil/recoilAtoms';
 import AgeCheckedDropTag from './AgeCheckedDropTag';
+import GenderCheckedDropTag from './GenderCheckedDropTag';
 import MbtiCheckedDropTag from './MbtiCheckedDropTag';
+import NoCheckedDropTag from './NoCheckedDropTag';
+import ZoneCheckedDropTag from './ZoneCheckedDropTag';
 
 const DropTag = () => {
     // 현재 선택된 카테고리를 담는 변수
@@ -42,7 +42,7 @@ const DropTag = () => {
             return newSelectedTags;
         });
     };
-
+    console.log(selectedTags);
     const removeSelectedTagsHandler = (tag) => {
         setSelectedTags((prevSelectedTags) => {
             const newSelectedTags = prevSelectedTags.filter((selectedTag) => selectedTag !== tag);
