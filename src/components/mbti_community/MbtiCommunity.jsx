@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
+import React, { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import chevronLeft from '../../assets/community/chevron-left.svg';
-import chevronRight from '../../assets/community/chevron-right.svg';
-import editImoge from '../../assets/community/edit.svg';
+import Swal from 'sweetalert2';
+import { getData } from '../../api/board';
+import blackheart from '../../assets/community/blackheart.svg';
 import fullheart from '../../assets/community/fullheart.svg';
 import heart from '../../assets/community/heart.svg';
-import blackheart from '../../assets/community/blackheart.svg';
 import readingGlasses from '../../assets/community/search.svg';
-import { userAtom } from '../../recoil/Atom';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { getData } from '../../api/board';
-import { useInfiniteQuery } from 'react-query';
-import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../firebase/firebase.config';
-import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
-import blackVector from '../../assets/community/blackVector.svg';
+import { db } from '../../firebase/firebase.config';
+import { userAtom } from '../../recoil/Atom';
 const MbtiCommunity = () => {
     const user = useRecoilState(userAtom);
     const queryClient = useQueryClient();
@@ -90,7 +85,7 @@ const MbtiCommunity = () => {
     );
 
     const handleLike = async (postId) => {
-        console.log(postId);
+        // console.log(postId);
         // postId를 인자로 받기
         mutation.mutate(postId);
     };

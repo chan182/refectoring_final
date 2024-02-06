@@ -16,7 +16,6 @@ import userImg from '../../assets/mbtiMeeting/userimg.png';
 import usersImg from '../../assets/mbtiMeeting/usersimg.png';
 import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
-import DropTag from './DropTag';
 
 const MbtiMeeting = () => {
     const user = useRecoilState(userAtom);
@@ -95,9 +94,9 @@ const MbtiMeeting = () => {
                     ></StSearch>
                 </StSearchImgWrap>
             </StSearchMeet>
-            <StSelectMeetSearchContainer>
+            {/* <StSelectMeetSearchContainer>
                 <DropTag />
-            </StSelectMeetSearchContainer>
+            </StSelectMeetSearchContainer> */}
             <StCreateWrap
                 onClick={() => {
                     nav('/mbti/meeting/create');

@@ -277,9 +277,6 @@ const CommentList = () => {
                                     ) : (
                                         <></>
                                     )}
-
-                                    {/* ) : (<></>
-                                    )} */}
                                 </StCommentDropdown>
                             </StCommentUserInfo>
 
