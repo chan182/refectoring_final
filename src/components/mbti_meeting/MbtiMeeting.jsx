@@ -1,24 +1,21 @@
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import check from '../../assets/mbtiMeeting/check.png';
-import produce from '../../assets/mbtiMeeting/produce.png';
-import search from '../../assets/mbtiMeeting/search.png';
-import { db } from '../../firebase/firebase.config';
-import { Link } from 'react-router-dom';
-import positionImg from '../../assets/mbtiMeeting/positionimg.png';
-import dateImg from '../../assets/mbtiMeeting/dateimg.png';
-import userImg from '../../assets/mbtiMeeting/userimg.png';
-import usersImg from '../../assets/mbtiMeeting/usersimg.png';
-import ageImg from '../../assets/mbtiMeeting/ageimg.png';
-import DropTag from './DropTag';
-import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
-import { getData } from '../../api/meeting';
-import { userAtom } from '../../recoil/Atom';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import styled from 'styled-components';
+import { getData } from '../../api/meeting';
+import ageImg from '../../assets/mbtiMeeting/ageimg.png';
 import bookmark from '../../assets/mbtiMeeting/bookmark.png';
 import bookmarking from '../../assets/mbtiMeeting/bookmark1.png';
+import dateImg from '../../assets/mbtiMeeting/dateimg.png';
+import positionImg from '../../assets/mbtiMeeting/positionimg.png';
+import produce from '../../assets/mbtiMeeting/produce.png';
+import search from '../../assets/mbtiMeeting/search.png';
+import userImg from '../../assets/mbtiMeeting/userimg.png';
+import usersImg from '../../assets/mbtiMeeting/usersimg.png';
+import { db } from '../../firebase/firebase.config';
+import { userAtom } from '../../recoil/Atom';
 
 const MbtiMeeting = () => {
     const user = useRecoilState(userAtom);
@@ -28,7 +25,7 @@ const MbtiMeeting = () => {
     const [searchKeyWord, setSearchKeyWord] = useState('');
 
     //데이터 검색
-    const { isLoading, data } = useQuery({
+    const { data } = useQuery({
         queryKey: ['meet', searchKeyWord],
         queryFn: getData
     });
@@ -81,10 +78,6 @@ const MbtiMeeting = () => {
     const upButtonHandler = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-
-    if (isLoading) {
-        return <h1>로딩중입니다</h1>;
-    }
 
     return (
         <StMeeting>
@@ -189,6 +182,8 @@ const StSearchMeet = styled.div`
     align-items: center;
     flex-direction: column;
 `;
+
+const StSelectMeetSearchContainer = styled.div``;
 
 const StSearchImgWrap = styled.div`
     width: 75%;
