@@ -1,24 +1,11 @@
 import dayjs from 'dayjs';
-import {
-    addDoc,
-    arrayRemove,
-    arrayUnion,
-    collection,
-    deleteDoc,
-    doc,
-    getDoc,
-    getDocs,
-    orderBy,
-    query,
-    updateDoc
-} from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import downVector from '../../assets/community/Vector-down.svg';
 import upVector from '../../assets/community/Vector-up.svg';
-import filteredImoge from '../../assets/community/align-left.svg';
 import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
 import {
@@ -28,18 +15,15 @@ import {
     getCommentsByLikeCount,
     switchComment
 } from '../../api/comment';
-import fullheart from '../../assets/community/fullheart.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import dropdown from '../../assets/community/dropdown.png';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
 import blackVector from '../../assets/community/blackVector.svg';
-import { debounce } from 'lodash';
 
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
     const [showButtons, setShowButtons] = useState(false);
-    const [comments, setComments] = useState([]);
     const [content, setContent] = useState('');
     const [editMode, setEditMode] = useState(false);
     const [userCommentId, setUserCommentId] = useState('');
@@ -47,12 +31,12 @@ const CommentList = () => {
     const [CommentCount, setCommentCount] = useState(0);
     const params = useParams();
     const queryClient = useQueryClient();
-    const [selectedCommentId, setSelectedCommentId] = useState(null);
-    const [showDropdown, setShowDropdown] = useState(false);
     const [selectedOption, setSelectedOption] = useState('latest');
     const navigate = useNavigate();
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
+    const [selectedCommentId, setSelectedCommentId] = useState();
 
+    // console.log('데이터 로딩 중 !!!!!');
     const getCommentsQueryFn = () => {
         // console.log(selectedOption);
         if (selectedOption === 'latest') {
@@ -72,10 +56,6 @@ const CommentList = () => {
         queryFn: getCommentsQueryFn
     });
     // console.log(data[0].id);
-
-    const handleInputChange = debounce((value) => {
-        setContent(value);
-    }, 300);
 
     // 댓글 추가하기
     const mutationAdd = useMutation((newComment) => addComment(newComment, params.id), {
@@ -273,7 +253,7 @@ const CommentList = () => {
                                         />
                                     </DropdownButton>
                                     {/* {isOpen == true && user?.uid === data?.id && selectedCommentId === id ? ( */}
-                                    {isOpen == true && selectedCommentId === id ? (
+                                    {isOpen === true && selectedCommentId === id ? (
                                         <MenuBox>
                                             <StEditButton
                                                 onClick={() => {
@@ -497,6 +477,12 @@ const MenuBox = styled.div`
     border: 1px solid #ededed;
 `;
 
+const StCommentDropdown = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+`;
+
 const StEditButton = styled.button`
     width: 75px;
     height: 27px;
@@ -519,27 +505,6 @@ const StDeleteButton = styled.button`
     }
 `;
 
-const StCommentDropdown = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-`;
-
-const StButtons = styled.button`
-    display: flex;
-    flex-direction: column;
-    right: 10%;
-    gap: 10px;
-    color: #fff;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 120%;
-    width: 84px;
-    padding: 4px;
-    border: 1px;
-`;
-
 const Stcomment = styled.div`
     width: 1044px;
     margin-bottom: 10px;
@@ -552,11 +517,6 @@ const Stcomment = styled.div`
     font-weight: 400;
     line-height: 148%; /* 26.64px */
     letter-spacing: -0.09px;
-`;
-
-const StDropDownImage = styled.img`
-    width: 24px;
-    height: 30px;
 `;
 
 const StUpDown = styled.div`
