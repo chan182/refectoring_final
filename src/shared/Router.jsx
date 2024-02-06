@@ -23,6 +23,8 @@ import GlobalColor from './../style/GlobalColor';
 import GlobalStyle from './../style/GlobalStyle';
 import MeetingDetailPage from '../pages/MeetingDetailPage';
 import MbtiCommunityDetailEditPage from '../pages/MbtiCommunityDetailEditPage';
+import Bookmark from '../components/profile/Bookmark';
+import Community from '../components/profile/Community';
 
 const Router = () => {
     const setUser = useSetRecoilState(userAtom);

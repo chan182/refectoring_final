@@ -5,6 +5,7 @@ import * as T from './mbtiTestStyle';
 import { questions } from './questions';
 import { typeDescriptions, typeDescriptionsDetails, typeDescriptionsImage } from './typeDescriptions';
 import { StyledTypeDescription } from './StyledTypeDesctiption';
+import styled from 'styled-components';
 
 const MbtiResult = ({ setCounts, counts, setCurrentQuestion, setIsModalOpen }) => {
     const navigate = useNavigate();
@@ -43,7 +44,7 @@ const MbtiResult = ({ setCounts, counts, setCurrentQuestion, setIsModalOpen }) =
     };
 
     return (
-        <T.StTestResultContainer>
+        <StTestResultContainer>
             <T.StQuestionContainer>
                 <T.StResultText>당신의 유형은!</T.StResultText>
                 <T.StTestResultbox>
@@ -55,20 +56,20 @@ const MbtiResult = ({ setCounts, counts, setCurrentQuestion, setIsModalOpen }) =
                     </T.StTestResultContentBox>
                 </T.StTestResultbox>
             </T.StQuestionContainer>
-            <T.StButtonContainer2>
+            <StButtonContainer1>
                 <T.StCompleteButton onClick={handleReloadClick} disabled={false}>
                     궁합 보러가기
                 </T.StCompleteButton>
                 <T.StCompleteButton2 onClick={handleReturnHomeClick} disabled={false}>
                     다시하기
                 </T.StCompleteButton2>
-            </T.StButtonContainer2>
+            </StButtonContainer1>
             <T.StResultLogoContainer>
-                <T.StLogoImageBox>
-                    <T.StTestStartText>참고 사이트: httos://www.16personalities.com/ 내용 일부 발췌</T.StTestStartText>
-                </T.StLogoImageBox>
+                <StLogoImageBox>
+                    <StTestStartText2>참고 사이트: httos://www.16personalities.com/ 내용 일부 발췌</StTestStartText2>
+                </StLogoImageBox>
             </T.StResultLogoContainer>
-        </T.StTestResultContainer>
+        </StTestResultContainer>
     );
 };
 
@@ -151,8 +152,8 @@ const MbtiTestStart = ({ setIsModalOpen }) => {
     }, [currentQuestion, counts]);
 
     return (
-        <T.StScreenBox>
-            <T.StTestContainer>
+        <StScreenBox>
+            <StTestContainer>
                 {currentQuestion !== -1 ? (
                     <div>
                         <T.StQuestionContainer>
@@ -167,17 +168,17 @@ const MbtiTestStart = ({ setIsModalOpen }) => {
                                 </T.StOptionButton>
                             </T.StOptionsContainer>
                         </T.StQuestionContainer>
-                        <T.StButtonContainer2>
+                        <StButtonContainer2>
                             <T.StCompleteButton onClick={goHomeButton}>검사 종료하기</T.StCompleteButton>
-                        </T.StButtonContainer2>
-                        <T.StLogoImageBox>
+                        </StButtonContainer2>
+                        <StLogoImageBox>
                             {/* <T.StLogoImage>
                                 <img src={mcoiLogo} alt="로고이미지" />
                             </T.StLogoImage> */}
-                            <T.StTestStartText>
+                            <StTestStartText>
                                 성격 테스트를 통해 자신의 성향과 행동에 대한 정확한 분석 결과를 확인해 보세요.
-                            </T.StTestStartText>
-                        </T.StLogoImageBox>
+                            </StTestStartText>
+                        </StLogoImageBox>
 
                         {/* <StProgressContainer>
                             <StProgressBarBox>
@@ -194,9 +195,88 @@ const MbtiTestStart = ({ setIsModalOpen }) => {
                         setCurrentQuestion={setCurrentQuestion}
                     />
                 )}
-            </T.StTestContainer>
-        </T.StScreenBox>
+            </StTestContainer>
+        </StScreenBox>
     );
 };
 
 export default MbtiTestStart;
+
+const StTestResultContainer = styled.div`
+    width: 1200px;
+    height: 640px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
+    position: absolute;
+    top: 49.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+`;
+
+const StScreenBox = styled.div`
+    /* height: 80vh;
+    background-color: #f5f5f5; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const StTestContainer = styled.div`
+    width: 1200px;
+    height: 500px;
+    margin: 0 auto;
+    /* padding: 20px; */
+    background-color: #fff;
+    border-radius: 0.5rem;
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
+`;
+
+const StButtonContainer1 = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    gap: 15px;
+    margin-top: 8%;
+`;
+
+const StButtonContainer2 = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    gap: 15px;
+    margin-top: -5%;
+`;
+
+const StLogoImageBox = styled.div`
+    width: 100%;
+    height: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const StTestStartText = styled.p`
+    font-size: 22px;
+    margin-top: 3%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+`;
+
+const StTestStartText2 = styled.p`
+    font-size: 22px;
+    margin-top: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+`;

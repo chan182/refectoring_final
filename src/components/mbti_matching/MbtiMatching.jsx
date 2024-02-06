@@ -7,6 +7,7 @@ import { mbtiInfo } from './mbtiInfo';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_matching.png';
 import { MBTIimage } from './textImage';
+// import { mbtiInfo } from './MBTIinformation/ENFJ';
 
 const MbtiMatching = () => {
     const [mbti1Type, setMbti1Type] = useState('');
@@ -61,13 +62,13 @@ const MbtiMatching = () => {
 
     const calculateMatching = (type1, type2) => {
         if (mbtiInfo[type1] && mbtiInfo[type1].천생연분 && mbtiInfo[type1].천생연분.includes(type2)) {
-            return { text: '최고 궁합, 지구뿌셔!!!', color: 'blue' };
+            return { text: '최고 궁합, 지구뿌셔!!!', color: 'black' };
         } else if (mbtiInfo[type1] && mbtiInfo[type1].좋은궁합 && mbtiInfo[type1].좋은궁합.includes(type2)) {
-            return { text: '좋은 궁합, 잘 맞아요!', color: 'green' };
+            return { text: '좋은 궁합, 잘 맞아요!', color: 'black' };
         } else if (mbtiInfo[type1] && mbtiInfo[type1].보통궁합 && mbtiInfo[type1].보통궁합.includes(type2)) {
-            return { text: '그럭저럭, 노력하자!', color: 'orange' };
+            return { text: '그럭저럭, 노력하자!', color: 'black' };
         } else if (mbtiInfo[type1] && mbtiInfo[type1].안맞는궁합 && mbtiInfo[type1].안맞는궁합.includes(type2)) {
-            return { text: '최악의 궁합, 지구멸망 ㅠㅠ', color: 'red' };
+            return { text: '최악의 궁합, 지구멸망 ㅠㅠ', color: 'black' };
         } else {
             return { text: '유효하지 않은 MBTI 유형입니다.', color: 'var(--light-purple)' };
         }
@@ -90,11 +91,17 @@ const MbtiMatching = () => {
                             <StMatchingResultImage src={MBTIimage[mbti2Type] || MBTIimage.DEFAULT} alt={mbti2Type} />
                         </StMatchingResultInput>
                         <StMatchingResultMent color={matchingResultColor}>"{matchingResult}"</StMatchingResultMent>
+                        <StMatchingResultMent2>
+                            {calculateMatching(mbti1Type, mbti2Type).introductionComment}
+                        </StMatchingResultMent2>
+                        <StMatchingComment2>
+                            {calculateMatching(mbti1Type, mbti2Type).inputValueComment}
+                        </StMatchingComment2>
 
-                        <T.StButtonContainer>
+                        <StButtonContainer>
                             {/* <T.StTestStartButton onClick={() => navigate('/')}>홈으로 돌아가기</T.StTestStartButton> */}
                             <T.StTestStartButton onClick={() => window.location.reload()}>다시하기</T.StTestStartButton>
-                        </T.StButtonContainer>
+                        </StButtonContainer>
                         {/* <T.StLogoImageBox>
                             <T.StLogoImage>
                                 <img src={mcoiLogo} alt="로고이미지" />
@@ -130,11 +137,11 @@ const MbtiMatching = () => {
                             </T.StTestStartButton>
                         </T.StButtonContainer>
 
-                        <T.StLogoImageBox>
+                        <StLogoImageBox>
                             <T.StLogoImage>
                                 <img src={mcoiLogo} alt="로고이미지" />
                             </T.StLogoImage>
-                        </T.StLogoImageBox>
+                        </StLogoImageBox>
                     </T.StTestContainer>
                 </T.StScreenBox2>
             )}
@@ -145,7 +152,7 @@ const MbtiMatching = () => {
 export default MbtiMatching;
 
 const StScreenBox2 = styled.div`
-    height: 150vh;
+    height: 90vh;
     background-color: #fcfcfc;
     display: flex;
     justify-content: center;
@@ -154,9 +161,8 @@ const StScreenBox2 = styled.div`
 
 const StTestContainer = styled.div`
     width: 1200px;
-    height: 1300px;
+    height: 840px;
     margin: 0 auto;
-    margin-top: -3%;
     background-color: #fff;
     border-radius: 0.5rem;
 `;
@@ -240,7 +246,20 @@ const StMatchingResultImage = styled.img`
 `;
 
 const StMatchingResultMent = styled.h1`
-    font-size: 54px;
+    font-size: 52px;
+    width: 914px;
+    height: 100px;
+    margin-left: 130px;
+    padding: 0px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: ${(props) => props.color || 'var(--light-purple)'};
+`;
+
+const StMatchingResultMent2 = styled.h1`
+    font-size: 38px;
     width: 914px;
     height: 100px;
     margin-left: 130px;
@@ -253,7 +272,7 @@ const StMatchingResultMent = styled.h1`
 `;
 
 const StMatchingComment = styled.h1`
-    font-size: 54px;
+    font-size: 34px;
     width: 914px;
     margin-top: 8.4%;
     margin-left: 130px;
@@ -262,4 +281,34 @@ const StMatchingComment = styled.h1`
     align-items: center;
     justify-content: center;
     text-align: center;
+`;
+
+const StMatchingComment2 = styled.h1`
+    font-size: 32px;
+    width: 914px;
+    margin-top: 8.4%;
+    margin-left: 130px;
+    padding: 0px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+`;
+
+const StLogoImageBox = styled.div`
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    margin-top: 10%;
+`;
+
+const StButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    margin-top: -10%;
+    margin-left: -3%;
 `;
