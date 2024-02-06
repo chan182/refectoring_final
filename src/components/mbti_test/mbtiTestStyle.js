@@ -117,7 +117,7 @@ export const StResultMent = styled.h1`
 
 export const StResultText = styled.h1`
     font-size: 48px;
-    margin-top: -10%;
+    margin-top: -7%;
     width: 100%;
 `;
 
@@ -264,8 +264,8 @@ export const StLogoImageBox = styled.div`
     width: 100%;
     height: 20%;
     display: flex;
+    justify-content: center;
     align-items: center;
-    margin-top: 10%;
 `;
 
 export const StTestStartComment = styled.h1`
