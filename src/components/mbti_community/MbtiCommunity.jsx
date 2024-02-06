@@ -117,7 +117,7 @@ const MbtiCommunity = () => {
                         console.log(user);
                         if (!user[0]) {
                             Swal.fire({
-                                text: '로그인 후에 이용이 가능합니다.',
+                                text: '로그인 후에 이용이 가능합니다..',
                                 imageUrl: modal_logo
                             });
 
