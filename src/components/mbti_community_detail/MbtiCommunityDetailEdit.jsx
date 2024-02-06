@@ -22,13 +22,12 @@ const MbtiCommunityDetailEdit = () => {
     const user = useRecoilValue(userAtom);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-
     const queryClient = useQueryClient();
-    const nav = useNavigate();
+    const navigate = useNavigate();
 
     // 기존 api 코드 사용하여 데이터 정보 가져오기
 
-    const { isLoading, isError, data } = useQuery({
+    const { data } = useQuery({
         queryKey: ['communities'],
         queryFn: () => communityDetailGetDate(params.id)
     });
@@ -40,7 +39,7 @@ const MbtiCommunityDetailEdit = () => {
             setContent(data.content);
             setImageFile(data.communityImage);
         }
-    }, [user]);
+    }, []);
 
     const handleFileUpload = (event) => {
         const file = event.target.files[0] || data.communityImage;
@@ -97,7 +96,7 @@ const MbtiCommunityDetailEdit = () => {
                 text: '',
                 imageUrl: modal_logo
             });
-            nav('/mbti/community');
+            navigate('/mbti/community');
         } catch (error) {
             console.log('실패하였습니다.', error);
         }
@@ -138,7 +137,7 @@ const MbtiCommunityDetailEdit = () => {
                 </StPeed>
                 <StBtns>
                     <StEditBtn onClick={handleUpdateCommuntiy}>저장하기</StEditBtn>
-                    <StCancelBtn onClick={() => nav('/mbti/community')}>글 작성 취소하기</StCancelBtn>
+                    <StCancelBtn onClick={() => navigate('/mbti/community')}>글 작성 취소하기</StCancelBtn>
                 </StBtns>
             </StDiv>
         </StBox>

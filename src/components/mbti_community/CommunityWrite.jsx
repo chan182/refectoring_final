@@ -25,7 +25,6 @@ export default function UpdateTest() {
     const mutationAdd = useMutation((newCommunity) => addCommunity(newCommunity), {
         onSuccess: (data) => {
             queryClient.invalidateQueries('communties');
-            // console.log('성공 !!');
         }
     });
     const handleFileUpload = (event) => {
@@ -56,6 +55,7 @@ export default function UpdateTest() {
         const storageRef = ref(storage, key);
 
         let userimageUrl = '';
+
         try {
             if (imageFile) {
                 const data = await uploadString(storageRef, imageFile, 'data_url');

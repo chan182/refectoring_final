@@ -55,12 +55,12 @@ const Bookmark = () => {
             {FilterData?.map(({ id, data }) => (
                 <StMeetingWrap>
                     <StMeetingLink to={`/mbti/meeting/detail/${id}`} key={id}>
-                        <StImg src={data.repreImg}></StImg>
+                        <StImg src={data?.repreImg}></StImg>
                     </StMeetingLink>
                     <StContainer>
                         <StTitle>
                             <div>
-                                {data.name}/{(data.mbtis + '').split()}
+                                {data?.name}/{(data.mbtis + '').split()}
                             </div>
                             {user[0] ? (
                                 <StBookMark
@@ -81,28 +81,28 @@ const Bookmark = () => {
                         <StPositionDateUserContainer>
                             <StContentsImgWrap>
                                 <StContentsPositionImg src={positionImg}></StContentsPositionImg>&nbsp;
-                                <StContents>{(data.locations + '').split()}</StContents>
+                                <StContents>{(data?.locations + '').split()}</StContents>
                             </StContentsImgWrap>
                             <StContentsImgWrap>
                                 <StContentsDateImg src={dateImg}></StContentsDateImg>&nbsp;
-                                <StContents>일정 : {data.schedule}</StContents>
+                                <StContents>일정 : {data?.schedule}</StContents>
                             </StContentsImgWrap>
                             <StContentsImgWrap>
                                 <StContentsUserImg src={userImg} alt="" />
                                 &nbsp;
-                                <StContents>정원 : {data.limitPeople}</StContents>
+                                <StContents>정원 : {data?.limitPeople}</StContents>
                             </StContentsImgWrap>
                         </StPositionDateUserContainer>
                         <StPositionDateUserContainer>
                             <StContentsImgWrap>
                                 <StContentsUsersImg src={usersImg} alt="" />
                                 &nbsp;
-                                <StContents>{(data.genders + '').split()}</StContents>
+                                <StContents>{(data?.genders + '').split()}</StContents>
                             </StContentsImgWrap>
                             <StContentsImgWrap>
                                 <StContentsAgeImg src={ageImg} alt="" />
                                 &nbsp;
-                                <StContents>{(data.ages + '').split()}</StContents>
+                                <StContents>{(data?.ages + '').split()}</StContents>
                             </StContentsImgWrap>
                             <StContentsImgWrap>
                                 <StContentsAgeImg></StContentsAgeImg>
