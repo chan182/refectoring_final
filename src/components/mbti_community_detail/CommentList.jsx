@@ -1,13 +1,11 @@
 import dayjs from 'dayjs';
 import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import downVector from '../../assets/community/Vector-down.svg';
-import upVector from '../../assets/community/Vector-up.svg';
-import { db } from '../../firebase/firebase.config';
-import { userAtom } from '../../recoil/Atom';
+import Swal from 'sweetalert2';
 import {
     addComment,
     deleteComment,
@@ -15,11 +13,12 @@ import {
     getCommentsByLikeCount,
     switchComment
 } from '../../api/comment';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import dropdown from '../../assets/community/dropdown.png';
-import Swal from 'sweetalert2';
-import modal_logo from '../../assets/home/mbti_community.png';
+import upVector from '../../assets/community/Vector-up.svg';
 import blackVector from '../../assets/community/blackVector.svg';
+import dropdown from '../../assets/community/dropdown.png';
+import modal_logo from '../../assets/home/mbti_community.png';
+import { db } from '../../firebase/firebase.config';
+import { userAtom } from '../../recoil/Atom';
 
 const CommentList = () => {
     const user = useRecoilValue(userAtom);
@@ -308,9 +307,9 @@ const CommentList = () => {
                                     </button>
                                     <div>{data?.likecount}</div>
                                 </StUp>
-                                <StDown>
+                                {/* <StDown>
                                     <img src={downVector} alt="" />
-                                </StDown>
+                                </StDown> */}
                             </StUpDown>
                         </StCommentWrapper>
                     </StCommentCardList>
