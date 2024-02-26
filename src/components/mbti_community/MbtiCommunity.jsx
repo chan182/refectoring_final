@@ -1,5 +1,6 @@
 import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
-import React, { useState } from 'react';
+import _ from 'lodash';
+import React, { useCallback, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -13,11 +14,23 @@ import readingGlasses from '../../assets/community/search.svg';
 import modal_logo from '../../assets/home/mbti_community.png';
 import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
+
 const MbtiCommunity = () => {
     const user = useRecoilState(userAtom);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [searchKeyWord, setSearchKeyWord] = useState('');
+
+    const handleSearchText = useCallback(
+        _.debounce((text) => {
+            setSearchKeyWord(text);
+        }, 2000),
+        []
+    );
+
+    const handleChange = (e) => {
+        handleSearchText(e.target.value);
+    };
 
     ///////// 데이터 가져오기 및 filter 검색
     const { data } = useQuery({
@@ -26,31 +39,6 @@ const MbtiCommunity = () => {
     });
 
     const filteredData = data?.filter(({ data }) => data.title.includes(searchKeyWord));
-
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            handleSearch();
-        }
-    };
-    const handleSearch = () => {
-        queryClient.invalidateQueries(['communities', searchKeyWord]);
-    };
-    // console.log('검색검색검색검색검색');
-    ////////////// usePaginatedQuery를 사용하여 페이지별로 데이터 가져오기
-    // const { resolvedData, latestData, status, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery(
-    //     ['communities', searchKeyWord],
-    //     getData,
-    //     {
-    //         getNextPageParam: (lastPage) => {
-    //             return lastPage.page + 1;
-    //         }
-    //     }
-    // );
-
-    // const handlePageChange = (newPage) => {
-    //     // 페이지 변경 함수
-    //     navigate(`/mbti/community?page=${newPage}`);
-    // };
 
     //////////////// 좋아요 기능
     const mutation = useMutation(
@@ -95,14 +83,7 @@ const MbtiCommunity = () => {
             <StBoardTitle>자유롭게 의견을 나누고 일상을 공유해보세요</StBoardTitle>
             <StsearchInputWrapper>
                 <StsearchImg src={readingGlasses} alt="검색창" />
-                <StsearchInput
-                    placeholder="검색어를 입력해주세요. "
-                    value={searchKeyWord}
-                    name="searchKeyWord"
-                    onChange={(e) => setSearchKeyWord(e.target.value)}
-                    onKeyPress={handleKeyPress} // Add event listener for Enter key
-                    autoFocus
-                />
+                <StsearchInput placeholder="검색어를 입력해주세요. " onChange={handleChange} autoFocus />
             </StsearchInputWrapper>
 
             <StfilteredButton>
