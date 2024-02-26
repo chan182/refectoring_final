@@ -1,8 +1,8 @@
 import React from 'react';
-import { RecoilRoot } from 'recoil';
-import Router from './shared/Router';
 import { QueryClient, QueryClientProvider } from 'react-query';
-
+import { RecoilRoot } from 'recoil';
+import './index.css';
+import Router from './shared/Router';
 const queryClient = new QueryClient();
 
 const App = () => {

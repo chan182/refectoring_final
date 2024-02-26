@@ -3,12 +3,12 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_community.png';
 import profileImage from '../../assets/profile/profileImg.png';
 import { db, storage } from '../../firebase/firebase.config';
 import { isEditingAtom, userAtom } from '../../recoil/Atom';
-import Avatar from '../common/avatar';
-import Swal from 'sweetalert2';
-import modal_logo from '../../assets/home/mbti_community.png';
+// import Avatar from '../common/avatar';
 
 const UserInfo = () => {
     const [user, setUser] = useRecoilState(userAtom);
@@ -34,6 +34,7 @@ const UserInfo = () => {
             setIntroduce(user.introduce);
         }
     }, [user]);
+
     //  이미지 미리보기 및 선택한 파일 업로드를 처리한다
     const fileSelectHandler = (event) => {
         const file = event.target.files[0];
@@ -47,10 +48,7 @@ const UserInfo = () => {
         }
         setSelectedFile(file);
     };
-    // 버튼 클릭시 boolean 값 바꾸기
-    const toggleInput = () => {
-        setIsEditing((prevIsEditing) => !prevIsEditing);
-    };
+
     // 프로필 수정 버튼 입력 후 입력한 값이 수정(추가)이 된다.
     const updateUserinfo = async () => {
         const userRef = doc(db, 'users', user.uid);
@@ -94,230 +92,195 @@ const UserInfo = () => {
 
     return (
         <>
-            <StProfileTitle>마이페이지</StProfileTitle>
-            <StWrapper>
-                <StUserwrapper>
-                    <>
-                        <StProfileImage>
-                            {isEditing === true ? (
-                                <>
-                                    <label htmlFor="inputFile">
-                                        <ProfilePointerAvatar
-                                            src={previewURL || (user && user.imageUrl) || profileImage}
-                                            for="inputFile"
-                                            size="large"
-                                        />
-                                        <Stinput
-                                            type="file"
-                                            id="inputFile"
-                                            accept="image/*"
-                                            onChange={fileSelectHandler}
-                                        />
-                                    </label>
-                                    {/* <StClearImageButton
-                                        onClick={() => {
-                                            clearSelectedImage();
-                                        }}
-                                    >
-                                        이미지 선택 취소
-                                    </StClearImageButton> */}
-                                </>
-                            ) : (
-                                <Avatar src={(user && user.imageUrl) || profileImage} size="large" />
-                            )}
-                            {/* <button>프로필 사진 업로드</button> */}
-                        </StProfileImage>
-                        {/* <StProfileImageButton
-                            onClick={() => {
-                                setIsImageEditing(!isImageEditing);
-                            }}
-                        >
-                            프로필 사진 업로드
-                        </StProfileImageButton> */}
-                    </>
-                    <StInputBox>
-                        <StUserInfo>
-                            {isEditing === false ? (
-                                <>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>이름</StminiTitle>
-                                            <StminiContent>{user?.name || ''}</StminiContent>
-                                        </Stlist>
-                                        <Stlist>
-                                            <StminiTitle>닉네임</StminiTitle>
-                                            <StminiContent>{user?.nickname || ''}</StminiContent>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>생년월일</StminiTitle>
-                                            <StminiContent>{user?.birth || ''}</StminiContent>
-                                        </Stlist>
-                                        <Stlist>
-                                            <StminiTitle>거주지</StminiTitle>
-                                            <StminiContent>{user?.location || ''}</StminiContent>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>MBTI</StminiTitle>
-                                            <StminiContent>{user?.mbti || ''}</StminiContent>
-                                        </Stlist>
-                                        <Stlist>
-                                            <StminiTitle>혈액형</StminiTitle>
-                                            <StminiContent>{user?.blood || ''}</StminiContent>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>한줄소개</StminiTitle>
-                                            <StminiContent2>{user?.introduce || ''}</StminiContent2>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                </>
-                            ) : (
-                                <>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>이름</StminiTitle>
-                                            <StminiContent>
-                                                <input
-                                                    placeholder="홍길동"
-                                                    value={name}
-                                                    onChange={(e) => {
-                                                        setName(e.target.value);
-                                                    }}
-                                                />
-                                            </StminiContent>
-                                        </Stlist>
-                                        <Stlist>
-                                            <StminiTitle>닉네임</StminiTitle>
-                                            <StminiContent>
-                                                <input
-                                                    placeholder="20자 이내(띄어쓰기 포함)로 작성해주세요."
-                                                    value={nickname}
-                                                    onChange={(e) => {
-                                                        setNickname(e.target.value);
-                                                    }}
-                                                />
-                                            </StminiContent>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>생년월일</StminiTitle>
-                                            <StminiContent>
-                                                <input
-                                                    placeholder="0000.00.00"
-                                                    value={birth}
-                                                    onChange={(e) => {
-                                                        setBirth(e.target.value);
-                                                    }}
-                                                />
-                                            </StminiContent>
-                                        </Stlist>
-                                        <Stlist>
-                                            <StminiTitle>거주지</StminiTitle>
-                                            <StminiContent>
-                                                <input
-                                                    placeholder="OO시 OO구"
-                                                    value={location}
-                                                    onChange={(e) => {
-                                                        setLocation(e.target.value);
-                                                    }}
-                                                />
-                                            </StminiContent>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>MBTI</StminiTitle>
-                                            <StminiContent>
-                                                <input
-                                                    placeholder="자신의 MBTI를 입력하세요."
-                                                    value={mbti}
-                                                    onChange={(e) => {
-                                                        setMbti(e.target.value);
-                                                    }}
-                                                />
-                                            </StminiContent>
-                                        </Stlist>
-                                        <Stlist>
-                                            <StminiTitle>혈액형</StminiTitle>
-                                            <StminiContent>
-                                                <input
-                                                    placeholder="자신의 혈액형을 입력하세요."
-                                                    value={blood}
-                                                    onChange={(e) => {
-                                                        setBlood(e.target.value);
-                                                    }}
-                                                />
-                                            </StminiContent>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                    <StlistWrapper>
-                                        <Stlist>
-                                            <StminiTitle>한 줄 소개</StminiTitle>
-                                            <StminiContent2>
-                                                <input
-                                                    placeholder="간단하게 나를 소개해보세요 !"
-                                                    value={introduce}
-                                                    onChange={(e) => {
-                                                        setIntroduce(e.target.value);
-                                                    }}
-                                                    autoFocus
-                                                />
-                                            </StminiContent2>
-                                        </Stlist>
-                                    </StlistWrapper>
-                                </>
-                            )}
-                        </StUserInfo>
-                        {isEditing ? (
-                            // isEditing이 true일 때 나온다.
-                            <ButtonWrapper>
-                                <StEditBtn onClick={updateUserinfo}>프로필 수정 완료</StEditBtn>
-                                <StCancelBtn
-                                    onClick={() => {
-                                        setIsEditing(false);
-                                    }}
-                                >
-                                    프로필 수정 취소
-                                </StCancelBtn>
-                            </ButtonWrapper>
+            <div className="text-black">마이페이지</div>
+            <div className="flex gap-4 ">
+                <>
+                    <div className="flex">
+                        {isEditing === true ? (
+                            <label
+                                className="bg-black  flex justify-center items-center w-[200px] h-[200px] rounded-full"
+                                htmlFor="inputFile"
+                            >
+                                <img
+                                    className="rounded-full w-[200px] h- "
+                                    alt="profile"
+                                    src={previewURL || (user && user.imageUrl) || profileImage}
+                                    for="inputFile"
+                                    size="large"
+                                />
+                                <input type="file" id="inputFile" accept="image/*" onChange={fileSelectHandler} />
+                            </label>
                         ) : (
-                            // isEditing이 false일 때 나온다.
-                            <StEditBtn
+                            <img
+                                className="rounded-full w-[250px]"
+                                alt="profile"
+                                src={(user && user.imageUrl) || profileImage}
+                            />
+                        )}
+                    </div>
+                </>
+                <div className="bg-yellow w-[500px]">
+                    <div>
+                        {isEditing === false ? (
+                            <>
+                                <StlistWrapper>
+                                    <Stlist>
+                                        <StminiTitle>이름</StminiTitle>
+                                        <StminiContent>{user?.name || ''}</StminiContent>
+                                    </Stlist>
+                                    <Stlist>
+                                        <StminiTitle>닉네임</StminiTitle>
+                                        <StminiContent>{user?.nickname || ''}</StminiContent>
+                                    </Stlist>
+                                </StlistWrapper>
+                                <StlistWrapper>
+                                    <Stlist>
+                                        <StminiTitle>생년월일</StminiTitle>
+                                        <StminiContent>{user?.birth || ''}</StminiContent>
+                                    </Stlist>
+                                    <Stlist>
+                                        <StminiTitle>거주지</StminiTitle>
+                                        <StminiContent>{user?.location || ''}</StminiContent>
+                                    </Stlist>
+                                </StlistWrapper>
+                                <StlistWrapper>
+                                    <Stlist>
+                                        <StminiTitle>MBTI</StminiTitle>
+                                        <StminiContent>{user?.mbti || ''}</StminiContent>
+                                    </Stlist>
+                                    <Stlist>
+                                        <StminiTitle>혈액형</StminiTitle>
+                                        <StminiContent>{user?.blood || ''}</StminiContent>
+                                    </Stlist>
+                                </StlistWrapper>
+                            </>
+                        ) : (
+                            <>
+                                <StlistWrapper>
+                                    <Stlist>
+                                        <StminiTitle>이름</StminiTitle>
+                                        <StminiContent>
+                                            <input
+                                                placeholder="홍길동"
+                                                value={name}
+                                                onChange={(e) => {
+                                                    setName(e.target.value);
+                                                }}
+                                            />
+                                        </StminiContent>
+                                    </Stlist>
+                                    <Stlist>
+                                        <StminiTitle>닉네임</StminiTitle>
+                                        <StminiContent>
+                                            <input
+                                                placeholder="20자 이내(띄어쓰기 포함)로 작성해주세요."
+                                                value={nickname}
+                                                onChange={(e) => {
+                                                    setNickname(e.target.value);
+                                                }}
+                                            />
+                                        </StminiContent>
+                                    </Stlist>
+                                </StlistWrapper>
+                                <StlistWrapper>
+                                    <Stlist>
+                                        <StminiTitle>생년월일</StminiTitle>
+                                        <StminiContent>
+                                            <input
+                                                placeholder="0000.00.00"
+                                                value={birth}
+                                                onChange={(e) => {
+                                                    setBirth(e.target.value);
+                                                }}
+                                            />
+                                        </StminiContent>
+                                    </Stlist>
+                                    <Stlist>
+                                        <StminiTitle>거주지</StminiTitle>
+                                        <StminiContent>
+                                            <input
+                                                placeholder="OO시 OO구"
+                                                value={location}
+                                                onChange={(e) => {
+                                                    setLocation(e.target.value);
+                                                }}
+                                            />
+                                        </StminiContent>
+                                    </Stlist>
+                                </StlistWrapper>
+                                <StlistWrapper>
+                                    <Stlist>
+                                        <StminiTitle>MBTI</StminiTitle>
+                                        <StminiContent>
+                                            <input
+                                                placeholder="자신의 MBTI를 입력하세요."
+                                                value={mbti}
+                                                onChange={(e) => {
+                                                    setMbti(e.target.value);
+                                                }}
+                                            />
+                                        </StminiContent>
+                                    </Stlist>
+                                    <Stlist>
+                                        <StminiTitle>혈액형</StminiTitle>
+                                        <StminiContent>
+                                            <input
+                                                placeholder="자신의 혈액형을 입력하세요."
+                                                value={blood}
+                                                onChange={(e) => {
+                                                    setBlood(e.target.value);
+                                                }}
+                                            />
+                                        </StminiContent>
+                                    </Stlist>
+                                </StlistWrapper>
+                                <StlistWrapper></StlistWrapper>
+                            </>
+                        )}
+                    </div>
+                    {isEditing ? (
+                        // isEditing이 true일 때 나온다.
+                        <ButtonWrapper>
+                            <StEditBtn onClick={updateUserinfo}>프로필 수정 완료</StEditBtn>
+                            <StCancelBtn
                                 onClick={() => {
-                                    setIsEditing(true);
+                                    setIsEditing(false);
                                 }}
                             >
-                                프로필 수정
-                            </StEditBtn>
-                        )}
-                    </StInputBox>
-                </StUserwrapper>
-            </StWrapper>
+                                프로필 수정 취소
+                            </StCancelBtn>
+                        </ButtonWrapper>
+                    ) : (
+                        // isEditing이 false일 때 나온다.
+                        <StEditBtn
+                            onClick={() => {
+                                setIsEditing(true);
+                            }}
+                        >
+                            프로필 수정
+                        </StEditBtn>
+                    )}
+                </div>
+            </div>
         </>
     );
 };
 export default UserInfo;
-const StWrapper = styled.div`
-    background-color: white;
-    border: 1px solid var(--content-border-color);
-    border-radius: 10px;
-    display: flex;
-    margin: 10px auto;
-    width: 60%;
-    height: 400px;
-`;
-const StProfileTitle = styled.div`
-    font-size: 24px;
-    color: var(--bold-gray);
-    width: 60%;
-    padding: 0px 0px 0px 10px;
-`;
+// const StWrapper = styled.div`
+//     background-color: white;
+//     border: 1px solid var(--content-border-color);
+//     border-radius: 10px;
+//     display: flex;
+//     margin: 10px auto;
+//     width: 60%;
+//     height: 400px;
+// `;
+// const StProfileTitle = styled.div`
+//     font-size: 24px;
+//     color: var(--bold-gray);
+//     width: 60%;
+//     padding: 0px 0px 0px 10px;
+// `;
 const StProfileImage = styled.div`
     display: flex;
     justify-content: center;
@@ -341,15 +304,15 @@ const StProfileImage = styled.div`
     }
 `;
 
-const StClearImageButton = styled.button`
-    width: 180px;
-    height: 40px;
-    font-size: 18px;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-`;
+// const StClearImageButton = styled.button`
+//     width: 180px;
+//     height: 40px;
+//     font-size: 18px;
+//     color: white;
+//     border: none;
+//     border-radius: 5px;
+//     cursor: pointer;
+// `;
 
 const StUserInfo = styled.div`
     display: flex;
@@ -410,9 +373,9 @@ const StCancelBtn = styled.button`
         color: white;
     }
 `;
-const ProfilePointerAvatar = styled(Avatar)`
-    cursor: pointer;
-`;
+// const ProfilePointerAvatar = styled(Avatar)`
+//     cursor: pointer;
+// `;
 const Stinput = styled.input`
     display: none;
 `;
