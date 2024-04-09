@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import mbti_community from '../../assets/home/mbti_community.png';
-import mbti_matching from '../../assets/home/mbti_matching.png';
-import mbti_meeting from '../../assets/home/mbti_meeting.png';
-import mbti_test from '../../assets/home/mbti_test.png';
+import mbti_community from '../../assets/home/mbti_community.webp';
+import mbti_matching from '../../assets/home/mbti_matching.webp';
+import mbti_meeting from '../../assets/home/mbti_meeting.webp';
+import mbti_test from '../../assets/home/mbti_test.webp';
 import MainSlider from './MainSlider';
 
 const Home = () => {
@@ -16,13 +16,13 @@ const Home = () => {
             <StBox>
                 <StCards>
                     <StCard onClick={() => navigate('/mbti/test')}>
-                        <StTitle>MBTI 검사입니다</StTitle>
-                        <StContent>본인의 MBTI가 무엇인지 알아보세요 !</StContent>
+                        <StTitle>MBTI 검사</StTitle>
+                        <StContent>본인의 MBTI가 무엇인지 알아보세요</StContent>
                         <img src={mbti_test} />
                     </StCard>
                     <StCard onClick={() => navigate('/mbti/meeting')}>
                         <StTitle>MBTI 모임</StTitle>
-                        <StContent>여러 사람들과 소통하는 모임을 만들어 보세요 !</StContent>
+                        <StContent>여러 사람들과 소통하는 모임을 만들어 보세요</StContent>
                         <img src={mbti_meeting} />
                     </StCard>
                     <StCard onClick={() => navigate('/mbti/matching')}>
@@ -47,10 +47,7 @@ const StContainer = styled.div`
     height: 100vh;
 `;
 
-const StBox = styled.div`
-    /* margin: 0px auto; */
-    /* margin-bottom: 40px; */
-`;
+const StBox = styled.div``;
 
 const StCards = styled.div`
     display: flex;

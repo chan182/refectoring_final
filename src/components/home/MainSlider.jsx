@@ -1,14 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import styled from 'styled-components';
+import MbtiMatchinggBanner from '../../assets/home/mbtiMatchingBanner.webp';
+import MeetingBanner from '../../assets/home/mbtiPopularMeetingBanner.webp';
+import PeedBanner from '../../assets/home/mbtiPopularPeedBanner.webp';
+import MbtiTestBanner from '../../assets/home/mbtiTestBanner.webp';
 import moveArrow from '../../assets/home/moveArrow.png';
-import PeedBanner from '../../assets/home/mbtiPopularPeedBanner.jpg';
-import MeetingBanner from '../../assets/home/mbtiPopularMeetingBanner.jpg';
-import MbtiTestBanner from '../../assets/home/mbtiTestBanner.jpg';
-import MbtiMatchinggBanner from '../../assets/home/mbtiMatchingBanner.jpg';
-import { useNavigate } from 'react-router-dom';
 
 const MainSlider = () => {
     const nav = useNavigate();
