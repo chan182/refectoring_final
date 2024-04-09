@@ -28,17 +28,17 @@ const Footer = () => {
 export default Footer;
 
 const StPostingBox = styled.div`
-    width: 100%;
-    height: 140px;
+    /* width: 100%; */
+    /* height: 140px; */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     /* position: absolute; */
-    bottom: 0;
+    /* bottom: 0;
     border: 1px solid var(--box-border-color);
     border-width: 1px 0 0 0;
-    background-color: var(--light-gray);
+    background-color: var(--light-gray); */
 `;
 
 const StLogo = styled.div`

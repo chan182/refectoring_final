@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { RxHamburgerMenu } from 'react-icons/rx';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -73,18 +74,15 @@ const Header = () => {
                                 {isOpen && <MainProfile toggleDropdown={toggleDropdown} />}
                             </StProfileBox>
                         ) : (
-                            <>
+                            // 반응형웹 ( ~1250px none)
+                            <StloginBox>
                                 <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
                                 <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
-                            </>
+                            </StloginBox>
                         )}
                     </StRightDiv>
                     {isMobileMenuOpen && (
                         <StMobileMenu>
-                            <StMobileMenuItem onClick={() => navigate('/mbti/test')}>MBTI 검사</StMobileMenuItem>
-                            <StMobileMenuItem onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StMobileMenuItem>
-                            <StMobileMenuItem onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StMobileMenuItem>
-                            <StMobileMenuItem onClick={() => navigate('/mbti/community')}>커뮤니티</StMobileMenuItem>
                             {user ? (
                                 <StProfileBoxMobile ref={mainProfileRef}>
                                     <StProfileDiv ref={dropBtnRef} onClick={toggleDropdown}>
@@ -99,16 +97,18 @@ const Header = () => {
                                 </StProfileBoxMobile>
                             ) : (
                                 <>
-                                    <StLoginBtn onClick={() => navigate('/login')}>로그인</StLoginBtn>
-                                    <StSignupBtn onClick={() => navigate('/signup')}>회원가입</StSignupBtn>
+                                    <StMobileMenuItem onClick={() => navigate('/login')}>로그인</StMobileMenuItem>
+                                    <StMobileMenuItem onClick={() => navigate('/signup')}>회원가입</StMobileMenuItem>
                                 </>
                             )}
+                            <StMobileMenuItem onClick={() => navigate('/mbti/test')}>MBTI 검사</StMobileMenuItem>
+                            <StMobileMenuItem onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StMobileMenuItem>
+                            <StMobileMenuItem onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StMobileMenuItem>
+                            <StMobileMenuItem onClick={() => navigate('/mbti/community')}>커뮤니티</StMobileMenuItem>
                         </StMobileMenu>
                     )}
                     <StBurgerMenu onClick={toggleMobileMenu}>
-                        <div />
-                        <div />
-                        <div />
+                        <RxHamburgerMenu size={30} />
                     </StBurgerMenu>
                 </StDiv>
             </StPositionBox>
@@ -170,20 +170,12 @@ const StBurgerMenu = styled.div`
     flex-direction: column;
     cursor: pointer;
 
-    div {
-        width: 25px;
-        height: 3px;
-        background-color: #333;
-        margin: 3px 0;
-        transition: transform 0.3s, opacity 0.3s;
-    }
-
     &:hover div {
         opacity: 0.7;
     }
-
+    /* ~ 1250px */
     @media (max-width: 1250px) {
-        display: flex;
+        display: block;
     }
 `;
 
@@ -230,6 +222,13 @@ const StP = styled.p`
 
     &:hover {
         transform: scale(1.15);
+    }
+`;
+
+const StloginBox = styled.div`
+    display: flex;
+    @media screen and (max-width: 1250px) {
+        display: none;
     }
 `;
 
