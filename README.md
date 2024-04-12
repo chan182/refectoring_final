@@ -8,6 +8,16 @@
 - 주제: 각기 다른 MBTI를 가진 사람들이 자유롭게 소통하고, 모임을 통해 인연을 쌓아갈 수 있는 커뮤니티 웹사이트 
 - 내용: MBTI를 검사할 수 있는 서비스, MBTI 궁합을 알아볼 수 있는 서비스, 모임을 만들고 친목을 도모할 수 있는 서비스, 자유롭게 게시글을 작성하고 댓글을 남기며 소통할 수 있는 커뮤니티 서비스를 지원하는 웹사이트
 
+1. 유저가 회원가입을 한 후 입력한 정보는 recoil을 사용하여 전역적으로 관리하게 됩니다.
+
+ ![image](https://github.com/chan182/refectoring_final/assets/139675355/079b1599-6988-4872-a73d-30c0dc8d36b8)
+
+※ router.jsx 에서 useEffect를 사용하여 렌더링 시 해당 유저의 db에 정보가 있는지 확인합니다.
+![image](https://github.com/chan182/refectoring_final/assets/139675355/89d6fb00-22d8-4bd0-bf9d-0882ffc624b3)
+
+
+
+
 ### 👥 팀 소개
 
 - 팀명: 6사시미
