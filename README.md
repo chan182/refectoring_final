@@ -13,6 +13,7 @@
  ![image](https://github.com/chan182/refectoring_final/assets/139675355/079b1599-6988-4872-a73d-30c0dc8d36b8)
 
 ※ router.jsx 에서 useEffect를 사용하여 렌더링 시 해당 유저의 db에 정보가 있는지 확인합니다.
+
 ![image](https://github.com/chan182/refectoring_final/assets/139675355/89d6fb00-22d8-4bd0-bf9d-0882ffc624b3)
 
 
