@@ -6,22 +6,22 @@ import KakaoLogin from '../components/login/KakaoLogin';
 import CommunityWrite from '../components/mbti_community/CommunityWrite';
 import { auth, db } from '../firebase/firebase.config';
 import Layout from '../layout/Layout';
+import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import MbtiCommunityDetailEditPage from '../pages/MbtiCommunityDetailEditPage';
 import MbtiCommunityDetailPage from '../pages/MbtiCommunityDetailPage';
 import MbtiCommunityPage from '../pages/MbtiCommunityPage';
 import MbtiMatchingPage from '../pages/MbtiMatchingPage';
 import MbtiMeetingCreatePage from '../pages/MbtiMeetingCreatePage';
+import MbtiMeetingPage from '../pages/MbtiMeetingPage';
+import MbtiTestPage from '../pages/MbtiTestPage';
 import MeetingDetailPage from '../pages/MeetingDetailPage';
 import ProfilePage from '../pages/ProfilePage';
 import PwChangePage from '../pages/PwChangePage';
 import SignupPage from '../pages/SignupPage';
 import { userAtom } from '../recoil/Atom';
-import HomePage from './../pages/HomePage';
-import MbtiMeetingPage from './../pages/MbtiMeetingPage';
-import MbtiTestPage from './../pages/MbtiTestPage';
-import GlobalColor from './../style/GlobalColor';
-import GlobalStyle from './../style/GlobalStyle';
+import GlobalColor from '../style/GlobalColor';
+import GlobalStyle from '../style/GlobalStyle';
 
 const Router = () => {
     const setUser = useSetRecoilState(userAtom);
@@ -34,10 +34,10 @@ const Router = () => {
                 // 데이터 가져오기
                 getDoc(docRef).then((docSnapshot) => {
                     const data = docSnapshot.data();
+                    console.log(data);
 
-                    setUser({ uid: user.uid, ...data });
+                    setUser({ ...data, uid: user.uid });
                 });
-                // console.log('Router.useEffect 실행 ==>', user);
             } else {
                 setUser(null);
             }

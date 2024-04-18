@@ -121,7 +121,6 @@ const MbtiCommunity = () => {
                             src={data.communityImage}
                         />
                         <StTitleWrapper>
-                            <StCommunityTitle>{data.title} </StCommunityTitle>
                             <StButton
                                 onClick={() => {
                                     handleLike(id);
@@ -275,19 +274,17 @@ const SteditButton = styled.div`
 `;
 
 const StCardList = styled.div`
-    max-width: 956px;
-
-    border-radius: 26px;
-    border: 1px solid #ededed;
     background: #fff;
     margin: 0 auto;
     margin-bottom: 30px;
+    /* background-color: pink; */
+    width: 500px;
 `;
 
 const StCommunityCardImg = styled.img`
     display: flex;
-    width: 924px;
-    height: 350px;
+    width: 468px;
+    height: 468px;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -299,24 +296,22 @@ const StCommunityCardImg = styled.img`
 `;
 
 const StTitleWrapper = styled.div`
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
     margin: 0px auto 4px 18px;
 `;
 
 const StCommunityTitle = styled.div`
     color: #000;
-    font-size: 25px;
+    font-size: 2rem;
     font-style: normal;
     font-weight: 500;
     line-height: 120%;
+    /* background-color: red; */
 `;
 
 const StButton = styled.div`
     cursor: pointer;
-    display: flex;
     gap: 10px;
+    /* background-color: yellow; */
 `;
 
 const StCommunityContent = styled.div`

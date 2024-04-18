@@ -25,7 +25,6 @@ const Community = () => {
             <Stbolder>
                 <Stcontents>
                     {filteredData.map((item) => {
-                        console.log(item.data.title);
                         return (
                             <StCardWrapper
                                 onClick={() => {

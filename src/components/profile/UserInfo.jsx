@@ -92,16 +92,14 @@ const UserInfo = () => {
 
     return (
         <>
-            <div className="text-black">마이페이지</div>
-            <div className="flex gap-4 ">
+            {/* <div className="text-black">마이페이지</div> */}
+            <StCardWrapper>
                 <>
                     <div className="flex">
                         {isEditing === true ? (
-                            <label
-                                className="bg-black  flex justify-center items-center w-[200px] h-[200px] rounded-full"
-                                htmlFor="inputFile"
-                            >
+                            <StLabel htmlFor="inputFile">
                                 <img
+                                    width={300}
                                     className="rounded-full w-[200px] h- "
                                     alt="profile"
                                     src={previewURL || (user && user.imageUrl) || profileImage}
@@ -109,9 +107,10 @@ const UserInfo = () => {
                                     size="large"
                                 />
                                 <input type="file" id="inputFile" accept="image/*" onChange={fileSelectHandler} />
-                            </label>
+                            </StLabel>
                         ) : (
                             <img
+                                width={300}
                                 className="rounded-full w-[250px]"
                                 alt="profile"
                                 src={(user && user.imageUrl) || profileImage}
@@ -119,7 +118,7 @@ const UserInfo = () => {
                         )}
                     </div>
                 </>
-                <div className="bg-yellow w-[500px]">
+                <StContentWrapper>
                     <div>
                         {isEditing === false ? (
                             <>
@@ -260,8 +259,8 @@ const UserInfo = () => {
                             프로필 수정
                         </StEditBtn>
                     )}
-                </div>
-            </div>
+                </StContentWrapper>
+            </StCardWrapper>
         </>
     );
 };
@@ -281,6 +280,17 @@ export default UserInfo;
 //     width: 60%;
 //     padding: 0px 0px 0px 10px;
 // `;
+
+const StLabel = styled.label`
+    display: flex;
+    flex-direction: column;
+`;
+
+const StCardWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: center;
+`;
 const StProfileImage = styled.div`
     display: flex;
     justify-content: center;
@@ -302,6 +312,10 @@ const StProfileImage = styled.div`
             color: white;
         }
     }
+`;
+const StContentWrapper = styled.div`
+    width: 50%;
+    padding-left: 3rem;
 `;
 
 // const StClearImageButton = styled.button`
