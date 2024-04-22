@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import modal_logo from '../../assets/home/mbti_matching.webp';
 import mcoiLogo from '../../assets/mbtiMatching/Group 10.png';
 import * as T from '../mbti_test/mbtiTestStyle';
 import { mbtiInfo } from './mbtiInfo';
-import Swal from 'sweetalert2';
-import modal_logo from '../../assets/home/mbti_matching.png';
 import { MBTIimage } from './textImage';
 // import { mbtiInfo } from './MBTIinformation/ENFJ';
 
