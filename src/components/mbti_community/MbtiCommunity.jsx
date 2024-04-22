@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import { getData } from '../../api/board';
+import { getBoardData } from '../../api/board';
 import blackheart from '../../assets/community/blackheart.svg';
 import fullheart from '../../assets/community/fullheart.svg';
 import heart from '../../assets/community/heart.svg';
@@ -35,7 +35,7 @@ const MbtiCommunity = () => {
     ///////// 데이터 가져오기 및 filter 검색
     const { data } = useQuery({
         queryKey: ['communities', searchKeyWord],
-        queryFn: getData
+        queryFn: getBoardData
     });
 
     const filteredData = data?.filter(({ data }) => data.title.includes(searchKeyWord));

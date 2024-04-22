@@ -80,7 +80,6 @@ const MbtiMatching = () => {
                 <StScreenBox2>
                     <StTestContainer>
                         <StMatchingComment>
-                            {' '}
                             {mbtiInfo[mbti1Type] && mbtiInfo[mbti2Type]
                                 ? '궁합이 나왔어요!'
                                 : '유효하지 않은 MBTI 유형입니다!'}

@@ -117,8 +117,6 @@ const Header = () => {
 export default Header;
 
 const StBox = styled.div`
-    position: relative;
-    z-index: 1;
     width: 100%;
     height: 80px;
 `;
@@ -126,7 +124,7 @@ const StBox = styled.div`
 const StPositionBox = styled.div`
     width: 100%;
     height: 80px;
-    position: fixed;
+
     justify-content: center;
     background-color: white;
     border-width: 0 0 1px 0;

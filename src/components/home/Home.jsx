@@ -1,108 +1,87 @@
 import React from 'react';
-<<<<<<< HEAD
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import mbti_community from '../../assets/home/mbti_community.png';
-import mbti_matching from '../../assets/home/mbti_matching.png';
-import mbti_meeting from '../../assets/home/mbti_meeting.png';
-import mbti_test from '../../assets/home/mbti_test.png';
-=======
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { getBoardData } from '../../api/board';
 import { getData } from '../../api/meeting';
 import mbti_community from '../../assets/home/mbti_community.webp';
 import mbti_matching from '../../assets/home/mbti_matching.webp';
 import mbti_meeting from '../../assets/home/mbti_meeting.webp';
 import mbti_test from '../../assets/home/mbti_test.webp';
->>>>>>> 6793bd2a82989be5719d07c48574b43a198f0369
 import MainSlider from './MainSlider';
 
 const Home = () => {
     const navigate = useNavigate();
+
     const { data } = useQuery({
         queryKey: ['meet'],
         queryFn: getData
     });
+
+    const { boardData } = useQuery({
+        queryKey: ['communities'],
+        queryFn: getBoardData
+    });
     console.log(data);
+    const filtredData = data?.filter((item, index) => index < 5);
+    const filteredBoardData = boardData?.filter((item, index) => index < 5);
+
     return (
-        <StContainer>
+        <>
             <MainSlider />
             <StBox>
                 <StCards>
                     <StCard onClick={() => navigate('/mbti/test')}>
                         <StTitle>MBTI 검사</StTitle>
                         <StContent>본인의 MBTI가 무엇인지 알아보세요</StContent>
-                        <img src={mbti_test} />
+                        <img src={mbti_test} alt="testPage" />
                     </StCard>
                     <StCard onClick={() => navigate('/mbti/meeting')}>
                         <StTitle>MBTI 모임</StTitle>
                         <StContent>여러 사람들과 소통하는 모임을 만들어 보세요</StContent>
-                        <img src={mbti_meeting} />
+                        <img src={mbti_meeting} alt="meetingPage" />
                     </StCard>
                     <StCard onClick={() => navigate('/mbti/matching')}>
                         <StTitle>MBTI 궁합</StTitle>
                         <StContent>우리의 MBTI 궁합이 궁금해요 !</StContent>
-                        <img src={mbti_matching} />
+                        <img src={mbti_matching} alt="matchingPage" />
                     </StCard>
                     <StCard onClick={() => navigate('/mbti/community')}>
                         <StTitle>커뮤니티</StTitle>
                         <StContent>다양한 사람들과 자유롭게 소통하세요 !</StContent>
-                        <img src={mbti_community} />
+                        <img src={mbti_community} alt="communityPage" />
                     </StCard>
                 </StCards>
             </StBox>
-            <div>
-                {data?.map((item) => {
-                    <>{item.data.name}</>;
+            <StTitle>인기 모임 Best 5 </StTitle>
+            <Stwrapper>
+                {filtredData?.map((item) => {
+                    return (
+                        <div key={item.id}>
+                            <StImg src={item.data.repreImg} />
+                        </div>
+                    );
                 })}
-            </div>
-        </StContainer>
+            </Stwrapper>{' '}
+        </>
     );
 };
 
 export default Home;
 
-const StContainer = styled.div`
-<<<<<<< HEAD
-    width: 100%;
-    height: 80vh;
-=======
-    height: 100vh;
->>>>>>> 6793bd2a82989be5719d07c48574b43a198f0369
+const StBox = styled.div`
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
 `;
-
-const StBox = styled.div``;
 
 const StCards = styled.div`
     display: flex;
     width: 80%;
     padding-top: 40px;
-<<<<<<< HEAD
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-`;
-
-const StComponent = styled.div`
-    width: 23%; /* 기본 너비 설정 */
-    height: 100%;
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0px 0px 3px #d3d3d3;
-    position: relative;
-    margin-bottom: 20px; /* 아래 여백 추가 */
-
-    & img {
-        width: 70%;
-        position: absolute;
-        padding-right: 5%;
-        bottom: 0;
-        right: 0;
-    }
-=======
-    flex-wrap: wrap;
-    margin: 0px auto;
 `;
 
 const StCard = styled.div`
@@ -114,8 +93,6 @@ const StCard = styled.div`
 
     border-radius: 16px;
     padding: 30px;
->>>>>>> 6793bd2a82989be5719d07c48574b43a198f0369
-
     &:hover {
         /* transform: scale(1.05); */
         box-shadow: 0px 1px 1px 1px var(--content-border-color);
@@ -142,11 +119,31 @@ const StCard = styled.div`
 `;
 
 const StTitle = styled.p`
-    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 2rem;
+    padding: 2rem;
 `;
 
 const StContent = styled.p`
     color: #6b6a6a;
     font-size: 1.2rem;
     margin-top: 20px;
+`;
+
+const Stwrapper = styled.div`
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 3rem;
+
+    border-radius: 1rem;
+    padding: 2rem;
+`;
+
+const StImg = styled.img`
+    width: 200px;
+    height: 200px;
+    border-radius: 2rem;
 `;

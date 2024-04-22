@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { getData } from '../../api/board';
+import { getBoardData } from '../../api/board';
 import eyeImoge from '../../assets/profile/eye.svg';
 import heartImoge from '../../assets/profile/heart.svg';
 import messageSquare from '../../assets/profile/message-square.svg';
@@ -15,7 +15,7 @@ const Community = () => {
     const navigate = useNavigate();
     const { data } = useQuery({
         queryKey: ['communities'],
-        queryFn: getData
+        queryFn: getBoardData
     });
 
     const filteredData = Array.isArray(data) ? data.filter((item) => item.data.id === user?.uid) : [];
