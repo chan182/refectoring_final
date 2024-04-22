@@ -1,6 +1,8 @@
 import React from 'react';
+import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { getData } from '../../api/meeting';
 import mbti_community from '../../assets/home/mbti_community.webp';
 import mbti_matching from '../../assets/home/mbti_matching.webp';
 import mbti_meeting from '../../assets/home/mbti_meeting.webp';
@@ -9,7 +11,11 @@ import MainSlider from './MainSlider';
 
 const Home = () => {
     const navigate = useNavigate();
-
+    const { data } = useQuery({
+        queryKey: ['meet'],
+        queryFn: getData
+    });
+    console.log(data);
     return (
         <StContainer>
             <MainSlider />
@@ -37,6 +43,11 @@ const Home = () => {
                     </StCard>
                 </StCards>
             </StBox>
+            <div>
+                {data?.map((item) => {
+                    <>{item.data.name}</>;
+                })}
+            </div>
         </StContainer>
     );
 };
