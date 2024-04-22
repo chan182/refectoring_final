@@ -52,12 +52,10 @@ const Header = () => {
                         <StLogo>
                             <img src={logo} onClick={() => navigate('/')} />
                         </StLogo>
-                        {/* PC 화면 메뉴 */}
                         <StP onClick={() => navigate('/mbti/test')}>MBTI 검사</StP>
                         <StP onClick={() => navigate('/mbti/meeting')}>MBTI 모임</StP>
                         <StP onClick={() => navigate('/mbti/matching')}>MBTI 궁합</StP>
                         <StP onClick={() => navigate('/mbti/community')}>커뮤니티</StP>
-                        {/* PC 화면 메뉴 끝 */}
                     </StLeftDiv>
                     <StRightDiv>
                         {user ? (
@@ -129,17 +127,17 @@ const StPositionBox = styled.div`
     width: 100%;
     height: 80px;
     position: fixed;
-    display: flex;
     justify-content: center;
     background-color: white;
     border-width: 0 0 1px 0;
 `;
 
 const StDiv = styled.div`
-    width: 75%;
+    width: 100%;
+    justify-content: space-around;
+    margin: 0 auto;
     height: 80px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 `;
 
