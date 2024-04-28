@@ -1,32 +1,30 @@
-import React, { useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
-import styled from 'styled-components';
+import { useMutation } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { useRecoilValue } from 'recoil';
-import { useMutation, useQueryClient } from 'react-query';
-import { userAtom } from '../../recoil/Atom';
-import { addCommunity } from '../../api/board';
-import modal_logo from '../../assets/home/mbti_community.png';
-import { v4 as uuidv4 } from 'uuid';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import { storage } from '../../firebase/firebase.config';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useRecoilValue } from 'recoil';
+import styled from 'styled-components';
 import Swal from 'sweetalert2';
+import { v4 as uuidv4 } from 'uuid';
+import { addCommunity } from '../../api/board';
 import backImage from '../../assets/community/backOImage.png';
+import modal_logo from '../../assets/home/mbti_community.png';
+import { storage } from '../../firebase/firebase.config';
+import { userAtom } from '../../recoil/Atom';
 
 export default function UpdateTest() {
     const [imageFile, setImageFile] = useState();
     const user = useRecoilValue(userAtom);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const queryClient = useQueryClient();
     const nav = useNavigate();
 
-    // 게시글 추가하기
-    const mutationAdd = useMutation((newCommunity) => addCommunity(newCommunity), {
-        onSuccess: (data) => {
-            queryClient.invalidateQueries('communties');
-        }
+    // 추가하기
+    const mutation = useMutation({
+        mutationFn: (newCommunity) => addCommunity(newCommunity)
     });
+
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
         console.log(file);
@@ -76,7 +74,7 @@ export default function UpdateTest() {
                 communityImage: userimageUrl
             };
 
-            mutationAdd.mutate(newCommunity);
+            mutation.mutate(newCommunity);
             nav('/mbti/community/');
         } catch {
             console.log('실패하였습니다.');
@@ -117,7 +115,7 @@ export default function UpdateTest() {
                     )}
                 </StPeed>
                 <StBtns>
-                    <StEditBtn onClick={handleAddCommunity}>저장하기</StEditBtn>
+                    <StEditBtn onClick={handleAddCommunity}>발행하기</StEditBtn>
                     <StCancelBtn onClick={() => nav('/mbti/community')}>글 작성 취소하기</StCancelBtn>
                 </StBtns>
             </StDiv>

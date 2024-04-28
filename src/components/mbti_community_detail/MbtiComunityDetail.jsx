@@ -1,15 +1,16 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { React, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import { communityDetailGetDate, deleteBoard } from '../../api/boardDetail';
 import heart from '../../assets/community/blackheart.svg';
 import eyeImoge from '../../assets/community/eyeImoge.svg';
 import messageImoge from '../../assets/community/messageImoge.svg';
-import { communityDetailGetDate, deleteBoard, updateBoard } from '../../api/boardDetail';
-import { useRecoilValue } from 'recoil';
-import { userAtom } from '../../recoil/Atom';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
+import { userAtom } from '../../recoil/Atom';
+import Loading from '../common/Loading';
 
 const MbtiComunityDetail = () => {
     const user = useRecoilValue(userAtom);
@@ -20,16 +21,17 @@ const MbtiComunityDetail = () => {
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
 
-    const { isLoading, isError, data } = useQuery({
-        queryKey: ['communities'],
+    // 데이터 가져오기
+    const { isLoading, data } = useQuery({
+        queryKey: ['commnuity'],
         queryFn: () => communityDetailGetDate(params.id)
     });
-    console.log(data);
 
-    /// 삭제하기
-    const DeleteBoardMutation = useMutation((id) => deleteBoard(id), {
-        onSuccess: (data) => {
-            queryClient.invalidateQueries('communities');
+    // 삭제하기
+    const mutation = useMutation({
+        mutationFn: (paramsId) => deleteBoard(paramsId),
+        onSuccess: () => {
+            queryClient.invalidateQueries('commnuity');
             navigate('/mbti/community');
         }
     });
@@ -40,34 +42,30 @@ const MbtiComunityDetail = () => {
             showDenyButton: true,
             confirmButtonText: 'YES'
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 Swal.fire({ imageUrl: modal_logo, title: '삭제되었습니다.' });
-                DeleteBoardMutation.mutate(params.id);
+                mutation.mutate(params.id);
             }
         });
     };
 
-    // 수정하기
-    const UpdateMutation = useMutation((paramsId, title) => updateBoard(paramsId, title), {
-        onSuccess: (data) => {
-            queryClient.invalidateQueries('communities');
-        }
-    });
+    // // 수정하기
+    // const UpdateMutation = useMutation((paramsId, title) => updateBoard(paramsId, title), {
+    //     onSuccess: (data) => {
+    //         queryClient.invalidateQueries('communities');
+    //     }
+    // });
 
-    const handleUpdateCommunity = async (paramsId) => {
-        console.log(title);
-        UpdateMutation.mutate(paramsId, title);
-    };
+    // const handleUpdateCommunity = async (paramsId) => {
+    //     console.log(title);
+    //     UpdateMutation.mutate(paramsId, title);
+    // };
 
     // 데이터 로딩 !
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Loading />;
     }
 
-    if (isError) {
-        return <div>Error loading data</div>;
-    }
     return (
         <StCardWrapper>
             <StCardImage src={data?.communityImage} alt="컨텐츠의 사진" />
@@ -132,7 +130,7 @@ const MbtiComunityDetail = () => {
                 <>
                     <button
                         onClick={() => {
-                            handleUpdateCommunity(params.id);
+                            // handleUpdateCommunity(params.id);
                         }}
                     >
                         등록하기
@@ -155,6 +153,8 @@ const MbtiComunityDetail = () => {
 export default MbtiComunityDetail;
 
 const StCardWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
     width: 1200px;
     border-radius: 26px;
     border: 1px solid #ededed;
@@ -163,10 +163,11 @@ const StCardWrapper = styled.div`
 `;
 
 const StCardImage = styled.img`
-    width: 1160px;
-    height: 540px;
+    width: 468px;
+    height: 468px;
     border-radius: 16px;
-    margin: 20px 20px 16px 20px;
+    padding: 2rem;
+    border-radius: 1rem;
 `;
 
 const StTitleWrapper = styled.div`

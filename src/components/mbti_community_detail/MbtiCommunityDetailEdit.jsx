@@ -1,20 +1,18 @@
-import { useParams } from 'react-router-dom';
-import React, { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import styled from 'styled-components';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { userAtom } from '../../recoil/Atom';
-import { addCommunity } from '../../api/board';
-import modal_logo from '../../assets/home/mbti_community.png';
-import { v4 as uuidv4 } from 'uuid';
-import { deleteObject, getDownloadURL, ref, uploadString } from 'firebase/storage';
-import { storage } from '../../firebase/firebase.config';
+import styled from 'styled-components';
 import Swal from 'sweetalert2';
+import { v4 as uuidv4 } from 'uuid';
+import { communityDetailGetDate, updateBoard } from '../../api/boardDetail';
 import backImage from '../../assets/community/backOImage.png';
-import { communityDetailGetDate } from '../../api/boardDetail';
-import { updateBoard } from '../../api/boardDetail';
+import modal_logo from '../../assets/home/mbti_community.png';
+import { storage } from '../../firebase/firebase.config';
+import { userAtom } from '../../recoil/Atom';
 
 const MbtiCommunityDetailEdit = () => {
     const params = useParams();
@@ -22,22 +20,25 @@ const MbtiCommunityDetailEdit = () => {
     const user = useRecoilValue(userAtom);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const queryClient = useQueryClient();
+
     const navigate = useNavigate();
 
-    // 기존 api 코드 사용하여 데이터 정보 가져오기
+    //수정하기
+    const mutation = useMutation({
+        mutationFn: (updateCommunity) => updateBoard(params.id, updateCommunity)
+    });
 
+    // 가져오기
     const { data } = useQuery({
-        queryKey: ['communities'],
+        queryKey: ['community'],
         queryFn: () => communityDetailGetDate(params.id)
     });
 
-    // 첫 렌더 시 기존 데이터에 있는 제목, 내용, 이미지 가져오기
     useEffect(() => {
         if (user) {
-            setTitle(data.title);
-            setContent(data.content);
-            setImageFile(data.communityImage);
+            setTitle(data?.title);
+            setContent(data?.content);
+            setImageFile(data?.communityImage);
         }
     }, []);
 
@@ -55,15 +56,6 @@ const MbtiCommunityDetailEdit = () => {
     const handleDeleteImage = () => {
         setImageFile(null);
     };
-
-    // 게시글 수정하기
-
-    const mutationUpdate = useMutation((updateCommunity) => updateBoard(params.id, updateCommunity), {
-        onSuccess: (data) => {
-            queryClient.invalidateQueries('communties');
-            console.log('성공 !!');
-        }
-    });
 
     const handleUpdateCommuntiy = async () => {
         console.log(1111);
@@ -90,8 +82,8 @@ const MbtiCommunityDetailEdit = () => {
                 createdAt: now.format('YY-MM-DD HH:mm:ss'),
                 communityImage: newImageUrl || data.communityImage
             };
-            console.log(title);
-            mutationUpdate.mutate(updateCommunity);
+
+            mutation.mutate(updateCommunity);
             Swal.fire({
                 text: '',
                 imageUrl: modal_logo
@@ -136,7 +128,7 @@ const MbtiCommunityDetailEdit = () => {
                     )}
                 </StPeed>
                 <StBtns>
-                    <StEditBtn onClick={handleUpdateCommuntiy}>저장하기</StEditBtn>
+                    <StEditBtn onClick={handleUpdateCommuntiy}>수정하기</StEditBtn>
                     <StCancelBtn onClick={() => navigate('/mbti/community')}>글 작성 취소하기</StCancelBtn>
                 </StBtns>
             </StDiv>

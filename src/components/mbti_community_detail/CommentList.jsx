@@ -1,23 +1,15 @@
+import React, { useState } from 'react';
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import {
-    addComment,
-    deleteComment,
-    getCommentsByCreatedAt,
-    getCommentsByLikeCount,
-    switchComment
-} from '../../api/comment';
+import { addComment, deleteComment, getCommentsByCreatedAt, modifyCommnetHandler } from '../../api/comment';
 import upVector from '../../assets/community/Vector-up.svg';
 import blackVector from '../../assets/community/blackVector.svg';
 import dropdown from '../../assets/community/dropdown.png';
-import modal_logo from '../../assets/home/mbti_community.png';
-import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
 
 const CommentList = () => {
@@ -32,153 +24,95 @@ const CommentList = () => {
     const queryClient = useQueryClient();
     const [selectedOption, setSelectedOption] = useState('latest');
     const navigate = useNavigate();
+    const now = dayjs();
     const [isOpen, setIsOpen] = useState(true);
     const [selectedCommentId, setSelectedCommentId] = useState();
 
-    // console.log('데이터 로딩 중 !!!!!');
-    const getCommentsQueryFn = () => {
-        // console.log(selectedOption);
-        if (selectedOption === 'latest') {
-            return getCommentsByCreatedAt(params.id);
-        } else if (selectedOption === 'best') {
-            // 좋아요가 많은 순으로 가져오는 함수를 사용하도록 변경
-            return getCommentsByLikeCount(params.id);
+    //fetching
+    const { data } = useQuery({
+        queryKey: ['comments'],
+        queryFn: () => getCommentsByCreatedAt(params.id)
+    });
+
+    // 추가
+    const mutation = useMutation({
+        mutationFn: (newComment) => addComment(newComment, params.id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['comments'] });
         }
-    };
+    });
+
+    // 수정
+    const updateMutation = useMutation({
+        mutationFn: () => modifyCommnetHandler(userCommentId, params.id, updateComment),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['comments'] });
+            setEditMode(!editMode);
+        },
+        onError: () => {
+            console.log('실패');
+        }
+    });
+
+    // 삭제
+    const deleteMutation = useMutation({
+        mutationFn: (id) => deleteComment(id, params.id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['comments'] });
+        }
+    });
+
+    // const getCommentsQueryFn = () => {
+    //     // console.log(selectedOption);
+    //     if (selectedOption === 'latest') {
+    //         return getCommentsByCreatedAt(params.id);
+    //     } else if (selectedOption === 'best') {
+    //         // 좋아요가 많은 순으로 가져오는 함수를 사용하도록 변경
+    //         return getCommentsByLikeCount(params.id);
+    //     }
+    // };
+
     const handleToggleDropdown = (id) => {
         setIsOpen(!isOpen);
         setSelectedCommentId(id);
     };
 
-    const { data } = useQuery({
-        queryKey: ['comments', selectedOption],
-        queryFn: getCommentsQueryFn
-    });
-    // console.log(data[0].id);
-
-    // 댓글 추가하기
-    const mutationAdd = useMutation((newComment) => addComment(newComment, params.id), {
-        onSuccess: (data) => {
-            queryClient.invalidateQueries('comments');
-            console.log('성공 !!');
-        }
-    });
-
-    const handleAddComment = async (paramsId) => {
-        if (!user) {
-            Swal.fire({
-                imageUrl: modal_logo,
-                title: '로그인한 유저만 댓글작성이 가능합니다.'
-            });
-            return navigate('/login');
-        }
-        const now = dayjs();
-
-        const newComment = {
-            ImageUrl: user.imageUrl,
-            content,
-            createdAt: now.format('YY-MM-DD HH:mm:ss'),
-            nickname: user.nickname,
-            id: user.uid,
-            likes: '',
-            likecount: 0
-        };
-        setContent('');
-
-        mutationAdd.mutate(newComment, paramsId);
-    };
-
-    // 댓글 삭제하기
-
-    const DeleteMutation = useMutation((id) => deleteComment(id, params.id), {
-        onSuccess: (data) => {
-            queryClient.invalidateQueries('comments');
-        }
-    });
-
-    const handleDeleteComment = async (id) => {
-        Swal.fire({
-            imageUrl: modal_logo,
-            title: '정말 삭제하시겠습니까?',
-            showDenyButton: true,
-            confirmButtonText: 'YES'
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                Swal.fire({ imageUrl: modal_logo, title: '삭제되었습니다.' });
-                DeleteMutation.mutate(id);
-            }
-        });
-    };
-
-    // 댓글 수정하기
-
-    const UpdateMutation = useMutation((id) => switchComment(id, params.id, updateComment), {
-        onSuccess: (data) => {
-            queryClient.invalidateQueries('comments');
-            setIsOpen(!isOpen);
-        }
-    });
-
-    const handlerUpdateComment = async (id) => {
-        UpdateMutation.mutate(id);
-    };
-
-    // 댓글 갯수 세기 (비효율 코드..?)
-
-    useEffect(() => {
-        const fetchCommentCount = async () => {
-            try {
-                const communityRef = doc(db, 'communities', params.id);
-                const commentsQuery = query(collection(communityRef, 'comments'));
-                const commentsSnapshot = await getDocs(commentsQuery);
-                const totalComments = commentsSnapshot.size;
-                setCommentCount(totalComments);
-
-                // 여기에서 totalComments를 원하는 대로 활용할 수 있습니다.
-            } catch (error) {
-                console.error('댓글 갯수를 가져오는 중 에러 발생:', error);
-            }
-        };
-        fetchCommentCount();
-    }, [params.id]);
-
     // 좋아요 기능 !! ! !!
 
-    const mutation = useMutation(
-        async (postId) => {
-            console.log(postId);
-            console.log(params.id);
-            const postRef = doc(db, 'communities', params.id, 'comments', postId);
-            // console.log(postRef);
-            const postDoc = await getDoc(postRef);
-            const postData = postDoc.data();
-            // console.log(postData.likes);
-            // console.log(user.uid);
-            if (user?.uid && postData.likes?.includes(user.uid)) {
-                return updateDoc(postRef, {
-                    likes: arrayRemove(user.uid),
-                    likecount: postData.likecount ? postData.likecount - 1 : 0
-                });
-            } else {
-                return updateDoc(postRef, {
-                    likes: arrayUnion(user.uid),
-                    likecount: postData.likecount ? postData.likecount + 1 : 1
-                });
-            }
-        },
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(['comments']);
-            }
-        }
-    );
+    // const mutation = useMutation(
+    //     async (postId) => {
+    //         console.log(postId);
+    //         console.log(params.id);
+    //         const postRef = doc(db, 'communities', params.id, 'comments', postId);
+    //         // console.log(postRef);
+    //         const postDoc = await getDoc(postRef);
+    //         const postData = postDoc.data();
+    //         // console.log(postData.likes);
+    //         // console.log(user.uid);
+    //         if (user?.uid && postData.likes?.includes(user.uid)) {
+    //             return updateDoc(postRef, {
+    //                 likes: arrayRemove(user.uid),
+    //                 likecount: postData.likecount ? postData.likecount - 1 : 0
+    //             });
+    //         } else {
+    //             return updateDoc(postRef, {
+    //                 likes: arrayUnion(user.uid),
+    //                 likecount: postData.likecount ? postData.likecount + 1 : 1
+    //             });
+    //         }
+    //     },
+    //     {
+    //         onSuccess: () => {
+    //             queryClient.invalidateQueries(['comments']);
+    //         }
+    //     }
+    // );
 
-    const handleLke = (postId) => {
-        // console.log(postId);
-        // console.log(params.id);
-        mutation.mutate(postId);
-    };
+    // const handleLke = (postId) => {
+    //     // console.log(postId);
+    //     // console.log(params.id);
+    //     mutation.mutate(postId);
+    // };
 
     return (
         <Stwrapper>
@@ -216,7 +150,23 @@ const CommentList = () => {
                         </StButton>
                         <StButton
                             onClick={() => {
-                                handleAddComment(params.id);
+                                if (!user) {
+                                    Swal.fire({
+                                        title: '로그인한 유저만 댓글작성이 가능합니다.'
+                                    });
+                                    return navigate('/login');
+                                }
+                                const newComment = {
+                                    ImageUrl: user.imageUrl,
+                                    content,
+                                    createdAt: now.format('YY-MM-DD HH:mm:ss'),
+                                    nickname: user.nickname,
+                                    id: user.uid,
+                                    likes: '',
+                                    likecount: 0
+                                };
+                                setContent('');
+                                mutation.mutate(newComment);
                             }}
                         >
                             댓글
@@ -260,14 +210,14 @@ const CommentList = () => {
                                                     setEditMode(!editMode);
                                                     setUserCommentId(id);
                                                     setUpdateComment(data?.content);
-                                                    handlerUpdateComment(id);
                                                 }}
                                             >
                                                 댓글 수정
                                             </StEditButton>
                                             <StDeleteButton
                                                 onClick={() => {
-                                                    handleDeleteComment(id);
+                                                    setUserCommentId(id);
+                                                    deleteMutation.mutate(id);
                                                 }}
                                             >
                                                 댓글 삭제
@@ -281,12 +231,22 @@ const CommentList = () => {
 
                             <Stcomment>
                                 {editMode && userCommentId === id ? (
-                                    <Stcomment>
-                                        <StInput
-                                            value={updateComment}
-                                            onChange={(e) => setUpdateComment(e.target.value)}
-                                        />
-                                    </Stcomment>
+                                    <form
+                                        onSubmit={(e) => {
+                                            console.log(id, updateComment);
+                                            e.preventDefault();
+                                            updateMutation.mutate(id, updateComment);
+                                        }}
+                                    >
+                                        <Stcomment>
+                                            <StInput
+                                                value={updateComment}
+                                                onChange={(e) => setUpdateComment(e.target.value)}
+                                            />
+                                        </Stcomment>
+                                        <button type="submit">입력</button>
+                                        <button>취소</button>
+                                    </form>
                                 ) : (
                                     <Stcomment>{data?.content}</Stcomment>
                                 )}
@@ -296,7 +256,7 @@ const CommentList = () => {
                                 <StUp>
                                     <button
                                         onClick={() => {
-                                            handleLke(id);
+                                            // handleLke(id);
                                         }}
                                     >
                                         {user?.uid && data?.likes?.includes(user?.uid) ? (

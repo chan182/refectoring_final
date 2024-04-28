@@ -1,4 +1,4 @@
-import { collection, deleteDoc, doc, getDoc, orderBy, query, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebase.config';
 
 // 가져오기
@@ -18,9 +18,6 @@ const deleteBoard = async (paramId) => {
 // 수정하기
 
 const updateBoard = async (paramId, updateCommunity) => {
-    console.log(paramId);
-    console.log(updateCommunity);
-
     const communityRef = doc(db, 'communities', paramId);
     await updateDoc(communityRef, updateCommunity);
 };

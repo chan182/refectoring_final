@@ -1,30 +1,26 @@
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
-import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getBoardData } from '../../api/board';
 import { getData } from '../../api/meeting';
 import mbti_community from '../../assets/home/mbti_community.webp';
 import mbti_matching from '../../assets/home/mbti_matching.webp';
 import mbti_meeting from '../../assets/home/mbti_meeting.webp';
 import mbti_test from '../../assets/home/mbti_test.webp';
+import Loading from '../common/Loading';
 import MainSlider from './MainSlider';
 
 const Home = () => {
     const navigate = useNavigate();
 
-    const { data } = useQuery({
-        queryKey: ['meet'],
+    const { data, isLoading } = useQuery({
+        queryKey: ['meetingList'],
         queryFn: getData
     });
-
-    const { boardData } = useQuery({
-        queryKey: ['communities'],
-        queryFn: getBoardData
-    });
-    console.log(data);
+    if (isLoading) {
+        return <Loading />;
+    }
     const filtredData = data?.filter((item, index) => index < 5);
-    const filteredBoardData = boardData?.filter((item, index) => index < 5);
 
     return (
         <>
@@ -62,7 +58,7 @@ const Home = () => {
                         </div>
                     );
                 })}
-            </Stwrapper>{' '}
+            </Stwrapper>
         </>
     );
 };

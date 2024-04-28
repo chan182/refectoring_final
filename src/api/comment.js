@@ -33,9 +33,9 @@ const deleteComment = async (id, paramId) => {
 
 // 댓글 수정하기
 
-const switchComment = async (id, paramsId, updateComment) => {
+const modifyCommnetHandler = async (id, paramsId, updateComment) => {
     const commentDocRef = doc(db, 'communities', paramsId, 'comments', id);
     await updateDoc(commentDocRef, { content: updateComment });
 };
 
-export { getCommentsByCreatedAt, addComment, deleteComment, switchComment, getCommentsByLikeCount };
+export { addComment, deleteComment, getCommentsByCreatedAt, getCommentsByLikeCount, modifyCommnetHandler };

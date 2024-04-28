@@ -1,7 +1,5 @@
-import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
-import _ from 'lodash';
-import React, { useCallback, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -10,10 +8,8 @@ import { getBoardData } from '../../api/board';
 import blackheart from '../../assets/community/blackheart.svg';
 import fullheart from '../../assets/community/fullheart.svg';
 import heart from '../../assets/community/heart.svg';
-import readingGlasses from '../../assets/community/search.svg';
-import modal_logo from '../../assets/home/mbti_community.png';
-import { db } from '../../firebase/firebase.config';
 import { userAtom } from '../../recoil/Atom';
+import Loading from '../common/Loading';
 
 const MbtiCommunity = () => {
     const user = useRecoilState(userAtom);
@@ -21,70 +17,72 @@ const MbtiCommunity = () => {
     const navigate = useNavigate();
     const [searchKeyWord, setSearchKeyWord] = useState('');
 
-    const handleSearchText = useCallback(
-        _.debounce((text) => {
-            setSearchKeyWord(text);
-        }, 2000),
-        []
-    );
+    // const handleSearchText = useCallback(
+    //     _.debounce((text) => {
+    //         setSearchKeyWord(text);
+    //     }, 2000),
+    //     []
+    // );
 
-    const handleChange = (e) => {
-        handleSearchText(e.target.value);
-    };
+    // const handleChange = (e) => {
+    //     handleSearchText(e.target.value);
+    // };
 
-    ///////// 데이터 가져오기 및 filter 검색
-    const { data } = useQuery({
-        queryKey: ['communities', searchKeyWord],
+    // 데이터 패칭
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['communities'],
         queryFn: getBoardData
     });
+    if (isLoading) {
+        return <Loading />;
+    }
 
-    const filteredData = data?.filter(({ data }) => data.title.includes(searchKeyWord));
+    // const filteredData = data?.filter(({ data }) => data.title.includes(searchKeyWord));
 
-    //////////////// 좋아요 기능
-    const mutation = useMutation(
-        async (id) => {
-            // 해당 문서 값 가져오기
+    // // 좋아요 기능
+    // const mutation = useMutation(
+    //     async (id) => {
+    //         // 해당 문서 값 가져오기
+    //         const postRef = doc(db, 'communities', id);
+    //         const postDoc = await getDoc(postRef);
+    //         const postData = postDoc.data();
+    //         console.log(postDoc.data());
+    //         console.log(user[0].uid);
 
-            const postRef = doc(db, 'communities', id);
-            const postDoc = await getDoc(postRef);
-            const postData = postDoc.data();
-            console.log(postDoc.data());
-            console.log(user[0].uid);
+    //         // 좋아요 기능 구현
+    //         if (user[0]?.uid && postData.likes?.includes(user[0]?.uid)) {
+    //             return updateDoc(postRef, {
+    //                 likes: arrayRemove(user[0].uid),
+    //                 likecount: postData.likecount ? postData.likecount - 1 : 0
+    //             });
+    //         } else {
+    //             return updateDoc(postRef, {
+    //                 likes: arrayUnion(user[0].uid),
+    //                 likecount: postData.likecount ? postData.likecount + 1 : 1
+    //             });
+    //         }
+    //     },
+    //     {
+    //         onSuccess: () => {
+    //             // 무효화 시키기
+    //             queryClient.invalidateQueries('communities');
+    //         }
+    //     }
+    // );
 
-            // 좋아요 기능 구현
-            if (user[0]?.uid && postData.likes?.includes(user[0]?.uid)) {
-                return updateDoc(postRef, {
-                    likes: arrayRemove(user[0].uid),
-                    likecount: postData.likecount ? postData.likecount - 1 : 0
-                });
-            } else {
-                return updateDoc(postRef, {
-                    likes: arrayUnion(user[0].uid),
-                    likecount: postData.likecount ? postData.likecount + 1 : 1
-                });
-            }
-        },
-        {
-            onSuccess: () => {
-                // 무효화 시키기
-                queryClient.invalidateQueries('communities');
-            }
-        }
-    );
-
-    const handleLike = async (postId) => {
-        // console.log(postId);
-        // postId를 인자로 받기
-        mutation.mutate(postId);
-    };
+    // const handleLike = async (postId) => {
+    //     // console.log(postId);
+    //     // postId를 인자로 받기
+    //     mutation.mutate(postId);
+    // };
 
     return (
         <StBackGround>
             <StBoardTitle>자유롭게 의견을 나누고 일상을 공유해보세요</StBoardTitle>
-            <StsearchInputWrapper>
+            {/* <StsearchInputWrapper>
                 <StsearchImg src={readingGlasses} alt="검색창" />
                 <StsearchInput placeholder="검색어를 입력해주세요. " onChange={handleChange} autoFocus />
-            </StsearchInputWrapper>
+            </StsearchInputWrapper> */}
 
             <StfilteredButton>
                 <div>
@@ -98,8 +96,7 @@ const MbtiCommunity = () => {
                         console.log(user);
                         if (!user[0]) {
                             Swal.fire({
-                                text: '로그인 후에 이용이 가능합니다..',
-                                imageUrl: modal_logo
+                                text: '로그인 후에 이용이 가능합니다..'
                             });
 
                             return navigate('/login');
@@ -110,21 +107,20 @@ const MbtiCommunity = () => {
                     게시글 작성
                 </SteditButton>
             </StfilteredButton>
-            {filteredData?.map(({ id, data }) => {
+            {data?.map(({ id, data }) => {
                 return (
                     <StCardList key={id}>
                         <StCommunityCardImg
-                            key={data.communityImage}
                             onClick={() => {
                                 navigate(`/mbti/community/${id}`);
                             }}
-                            src={data.communityImage}
+                            src={data?.communityImage}
                         />
                         <StTitleWrapper>
                             <StButton
-                                onClick={() => {
-                                    handleLike(id);
-                                }}
+                            // onClick={() => {
+                            //     handleLike(id);
+                            // }}
                             >
                                 {user && data?.likes?.includes(user[0]?.uid) ? (
                                     <img src={fullheart} alt="눌렀을 때" />
@@ -133,39 +129,22 @@ const MbtiCommunity = () => {
                                 )}
                             </StButton>
                         </StTitleWrapper>
-                        <StCommunityContent>{data.content}</StCommunityContent>
+                        <StCommunityContent>{data?.content}</StCommunityContent>
                         <StuserInfoWrapper>
                             <StUserInformation>
-                                <StprofileImg src={data.ImageUrl} alt="" />
+                                <StprofileImg src={data?.ImageUrl} alt="" />
                                 <StlikeNumber>
-                                    {data.nickname} / {data.mbti}
+                                    {data?.nickname} / {data?.mbti}
                                 </StlikeNumber>
                             </StUserInformation>
                             <StlikeInformation>
                                 <img src={blackheart} alt="좋아요 눌린 이미지" />
                                 {data?.likecount || 0}
                             </StlikeInformation>
-                            {/* <StMessageInformation>
-                                <img src={messageImoge} alt="" />
-                                <div>0</div>
-                            </StMessageInformation>
-                            <StViewInformation>
-                                <img src={eyeImoge} alt="" />
-                                <div>0</div>
-                            </StViewInformation> */}
                         </StuserInfoWrapper>
                     </StCardList>
                 );
             })}
-            {/* <StPagination>
-                <button onClick={() => handlePageChange(resolvedData?.page - 1)} disabled={resolvedData?.page === 1}>
-                    이전
-                </button>
-                <span>현재 페이지: {resolvedData?.page}</span>
-                <button onClick={() => handlePageChange(resolvedData?.page + 1)} disabled={!hasNextPage || isFetching}>
-                    다음
-                </button>
-            </StPagination> */}
         </StBackGround>
     );
 };

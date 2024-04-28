@@ -4,9 +4,9 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import modal_logo from '../../assets/home/mbti_community.png';
+import profileImage from '../../assets/profile/profileImg.png';
 import { auth } from '../../firebase/firebase.config';
 import { isEditingAtom, userAtom } from '../../recoil/Atom';
-import profileImage from '../../assets/profile/profileImg.png';
 
 const MainProfile = ({ toggleDropdown }) => {
     const [user] = useRecoilState(userAtom);
@@ -82,6 +82,7 @@ const StProfileBox = styled.div`
     background-color: white;
     border-radius: 0 0 5px 5px;
     border: none;
+    z-index: 20;
     /* border: 1px solid var(--button-border-color); */
 `;
 
