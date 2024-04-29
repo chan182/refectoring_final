@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import { addComment, deleteComment, getCommentsByCreatedAt, modifyCommnetHandler } from '../../api/comment';
+import {
+    addComment,
+    deleteComment,
+    getCommentsByCreatedAt,
+    getCommentsByLikeCount,
+    likeCommentHandler,
+    modifyCommnetHandler
+} from '../../api/comment';
 import upVector from '../../assets/community/Vector-up.svg';
 import blackVector from '../../assets/community/blackVector.svg';
 import dropdown from '../../assets/community/dropdown.png';
@@ -31,7 +37,7 @@ const CommentList = () => {
     //fetching
     const { data } = useQuery({
         queryKey: ['comments'],
-        queryFn: () => getCommentsByCreatedAt(params.id)
+        queryFn: () => getCommentsQueryFn(params.id)
     });
 
     // 추가
@@ -61,58 +67,33 @@ const CommentList = () => {
             queryClient.invalidateQueries({ queryKey: ['comments'] });
         }
     });
+    // 좋아요
+    const likeMutation = useMutation({
+        mutationFn: (postId) => likeCommentHandler(user.uid, params.id, postId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['comments'] });
+        }
+    });
 
-    // const getCommentsQueryFn = () => {
-    //     // console.log(selectedOption);
-    //     if (selectedOption === 'latest') {
-    //         return getCommentsByCreatedAt(params.id);
-    //     } else if (selectedOption === 'best') {
-    //         // 좋아요가 많은 순으로 가져오는 함수를 사용하도록 변경
-    //         return getCommentsByLikeCount(params.id);
-    //     }
-    // };
+    const getCommentsQueryFn = () => {
+        // console.log(selectedOption);
+        if (selectedOption === 'latest') {
+            return getCommentsByCreatedAt(params.id);
+        } else if (selectedOption === 'best') {
+            // 좋아요가 많은 순으로 가져오는 함수를 사용하도록 변경
+            return getCommentsByLikeCount(params.id);
+        }
+    };
 
     const handleToggleDropdown = (id) => {
         setIsOpen(!isOpen);
         setSelectedCommentId(id);
     };
 
-    // 좋아요 기능 !! ! !!
-
-    // const mutation = useMutation(
-    //     async (postId) => {
-    //         console.log(postId);
-    //         console.log(params.id);
-    //         const postRef = doc(db, 'communities', params.id, 'comments', postId);
-    //         // console.log(postRef);
-    //         const postDoc = await getDoc(postRef);
-    //         const postData = postDoc.data();
-    //         // console.log(postData.likes);
-    //         // console.log(user.uid);
-    //         if (user?.uid && postData.likes?.includes(user.uid)) {
-    //             return updateDoc(postRef, {
-    //                 likes: arrayRemove(user.uid),
-    //                 likecount: postData.likecount ? postData.likecount - 1 : 0
-    //             });
-    //         } else {
-    //             return updateDoc(postRef, {
-    //                 likes: arrayUnion(user.uid),
-    //                 likecount: postData.likecount ? postData.likecount + 1 : 1
-    //             });
-    //         }
-    //     },
-    //     {
-    //         onSuccess: () => {
-    //             queryClient.invalidateQueries(['comments']);
-    //         }
-    //     }
-    // );
-
-    // const handleLke = (postId) => {
-    //     // console.log(postId);
-    //     // console.log(params.id);
-    //     mutation.mutate(postId);
-    // };
+    const handleLke = (postId) => {
+        console.log('하이');
+        likeMutation.mutate(postId);
+    };
 
     return (
         <Stwrapper>
@@ -256,7 +237,7 @@ const CommentList = () => {
                                 <StUp>
                                     <button
                                         onClick={() => {
-                                            // handleLke(id);
+                                            handleLke(id);
                                         }}
                                     >
                                         {user?.uid && data?.likes?.includes(user?.uid) ? (

@@ -70,11 +70,10 @@ const MbtiCommunity = () => {
     //     }
     // );
 
-    // const handleLike = async (postId) => {
-    //     // console.log(postId);
-    //     // postId를 인자로 받기
-    //     mutation.mutate(postId);
-    // };
+    const handleLike = async (postId) => {
+        console.log(postId);
+        // postId를 인자로 받기
+    };
 
     return (
         <StBackGround>
@@ -118,9 +117,9 @@ const MbtiCommunity = () => {
                         />
                         <StTitleWrapper>
                             <StButton
-                            // onClick={() => {
-                            //     handleLike(id);
-                            // }}
+                                onClick={() => {
+                                    handleLike(id);
+                                }}
                             >
                                 {user && data?.likes?.includes(user[0]?.uid) ? (
                                     <img src={fullheart} alt="눌렀을 때" />
@@ -287,7 +286,7 @@ const StCommunityTitle = styled.div`
     /* background-color: red; */
 `;
 
-const StButton = styled.div`
+const StButton = styled.button`
     cursor: pointer;
     gap: 10px;
     /* background-color: yellow; */

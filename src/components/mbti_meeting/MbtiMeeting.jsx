@@ -33,8 +33,8 @@ const MbtiMeeting = () => {
     const FilterData = data?.filter(({ data }) => data.name.includes(searchKeyWord));
 
     // 북마크
-    const mutation = useMutation(
-        async (id) => {
+    const mutation = useMutation({
+        mutationFn: async (id) => {
             const postRef = doc(db, 'meet', id);
             const postDoc = await getDoc(postRef);
             const postData = postDoc.data();
@@ -48,12 +48,10 @@ const MbtiMeeting = () => {
                 });
             }
         },
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries('meet');
-            }
+        onSuccess: () => {
+            queryClient.invalidateQueries('meet');
         }
-    );
+    });
 
     const bookmarked = async (postId) => {
         mutation.mutate(postId);

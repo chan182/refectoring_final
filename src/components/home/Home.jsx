@@ -28,7 +28,7 @@ const Home = () => {
             <StBox>
                 <StCards>
                     <StCard onClick={() => navigate('/mbti/test')}>
-                        <StTitle>MBTI 검사</StTitle>
+                        <StTitle>MBTI 검사ㅇㅇㅇㅇ</StTitle>
                         <StContent>본인의 MBTI가 무엇인지 알아보세요</StContent>
                         <img src={mbti_test} alt="testPage" />
                     </StCard>

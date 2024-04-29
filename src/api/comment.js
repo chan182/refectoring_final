@@ -1,4 +1,16 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc } from 'firebase/firestore';
+import {
+    addDoc,
+    arrayRemove,
+    arrayUnion,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    orderBy,
+    query,
+    updateDoc
+} from 'firebase/firestore';
 import { db } from '../firebase/firebase.config';
 
 // 최신 순 댓글 가져오기
@@ -38,4 +50,31 @@ const modifyCommnetHandler = async (id, paramsId, updateComment) => {
     await updateDoc(commentDocRef, { content: updateComment });
 };
 
-export { addComment, deleteComment, getCommentsByCreatedAt, getCommentsByLikeCount, modifyCommnetHandler };
+// 좋아요
+
+const likeCommentHandler = async (userUid, paramId, postId) => {
+    console.log(userUid, paramId, postId);
+    const postRef = doc(db, 'communities', paramId, 'comments', postId);
+    const postDoc = await getDoc(postRef);
+    const postData = postDoc.data();
+    if (postData.likes?.includes(userUid)) {
+        return updateDoc(postRef, {
+            likes: arrayRemove(userUid),
+            likecount: postData.likecount ? postData.likecount - 1 : 0
+        });
+    } else {
+        return updateDoc(postRef, {
+            likes: arrayUnion(userUid),
+            likecount: postData.likecount ? postData.likecount + 1 : 1
+        });
+    }
+};
+
+export {
+    addComment,
+    deleteComment,
+    getCommentsByCreatedAt,
+    getCommentsByLikeCount,
+    likeCommentHandler,
+    modifyCommnetHandler
+};
